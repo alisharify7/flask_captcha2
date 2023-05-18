@@ -2,12 +2,12 @@
 an light and simple flask extension for integrate google recaptcha with Flask Apps
 
 
-#### 0.0 how to install:
+### 0.0 how to install:
   
     pip install -U flask_captcha2 
 
 
-#### 0.1 how to use:
+### 0.1 how to use:
 
 ```python
 from flask import Flask
@@ -25,7 +25,7 @@ captcha = FlaskCaptcha(app)
 
 ```
 
-#### 0.2 how use in template for rendering Captcha Widget:
+### 0.2 how use in template for rendering Captcha Widget:
 
 ### Use < captchaField > Filter to render captcha in html
 
@@ -52,8 +52,8 @@ captcha = FlaskCaptcha(app)
 ```
 
 
-#### 0.3 how Verify captcha was correct:
-### Use is_verify Method for verify captcha 
+### 0.3 How verify Captcha:
+### Use is_verify method  
 ```python
 captcha = FlaskCaptcha(app)
 
