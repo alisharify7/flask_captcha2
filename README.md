@@ -1,2 +1,2 @@
 # flask_captcha2
-an simple and light flask extension for integerate flask app with google recaptcha
+an light and simple flask extension for integrate google recaptcha with Flask Apps
