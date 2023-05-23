@@ -1,5 +1,6 @@
 # flask_captcha2
 an light and simple flask extension for integrate google recaptcha with Flask Apps
+[![PyPI version](https://badge.fury.io/py/flask-captcha2.svg)](https://badge.fury.io/py/flask-captcha2)
 
 
 ### 0.0 how to install:
