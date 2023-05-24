@@ -101,7 +101,7 @@ def index():
 
 
 # Set configuration :
-    
+```python
     from flask import Flask
     app = Flask(__name__)
     
@@ -113,3 +113,4 @@ def index():
     app.config[RECAPTCHA_TYPE] = "Captcha type default image"
     app.config[RECAPTCHA_THEME] = "Captcha theme default light <dark, light>"
     app.config[RECAPTCHA_ENABLED] = "Captcha status default True <True, False>"
+```
