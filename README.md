@@ -75,3 +75,15 @@ def index():
         return "Try again!" 
 
 ```
+
+
+#### Configuration :
+  
+    RECAPTCHA_PRIVATE_KEY = "Put Your private<secret> key here"
+    RECAPTCHA_PUBLIC_KEY = "Put your public<site> key here"
+    RECAPTCHA_TABINDEX= "enter tab index for Captcha Widget"
+    RECAPTCHA_LANGUAGE = "Captcha Language <default en>"
+    RECAPTCHA_SIZE = "Captcha Widget Size <compact،, normal, invisible>"
+    RECAPTCHA_TYPE = "captcha type default image"
+    RECAPTCHA_THEME = "captcha theme default light<dark, light>"
+    RECAPTCHA_ENABLED = "Captcha status default True<True, False>"
