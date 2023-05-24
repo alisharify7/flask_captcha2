@@ -98,3 +98,18 @@ def index():
     RECAPTCHA_TYPE = "Captcha type default image"
     RECAPTCHA_THEME = "Captcha theme default light <dark, light>"
     RECAPTCHA_ENABLED = "Captcha status default True <True, False>"
+
+
+# Set configuration :
+    
+    from flask import Flask
+    app = Flask(__name__)
+    
+    app.config[RECAPTCHA_PRIVATE_KEY] = "Put Your private<secret> key here"
+    app.config[RECAPTCHA_PUBLIC_KEY] = "Put your public<site> key here"
+    app.config[RECAPTCHA_TABINDEX] = "Tab index for Captcha Widget"
+    app.config[RECAPTCHA_LANGUAGE] = "Captcha Language <default en>"
+    app.config[RECAPTCHA_SIZE] = "Captcha Widget Size default normal <compact،, normal, invisible>"
+    app.config[RECAPTCHA_TYPE] = "Captcha type default image"
+    app.config[RECAPTCHA_THEME] = "Captcha theme default light <dark, light>"
+    app.config[RECAPTCHA_ENABLED] = "Captcha status default True <True, False>"
