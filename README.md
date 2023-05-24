@@ -103,6 +103,8 @@ def index():
 # Set configuration :
 ```python
     from flask import Flask
+    from flask_captcha2 import FlaskCaptcha
+    
     app = Flask(__name__)
     
     app.config["RECAPTCHA_PRIVATE_KEY"] = "Put Your private<secret> key here"
@@ -113,4 +115,11 @@ def index():
     app.config["RECAPTCHA_TYPE"] = "Captcha type default image"
     app.config["RECAPTCHA_THEME"] = "Captcha theme default light <dark, light>"
     app.config["RECAPTCHA_ENABLED"] = "Captcha status default True <True, False>"
+
+    captcha = FlaskCaptcha(app)
+    or 
+    captcha = FlaskCaptcha()
+    captcha.init_app(app)
+    
+    
 ```
