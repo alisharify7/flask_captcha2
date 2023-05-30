@@ -95,4 +95,4 @@ class FlaskCaptcha(Captcha):
                     data-theme="{self.THEME}" data-type="{self.TYPE}" data-size="{self.SIZE}"
                     data-tabindex="{self.TABINDEX}">
             </div>
-        """)
+        """) if self.ENABLED else ""
