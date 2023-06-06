@@ -41,7 +41,7 @@ app.config["RECAPTCHA_PUBLIC_KEY"] = "Public Key"
 app.config["RECAPTCHA_ENABLED"] = True or False
 
 # create captcha instance
-captcha = FlaskCaptcha(app)
+captcha = FlaskCaptcha2(app)
 
 ```
 
@@ -116,9 +116,9 @@ def index():
     app.config["RECAPTCHA_THEME"] = "Captcha theme default light <dark, light>"
     app.config["RECAPTCHA_ENABLED"] = "Captcha status default True <True, False>"
 
-    captcha = FlaskCaptcha(app)
+    captcha = FlaskCaptcha2(app)
     or 
-    captcha = FlaskCaptcha()
+    captcha = FlaskCaptcha2()
     captcha.init_app(app)
     
     
