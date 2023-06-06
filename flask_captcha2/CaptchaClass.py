@@ -3,9 +3,10 @@ import requests
 from markupsafe import Markup
 
 
-class Captcha:
+
+class BaseCaptcha3:
     """
-       Base Class For captcha object in app
+       Base Google Captcha v3 class
     """
     PUBLIC_KEY = None
     PRIVATE_KEY = None
@@ -15,12 +16,37 @@ class Captcha:
     LANGUAGE = "en"
     TYPE = "image"
     SIZE = "normal" # compact، normal، invisible
-
+    
+    MINIMUM_SCORE = 0.5 # uses for captcha v3
+    SHOW_CAPTCHA = True # uses for showing captcha v3
+    
     GOOGLE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 
-class FlaskCaptcha(Captcha):
+    
+class FlaskCaptcha3(BaseCaptcha3):
+    """ Google Captcha version 3 """
+    pass    
+    
 
+class BaseCaptcha2:
+    """
+       Base Google Captcha v2 class
+    """
+    PUBLIC_KEY = None
+    PRIVATE_KEY = None
+    ENABLED = False
+    THEME = "light",
+    TABINDEX = 0
+    LANGUAGE = "en"
+    TYPE = "image"
+    SIZE = "normal" # compact، normal، invisible
+    
+    GOOGLE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
+
+
+class FlaskCaptcha2(BaseCaptcha2):
+    """ Google Captcha version 2 """
     def __init__(self, app=None, public_key=None, private_key=None, **kwargs):
         if app:
             self.init_app(app)
@@ -56,6 +82,7 @@ class FlaskCaptcha(Captcha):
 
 
     def is_verify(self):
+        """ Verify a Captcha v2 """
         if not self.ENABLED:
             return True
         else:
@@ -86,7 +113,7 @@ class FlaskCaptcha(Captcha):
 
     def renderWidget(self):
         """
-            render captcha widget
+            render captcha v2 widget
         :return:
         """
         return Markup(f"""
