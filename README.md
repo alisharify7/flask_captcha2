@@ -75,7 +75,7 @@ captcha = FlaskCaptcha2(app)
 ### 0.3 How verify Captcha:
 ### Use is_verify method  
 ```python
-captcha = FlaskCaptcha(app)
+captcha = FlaskCaptcha2(app)
 
 @app.route("/", methods=["POST"])
 def index():
