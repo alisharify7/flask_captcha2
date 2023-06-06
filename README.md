@@ -129,16 +129,16 @@ def index():
 
 
 
-Version History:
-  version 2.0.0 Released: May 18, 2023
-  
-  Changes:
+## Version History:
+
+
+  - version 2.0.0 Released: May 18, 2023
+  - Changes:
   
             None
   
-  version 2.0.1 Released: 0.0.0.
-  
-  Changes:
+  - version 2.0.1 Released: 0.0.0.
+  - Changes:
   
         Change FlaskCaptcha Class to FlaskCaptcha2
 
