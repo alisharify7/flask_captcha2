@@ -31,7 +31,7 @@ an light and simple flask extension for integrate google recaptcha with Flask Ap
 
 ```python
 from flask import Flask
-from flask_captcha2 import FlaskCaptcha
+from flask_captcha2 import FlaskCaptcha2
 
 app = Flask(__name__)
 
@@ -103,7 +103,7 @@ def index():
 # Set configuration :
 ```python
     from flask import Flask
-    from flask_captcha2 import FlaskCaptcha
+    from flask_captcha2 import FlaskCaptcha2
     
     app = Flask(__name__)
     
@@ -123,3 +123,22 @@ def index():
     
     
 ```
+
+
+
+
+
+
+Version History:
+  version 2.0.0 Released: May 18, 2023
+  Changes:
+  
+            None
+  
+  version 2.0.1 Released: 0.0.0.
+  Changes:
+  
+        Change FlaskCaptcha Class to FlaskCaptcha2
+
+
+
