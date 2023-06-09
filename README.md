@@ -10,6 +10,7 @@ an light and simple flask extension for integrate google recaptcha with Flask Ap
 
   
   <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
+  
   [![PyPI version](https://badge.fury.io/py/flask-captcha2.svg)](https://badge.fury.io/py/flask-captcha2)
   [![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
   [![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2)
