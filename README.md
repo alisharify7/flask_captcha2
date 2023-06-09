@@ -137,10 +137,11 @@ def index():
   
             None
   
-  - version 2.0.1 Released: 0.0.0.
+  - version 2.0.1 Released: June 9, 2023
   - Changes:
   
         Change FlaskCaptcha Class to FlaskCaptcha2
+        Fix bug in rendering captcha widget when captcha-enable was False
 
 
 
