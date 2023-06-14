@@ -1,5 +1,4 @@
-import flask
-from flask import request
+from flask import request, Flask
 import requests
 from markupsafe import Markup
 
@@ -29,7 +28,7 @@ class FlaskCaptcha3(BaseCaptcha3):
     """ Google Captcha version 3 """
 
     def __init__(self, app=None, private_key=None, public_key=None, **kwargs):
-        if app and isinstance(app, flask.Flask):
+        if app and isinstance(app, Flask):
             self.init_app(app)
 
         elif private_key and public_key:
