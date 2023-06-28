@@ -74,9 +74,6 @@ class FlaskCaptcha3(BaseCaptcha3):
             response = request.form.get('g-recaptcha-response', None)
 
             responseGoogle = requests.post(f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}")
-            print(responseGoogle)
-            print(responseGoogle.json())
-            print(responseGoogle.text)
 
             # response from Google is something like this
 
@@ -103,10 +100,10 @@ class FlaskCaptcha3(BaseCaptcha3):
         # {{
         #     captchaField(
         #     {
-        #     'btnText': "submit btn text",
-        #     'style': 'css style',
-        #     'ParentFormID': 'put prent form id here',
-        #     'id':'if you wanna set id for btn set id here',
+        #         'btnText': "submit btn text", # required
+        #         'style': 'css style', # optional
+        #         'ParentFormID': 'put prent form id here', # required
+        #         'id':'if you wanna set id for btn set id here', # optional
         #     ''})
         # }}
 
