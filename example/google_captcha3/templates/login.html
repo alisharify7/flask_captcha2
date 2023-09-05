@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+
+    <form method="POST" action="" id="parent">
+        {# you can also use Flask-wtf forms #}
+        <input placeholder="username" type="text" name="username" id="">
+        <br>
+        <input placeholder="password" type="password" name="password" id="">
+        <br>
+        {{
+            captchaField(
+                {
+                    'ParentFormID':"parent",
+                    'btnText':"submit form",
+                    'id':"submitbutton",
+                    'style':"background-color:blue;color:white;",
+                    'dataset':"data-ok='true';",
+                    'hidden-badge':True,
+                }
+                )
+        }}
+    </form>
+    
+</body>
+</html>

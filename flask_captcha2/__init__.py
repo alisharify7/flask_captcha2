@@ -1,3 +1,1 @@
-from flask_captcha2.CaptchaClass import FlaskCaptcha2, FlaskCaptcha3
-
-
+from .GoogleCaptcha import FlaskCaptcha2, FlaskCaptcha3 
