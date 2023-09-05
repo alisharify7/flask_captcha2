@@ -68,9 +68,8 @@ RECAPTCHA_SCORE = "Score for captcha <Float, between 0.5 to 1>"
 # create captcha instance
 captcha2 = FlaskCaptcha2(app=app)
 captcha3 = FlaskCaptcha3(app=app)
+
 # or 
-
-
 captcha2 = FlaskCaptcha2()
 captcha3 = FlaskCaptcha3()
 
