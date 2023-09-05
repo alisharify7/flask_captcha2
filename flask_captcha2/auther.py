@@ -1,5 +1,5 @@
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 
 
 

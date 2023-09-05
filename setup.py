@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 from flask_captcha2.auther import __version__, __NAME__, __short_description__, __author__, __author_mail__
 
-with open("./README.md", "r") as f:
+with open("./README.rst", "r") as f:
     long_description = f.read()
 
 
