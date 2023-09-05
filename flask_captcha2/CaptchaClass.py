@@ -130,7 +130,7 @@ class BaseCaptcha2:
     PUBLIC_KEY = None
     PRIVATE_KEY = None
     ENABLED = False
-    THEME = "light",
+    THEME = "light"
     TABINDEX = 0
     LANGUAGE = "en"
     TYPE = "image"
@@ -213,7 +213,7 @@ class FlaskCaptcha2(BaseCaptcha2):
         return Markup(f"""
         <script src='//www.google.com/recaptcha/api.js'></script>
             <div class="g-recaptcha" data-sitekey="{self.PUBLIC_KEY}"
-                    data-theme="{self.THEME}" data-type="{self.TYPE}" data-size="{self.SIZE}"
+                    data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
                     data-tabindex="{self.TABINDEX}">
             </div>
         """) if self.ENABLED else ""
