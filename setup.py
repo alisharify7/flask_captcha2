@@ -1,12 +1,19 @@
 from setuptools import setup, find_packages
-from flask_captcha2.auther import __version__, __NAME__, __short_description__, __author__, __author_mail__
+
+__NAME__ = "Flask-captcha2"
+__version__ = "3.0.2"
+__author__ = "ali sharify"
+__author_mail__ = "alisharifyofficial@gmail.com"
+__copyright__ = "ali sharify - 2023"
+__license__ = "MIT"
+__short_description__ = "a light and simple Flask extension for integrating google captcha with Flask Apps"
+
 
 with open("./README.rst", "r") as f:
     long_description = f.read()
 
-
 setup(
-    name=__NAME__ ,
+    name=__NAME__,
     version=__version__,
     description=__short_description__,
     packages=find_packages(),
@@ -14,11 +21,19 @@ setup(
     author=__author__,
     url="https://github.com/alisharify7/flask_captcha2",
     long_description=long_description,
-    # long_description_content_type="text/x-rst",
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
+    #long_description_content_type="text/markdown",
     classifiers=[
-        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Environment :: Web Environment",
+        "Topic :: Security",
+        "Topic :: Internet :: WWW/HTTP",
+        "Framework :: Flask",
     ],
     license="MIT",
     install_requires=[

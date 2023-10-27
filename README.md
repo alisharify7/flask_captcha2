@@ -81,9 +81,6 @@ captcha3 = FlaskCaptcha3()
 
 captcha2.init_app(app=app)
 captcha3.init_app(app=app)
-
-
-
 ```
 
 ### 0.2 how use in templates for rendering Captcha Widget:
