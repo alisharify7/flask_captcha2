@@ -1,28 +1,48 @@
+
 flask_captcha2
 ==============
 
-a light and simple Flask extension for integrating google recaptcha with
-Flask Apps
+a light and simple Flask extension for integrating google recaptcha with Flask Apps
 
 .. raw:: html
 
    <p>
+     <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2">
+     <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2">
+     <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
 
-.. raw:: html
+     [![PyPI version](https://badge.fury.io/py/flask-captcha2.svg)](https://badge.fury.io/py/flask-captcha2)
+
+     total downloads: 
+
+     [![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2)
+
+     month downloads:
+
+     [![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
+
+
+     week downloads:
+
+     [![Downloads](https://static.pepy.tech/badge/flask-captcha2/week)](https://pepy.tech/project/flask-captcha2)
+
 
    </p>
 
+
 0.0 how to install:
--------------------
+^^^^^^^^^^^^^^^^^^^
 
-::
+.. code-block::
 
-   pip install -U flask_captcha2
+   pip install -U flask_captcha2 
+
+
 
 0.1 how to use:
----------------
+^^^^^^^^^^^^^^^
 
-.. code:: python
+.. code-block:: python
 
    from flask import Flask
    from flask_captcha2.GoogleCaptcha import FlaskCaptcha2, FlaskCaptcha3
@@ -56,7 +76,7 @@ Flask Apps
    captcha2 = FlaskCaptcha2(app=app)
    captcha3 = FlaskCaptcha3(app=app)
 
-   # or
+   # or 
    captcha2 = FlaskCaptcha2()
    captcha3 = FlaskCaptcha3()
 
@@ -64,15 +84,15 @@ Flask Apps
    captcha3.init_app(app=app)
 
 0.2 how use in templates for rendering Captcha Widget:
-------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use < captchaField > Filter to render captcha in html
------------------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Version 2 Captcha rendering:
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code:: html
+.. code-block:: html
 
 
    <!DOCTYPE html>
@@ -95,9 +115,9 @@ Version 2 Captcha rendering:
    </html>
 
 Version 3 Captcha rendering:
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code:: html
+.. code-block:: html
 
 
    <!DOCTYPE html>
@@ -114,15 +134,15 @@ Version 3 Captcha rendering:
            <input type="text" name="username">
            <input type="submit" value="submit">
            {# With captchaField filter you can render captcha widget in your html code #}
-           {{
+           {{ 
                captchaField
                ( {
                     'btnText': "Submit", # required
                     'ParentFormID': 'ParentForm', # required
-               } )
+               } ) 
            }}
 
-   <!--
+   <!--        
                full arguments in captcha version 3
                captchaField(
                {
@@ -140,19 +160,19 @@ Version 3 Captcha rendering:
    </html>
 
 0.3 How verify Captcha:
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Use is_verify method
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
-.. code:: python
+.. code-block:: python
 
    captcha = FlaskCaptcha2(app)
    captcha = FlaskCaptcha3(app)
 
    @app.route("/", methods=["POST"])
    def index():
-       # with is_verify method verify the captcha
+       # with is_verify method verify the captcha 
        if captcha.is_verify():
            return "Captcha is ok."
        else:
@@ -161,28 +181,43 @@ Use is_verify method
 Version History:
 ----------------
 
--  version 2.0.0 Released: May 18, 2023
 
--  Changes:
+* version 2.0.0 Released: May 18, 2023
+* 
+  Changes:
 
-   ::
+  .. code-block:
 
-          None
+  .. code-block::
 
--  version 2.0.1 Released: June 9, 2023
+        None
 
--  Changes:
+* 
+  version 2.0.1 Released: June 9, 2023
 
-   ::
+* 
+  Changes:
 
-      Change FlaskCaptcha Class to FlaskCaptcha2
-      Fix bug in rendering captcha widget when captcha-enable was False
+  .. code-block:
 
--  version 3.0.0 Released: September 9, 2023
+     Change FlaskCaptcha Class to FlaskCaptcha2
+     Fix bug in rendering captcha widget when captcha-enable was False
 
--  Changes:
 
-   ::
+* version 3.0.0 Released: September 9, 2023
+* 
+  Changes:
 
-      change Package structure
-      Add Captcha version 3 and fix some bugs in captcha version 2
+  .. code-block:
+
+     change Package structure
+     Add Captcha version 3 and fix some bugs in captcha version 2
+
+
+* version 3.0.2 Released: October 27, 2023
+* 
+  Changes:
+
+  .. code-block:
+
+     fix install error for version 3.0.0 and 3.0.1

@@ -1,16 +1,9 @@
 # flask_captcha2
 a light and simple Flask extension for integrating google recaptcha with Flask Apps
 <p>
-
-  
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2">
-
-  
   <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2">
-
-  
   <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
-  
   
   [![PyPI version](https://badge.fury.io/py/flask-captcha2.svg)](https://badge.fury.io/py/flask-captcha2)
 
@@ -29,11 +22,6 @@ a light and simple Flask extension for integrating google recaptcha with Flask A
   
   
 </p>
-  
-  
-  
-
-
 
 ### 0.0 how to install:
   
@@ -41,7 +29,6 @@ a light and simple Flask extension for integrating google recaptcha with Flask A
 
 
 ### 0.1 how to use:
-
 ```python
 from flask import Flask
 from flask_captcha2.GoogleCaptcha import FlaskCaptcha2, FlaskCaptcha3
@@ -195,4 +182,9 @@ def index():
         change Package structure
         Add Captcha version 3 and fix some bugs in captcha version 2
 
+
+  - version 3.0.2 Released: October 27, 2023
+  - Changes:
+  
+        fix install error for version 3.0.0 and 3.0.1
 

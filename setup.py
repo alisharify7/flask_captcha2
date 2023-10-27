@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.2"
+__version__ = "3.0.3"
 __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"
 __copyright__ = "ali sharify - 2023"
@@ -22,7 +22,7 @@ setup(
     url="https://github.com/alisharify7/flask_captcha2",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    #long_description_content_type="text/markdown",
+    # long_description_content_type="text/markdown",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
