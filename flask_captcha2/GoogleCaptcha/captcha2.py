@@ -90,7 +90,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             # }
             if self.CAPTCHA_LOG:
                 logger.info(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                logger.info(f"RESPONSE CATCHA:\n {json.dumps(responseGoogle.json(), indent=4)}")
+                logger.info(f"RESPONSE RESPONSE GOOGLE CAPTCHA:\n {json.dumps(responseGoogle.json(), indent=4)}")
 
 
             if responseGoogle.status_code == 200:

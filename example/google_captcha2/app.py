@@ -10,8 +10,8 @@ app = Flask(__name__)
 
 app.config.update({
     "RECAPTCHA_PRIVATE_KEY": '',
-    "RECAPTCHA_PUBLIC_KEY":'',
-    'RECAPTCHA_ENABLED':True, # captcha enable status
+    "RECAPTCHA_PUBLIC_KEY": '',
+    'RECAPTCHA_ENABLED': True,  # captcha enable status
     "RECAPTCHA_LOG": True,
     "RECAPTCHA_LANGUAGE": "en"
 
@@ -19,7 +19,7 @@ app.config.update({
 
 captcha = FlaskCaptcha2()
 captcha.init_app(app=app)
-# or 
+# or
 # captcha = FlaskCaptcha2(app=app)
 
 
@@ -34,7 +34,6 @@ def index_post():
 @app.get("/")
 def index_get():
     return render_template("login.html")
-
 
 
 if __name__ == "__main__":
