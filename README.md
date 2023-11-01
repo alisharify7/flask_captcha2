@@ -39,24 +39,32 @@ from flask_captcha2.GoogleCaptcha import FlaskCaptcha2, FlaskCaptcha3
 app = Flask(__name__)
 
 # Captcha version 2 Configuration (I'm not a robot)
-RECAPTCHA_PRIVATE_KEY = "Put Your private<secret> key here"
-RECAPTCHA_PUBLIC_KEY = "Put your public<site> key here"
-RECAPTCHA_TABINDEX= "Tab index for Captcha Widget"
-RECAPTCHA_LANGUAGE = "Captcha Language <default en>"
-RECAPTCHA_SIZE = "Captcha Widget Size default normal <compact،, normal, invisible>"
-RECAPTCHA_TYPE = "Captcha type default image"
-RECAPTCHA_THEME = "Captcha theme default light <dark, light>"
-RECAPTCHA_ENABLED = "Captcha status default True <True, False>"
-RECAPTCHA_LOG = "Show captcha requests in stdout <True, False>"
+version_2_conf = {
+  "RECAPTCHA_PRIVATE_KEY" : "Put Your private<secret> key here"
+  "RECAPTCHA_PUBLIC_KEY" : "Put your public<site> key here"
+  "RECAPTCHA_TABINDEX": "Tab index for Captcha Widget"
+  "RECAPTCHA_LANGUAGE" : "Captcha Language <default en>"
+  "RECAPTCHA_SIZE" : "Captcha Widget Size default normal <compact،, normal, invisible>"
+  "RECAPTCHA_TYPE" : "Captcha type default image"
+  "RECAPTCHA_THEME" : "Captcha theme default light <dark, light>"
+  "RECAPTCHA_ENABLED" : "Captcha status default True <True, False>"
+  "RECAPTCHA_LOG" : "Show captcha requests in stdout <True, False>"
+}
 
 
 # Captcha version 3 Configuration (invisible captcha)
-RECAPTCHA_PRIVATE_KEY = "Put Your private<secret> key here"
-RECAPTCHA_PUBLIC_KEY = "Put your public<site> key here"
-RECAPTCHA_ENABLED = "Captcha status default True <True, False>"
-RECAPTCHA_LOG = "Show captcha requests in stdout <True, False>"
-RECAPTCHA_SCORE = "Score for captcha <Float, between 0.5 to 1>"
+version_3_conf = {
+  "RECAPTCHA_PRIVATE_KEY" : "Put Your private<secret> key here"
+  "RECAPTCHA_PUBLIC_KEY" : "Put your public<site> key here"
+  "RECAPTCHA_ENABLED" : "Captcha status default True <True, False>"
+  'RECAPTCHA_LOG" : "Show captcha requests in stdout <True, False>"
+  "RECAPTCHA_SCORE" : "Score for captcha <Float, between 0.5 to 1>"
+}
 
+
+# add config to flask app
+app.config.from_mapping(version_2_conf) 
+app.config.from_mapping(version_3_conf)
 
 # Create a captcha instance
 captcha2 = FlaskCaptcha2(app=app)
