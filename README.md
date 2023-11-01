@@ -57,7 +57,7 @@ version_3_conf = {
   "RECAPTCHA_PRIVATE_KEY" : "Put Your private<secret> key here",
   "RECAPTCHA_PUBLIC_KEY" : "Put your public<site> key here",
   "RECAPTCHA_ENABLED" : "Captcha status default True <True, False>",
-  'RECAPTCHA_LOG": "Show captcha requests in stdout <True, False>",
+  "RECAPTCHA_LOG": "Show captcha requests in stdout <True, False>",
   "RECAPTCHA_SCORE" : "Score for captcha <Float, between 0.5 to 1>"
 }
 
