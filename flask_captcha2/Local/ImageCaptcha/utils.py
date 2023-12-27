@@ -21,10 +21,14 @@ class ImageCaptchaCONF:
 
 
 class ImageCaptcha(ImageCaptchaCONF):
-    def __init__(self, app: Flask = None, RECAPTCHA_KEY="",
-                 RECAPTCHA_ENABLE: bool = True, RECAPTCHA_LOG: bool = True, RECAPTCHA_MIN: int = 99999 + 1,
+    def __init__(self, app: Flask = None,
+                 RECAPTCHA_KEY="",
+                 RECAPTCHA_ENABLE: bool = True,
+                 RECAPTCHA_LOG: bool = True,
+                 RECAPTCHA_MIN: int = 99999 + 1,
                  RECAPTCHA_MAX: int = 999999 + 1,
-                 RECAPTCHA_ALPHABET: bool = False, RECAPTCHA_PUNCTUATION: bool = False
+                 RECAPTCHA_ALPHABET: bool = False,
+                 RECAPTCHA_PUNCTUATION: bool = False
                  ):
         if app:
             self.init_app(app=app)
