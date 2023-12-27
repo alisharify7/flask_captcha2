@@ -32,7 +32,7 @@ class ImageCaptcha(ImageCaptchaCONF):
             self.RECAPTCHA_PUNCTUATION = RECAPTCHA_ALPHABET
             self.RECAPTCHA_LOG = RECAPTCHA_LOG
 
-        self.IMAGER = ImageCaptcha()
+        self.IMAGER = image.ImageCaptcha()
 
         pass
 
