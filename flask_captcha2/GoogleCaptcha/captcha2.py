@@ -4,30 +4,29 @@ from flask import request, Flask
 from markupsafe import Markup
 from flask_captcha2.Logger import get_logger
 
-
-
 logger = get_logger()
+
 
 class BaseCaptcha2:
     """
        Base Google Captcha v2 class
     """
-    PUBLIC_KEY = None
-    PRIVATE_KEY = None
-    ENABLED = False
-    CAPTCHA_LOG = True
-    THEME = "light"
-    TABINDEX = 0
-    LANGUAGE = "en"
-    TYPE = "image"
-    SIZE = "normal" # compact، normal، invisible
-    
-    GOOGLE_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
+    PUBLIC_KEY: str = None
+    PRIVATE_KEY: str = None
+    CAPTCHA_LOG: bool = True
+    ENABLED: bool = False
+    THEME: str = "light"
+    TABINDEX: int = 0
+    LANGUAGE: str = "en"
+    TYPE: str = "image"
+    SIZE: str = "normal"  # compact، normal، invisible
+    GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
 
 class FlaskCaptcha2(BaseCaptcha2):
     """ Google Captcha version 2 """
-    def __init__(self, app=None, public_key=None, private_key=None, **kwargs):
+
+    def __init__(self, app: Flask = None, public_key: str = None, private_key: str = None, **kwargs):
         if app:
             self.init_app(app)
 
@@ -42,8 +41,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             self.LANGUAGE = kwargs.get('language', self.LANGUAGE)
             self.CAPTCHA_LOG = kwargs.get('captcha_log', self.CAPTCHA_LOG)
 
-
-    def init_app(self, app=None):
+    def init_app(self, app: Flask = None):
         if not app.config.get("RECAPTCHA_PUBLIC_KEY", None) or not app.config.get("RECAPTCHA_PRIVATE_KEY", None):
             raise ValueError("Private and Public Keys are Required")
 
@@ -61,11 +59,10 @@ class FlaskCaptcha2(BaseCaptcha2):
         )
 
         @app.context_processor
-        def render_captcha():
-            return{"captchaField": self.renderWidget()}
+        def render_captcha() -> dict:
+            return {"captchaField": self.renderWidget()}
 
-
-    def is_verify(self):
+    def is_verify(self) -> bool:
         """ Verify a Captcha v2 """
         if not self.ENABLED:
             return True
@@ -90,15 +87,14 @@ class FlaskCaptcha2(BaseCaptcha2):
             # }
             if self.CAPTCHA_LOG:
                 logger.info(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                logger.info(f"RESPONSE RESPONSE GOOGLE CAPTCHA:\n {json.dumps(responseGoogle.json(), indent=4)}")
-
+                logger.info(f"GOOGLE RESPONSE:\n {json.dumps(responseGoogle.json(), indent=4)}")
 
             if responseGoogle.status_code == 200:
                 return responseGoogle.json()["success"]
             else:
                 return False
 
-    def renderWidget(self):
+    def renderWidget(self) -> Markup:
         """
             render captcha v2 widget
         :return:
@@ -109,8 +105,8 @@ class FlaskCaptcha2(BaseCaptcha2):
                 data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
                 data-tabindex="{self.TABINDEX}">
             </div>
-        """) 
+        """)
         if self.ENABLED:
             return Markup(CaptchaField)
-        else: 
+        else:
             return Markup(" ")
