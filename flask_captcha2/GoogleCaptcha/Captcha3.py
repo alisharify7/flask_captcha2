@@ -1,7 +1,9 @@
 import json
-from flask import request, Flask
+
 import requests
+from flask import request, Flask
 from markupsafe import Markup
+
 from flask_captcha2.Logger import get_logger
 
 logger = get_logger()
@@ -23,7 +25,7 @@ class BaseCaptcha3:
 class FlaskCaptcha3(BaseCaptcha3):
     """ 
     Google Captcha version 3
-        Scoere Base
+        Score Base
 
 
     Env variables:

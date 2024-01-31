@@ -1,7 +1,9 @@
 import json
+
 import requests
 from flask import request, Flask
 from markupsafe import Markup
+
 from flask_captcha2.Logger import get_logger
 
 logger = get_logger()
