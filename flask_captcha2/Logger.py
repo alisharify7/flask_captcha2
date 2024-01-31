@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def get_logger(CaptchaName: str):
+def get_logger(CaptchaName: str = "Flask-Captcha"):
     """ This function return a stdout Logger
     args:
         . CaptchaName:string: name of the logger
