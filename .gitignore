@@ -161,5 +161,6 @@ cython_debug/
 .idea/
 
 
-#add
-secrets
+# local config
+
+local-config.txt
