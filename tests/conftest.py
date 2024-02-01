@@ -1,15 +1,9 @@
 import os
 
-
-
 import pytest
-from dotenv import load_dotenv
-
-
 from flask import Flask
+
 from flask_captcha2 import FlaskCaptcha
-
-
 
 
 @pytest.fixture()
@@ -21,6 +15,7 @@ def app():
         # 'DEBUG': True
     })
     yield app
+
 
 @pytest.fixture()
 def googlecaptcha2(app):
@@ -41,6 +36,7 @@ def googlecaptcha2(app):
     Master_captcha = FlaskCaptcha(app=app)
     captcha = Master_captcha.getGoogleCaptcha2('flask-captcha-v2')
     yield captcha
+
 
 @pytest.fixture()
 def googlecaptcha3(app):
@@ -65,6 +61,3 @@ def googlecaptcha3(app):
 def client(app):
     """Simple client for testing flask application"""
     yield app.test_client()
-
-
-
