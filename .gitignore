@@ -162,5 +162,4 @@ cython_debug/
 
 
 # local config
-
-local-config.txt
+make-local.bat
