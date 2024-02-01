@@ -6,7 +6,7 @@ from markupsafe import Markup
 
 from flask_captcha2.Logger import get_logger
 
-logger = get_logger()
+logger = get_logger("Google-Captcha-v2")
 
 
 class BaseCaptcha2:
@@ -45,7 +45,7 @@ class FlaskCaptcha2(BaseCaptcha2):
 
     def init_app(self, app: Flask = None):
         if not app.config.get("RECAPTCHA_PUBLIC_KEY", None) or not app.config.get("RECAPTCHA_PRIVATE_KEY", None):
-            raise ValueError("Private and Public Keys are Required")
+            raise ValueError("Flask-Captcha2.GoogleCaptcha.captcha2: Private and Public Keys are Required")
 
         self.__init__(
             public_key=app.config.get("RECAPTCHA_PUBLIC_KEY", None),
@@ -60,9 +60,10 @@ class FlaskCaptcha2(BaseCaptcha2):
 
         )
 
-        @app.context_processor
-        def render_captcha() -> dict:
-            return {"captchaField": self.renderWidget()}
+        # call this context_processor from upper class FlaskCaptcha.render_captcha
+        # @app.context_processor
+        # def render_captcha() -> dict:
+        #     return {"captchaField": self.renderWidget()}
 
     def is_verify(self) -> bool:
         """ Verify a Captcha v2 """

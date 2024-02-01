@@ -8,7 +8,7 @@ def get_logger(CaptchaName: str = "Flask-Captcha"):
         . CaptchaName:string: name of the logger
     """
     logLevel = logging.INFO
-    logformat = logging.Formatter(f"[{CaptchaName}"+"- %(levelname)s] [%(asctime)s] - %(message)s")
+    logformat = logging.Formatter(f"[{CaptchaName}" + "- %(levelname)s] [%(asctime)s] - %(message)s")
     logger = logging.getLogger(CaptchaName)
     logger.setLevel(logLevel)
     handler = logging.StreamHandler(sys.stdout)

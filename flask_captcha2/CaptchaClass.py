@@ -1,4 +1,101 @@
 # all captcha Classes
 
+from flask import Flask
+
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
-from .GoogleCaptcha.Captcha3 import FlaskCaptcha3
+from .GoogleCaptcha.captcha3 import FlaskCaptcha3
+from .Logger import get_logger
+
+
+class FlaskCaptcha:
+
+    def __init__(self, app: Flask):
+        """Constructor function
+
+        this function set captcha key in  app.context_processor for getting captcha object acros the application templates
+        and also initiate the captcha_object_mapper storage in app.config
+        """
+        if not app or not isinstance(app, Flask):
+            raise ValueError("Flask App required. please provide app like FlaskCaptcha(app=app)")
+
+        @app.context_processor
+        def app_context_processor():
+            ctx = {
+                "captcha": self
+            }
+            return ctx
+
+        app.config["captcha_object_mapper"] = {}  # keep all captcha object and names
+        self.__debug = app.debug
+        self.__app = app
+        self.__logger = get_logger("Flask-Captcha")
+
+    def refresh_conf(self, app: Flask) -> None:
+        """Use This Method for refreshing Captcha object conf again base on flask app conf
+
+        args:
+            . app:Flask: flask application object
+        """
+        self.__init__(app)
+
+    def getGoogleCaptcha2(self, name: str) -> FlaskCaptcha2:
+        """return a flask captcha object for google captcha version 2
+
+        args:
+            . name:str: a unique name for captcha object. it is better to be a combination of captcha type and version
+        """
+        if not name:
+            raise ValueError("captcha should have a name!")
+        if not self.__check_duplicate_captcha_name(name):
+            raise ValueError("duplicated captcha name!")
+
+        captcha = FlaskCaptcha2(app=self.__app)
+        self.__set_captcha_mapper(name=name, captchaObject=captcha)
+        return self.__get_captcha_from_mapper(name=name)
+
+    def getGoogleCaptcha3(self, name: str) -> FlaskCaptcha3:
+        """return a flask captcha object for google captcha version 3
+
+        args:
+            . name:str: a unique name for captcha object. it is better to be a combination of captcha type and version
+        """
+        if not name:
+            raise ValueError("captcha should have a name!")
+        if not self.__check_duplicate_captcha_name(name):
+            raise ValueError("duplicated captcha name!")
+
+        captcha = FlaskCaptcha3(app=self.__app)
+        self.__set_captcha_mapper(name=name, captchaObject=captcha)
+
+        return self.__get_captcha_from_mapper(name=name)
+
+    def render_captcha(self, *args, **kwargs):
+        """Use this method in templates for rendering captcha widgets in your template"""
+        return self.__render_captcha_in_template(*args, **kwargs)
+
+    def __render_captcha_in_template(self, model_name: str):
+        """render a captcha base on captcha name in param"""
+        if (captchaObject := self.__get_captcha_from_mapper(model_name)):
+            return captchaObject.renderWidget()
+        else:
+            return "NAN"
+
+    def __check_duplicate_captcha_name(self, name: str):
+        """check a captcha object name is not duplicated in app"""
+        if name in self.__app.config["captcha_object_mapper"]:
+            return False
+        return True
+
+    def __set_captcha_mapper(self, name: str, captchaObject) -> bool:
+        """This Method get a captcha object and name and save it in app.config[captcha_object_mapper] """
+        try:
+            self.__app.config["captcha_object_mapper"][name] = captchaObject
+        except Exception as e:
+            return False
+        return True
+
+    def __get_captcha_from_mapper(self, name: str):
+        """This Method get a captcha name and return that captcha objects from app.config"""
+        if name in self.__app.config["captcha_object_mapper"]:
+            return self.__app.config["captcha_object_mapper"][name]
+        return False
