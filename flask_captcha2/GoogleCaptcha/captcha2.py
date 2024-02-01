@@ -110,7 +110,7 @@ class FlaskCaptcha2(BaseCaptcha2):
                 data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
                 data-tabindex="{self.TABINDEX}">
             </div>
-        """)
+        """).strip()
         if self.ENABLED:
             return Markup(CaptchaField)
         else:

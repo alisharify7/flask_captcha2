@@ -132,7 +132,7 @@ class FlaskCaptcha3(BaseCaptcha3):
             data-action='submit'  
             data-callback='onSubmit'>
             </input>
-        """)
+        """).strip()
         if self.ENABLED:
             return Markup(captchaField)
         else:
