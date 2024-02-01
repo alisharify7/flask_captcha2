@@ -14,6 +14,7 @@ def app():
         "TESTING": True,
         # 'DEBUG': True
     })
+
     yield app
 
 
