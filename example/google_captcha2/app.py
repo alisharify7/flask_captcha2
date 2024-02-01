@@ -8,9 +8,10 @@ except ImportError:
     raise ValueError("dotenv library is not installed, install it with `pip install python-dotenv` ")
 
 import os
-from flask import Flask, render_template
-from flask_captcha2 import FlaskCaptcha2
 
+from flask import Flask, render_template
+
+from flask_captcha2 import FlaskCaptcha
 
 app = Flask(__name__)
 
@@ -24,10 +25,8 @@ app.config.update({
     "RECAPTCHA_LANGUAGE": "en"
 })
 
-captcha = FlaskCaptcha2()
-captcha.init_app(app=app)
-# or
-# captcha = FlaskCaptcha2(app=app)
+Master_captcha = FlaskCaptcha(app=app)  # app is required
+captcha = Master_captcha.getGoogleCaptcha2(name='captcha2')
 
 
 @app.post("/")
