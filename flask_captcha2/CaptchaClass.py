@@ -71,7 +71,8 @@ class FlaskCaptcha:
         if (captchaObject := self.__get_captcha_from_mapper(model_name)):
             return captchaObject.renderWidget()
         else:
-            return "NAN"
+            raise ValueError(f"invalid model name. {model_name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
+
 
     def __check_duplicate_captcha_name(self, name: str):
         """check a captcha object name is not duplicated in app"""
@@ -92,3 +93,8 @@ class FlaskCaptcha:
         if name in self.__app.config["captcha_object_mapper"]:
             return self.__app.config["captcha_object_mapper"][name]
         return False
+
+
+    def __get_all_available_captcha_names(self):
+        """This method return all captcha names that registered"""
+        return list(self.__app.config.get('captcha_object_mapper').keys())
