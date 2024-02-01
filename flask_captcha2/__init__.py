@@ -1,1 +1,1 @@
-from .CaptchaClass import FlaskCaptcha2, FlaskCaptcha3
+from .CaptchaClass import FlaskCaptcha

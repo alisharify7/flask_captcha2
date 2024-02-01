@@ -31,15 +31,14 @@ a light and simple Flask extension for integrating google recaptcha with Flask A
 ### 0.1 how to use:
 ```python
 from flask import Flask
-from flask_captcha2.GoogleCaptcha import FlaskCaptcha2, FlaskCaptcha3
+from flask_captcha2.CaptchaClass import FlaskCaptcha
 
-# `FlaskCaptcha3` is for Google Captcha version 3
-# `FlaskCaptcha2` is for Google Captcha version 2
+
 
 app = Flask(__name__)
 
 # Captcha version 2 Configuration (I'm not a robot)
-version_2_conf = {
+google_captcha_version_2_conf = {
   "RECAPTCHA_PRIVATE_KEY" : "Put Your private<secret> key here",
   "RECAPTCHA_PUBLIC_KEY" : "Put your public<site> key here",
   "RECAPTCHA_TABINDEX": "Tab index for Captcha Widget",
@@ -53,7 +52,7 @@ version_2_conf = {
 
 
 # Captcha version 3 Configuration (invisible captcha)
-version_3_conf = {
+google_captcha_version_3_conf = {
   "RECAPTCHA_PRIVATE_KEY" : "Put Your private<secret> key here",
   "RECAPTCHA_PUBLIC_KEY" : "Put your public<site> key here",
   "RECAPTCHA_ENABLED" : "Captcha status default True <True, False>",
@@ -62,25 +61,23 @@ version_3_conf = {
 }
 
 
+# create main captcha object
+captcha = FlaskCaptcha(app=app)
+
+
 # add config to flask app
-app.config.from_mapping(version_2_conf) 
-app.config.from_mapping(version_3_conf)
+app.config.from_mapping(google_captcha_version_2_conf)   
+google_captcha_2 = captcha.getGoogleCaptcha2(name='first-google-captcha-v2') #-> return flask_captcha2.GoogleCaptcha.captcha2 object
 
-# Create a captcha instance
-captcha2 = FlaskCaptcha2(app=app)
-captcha3 = FlaskCaptcha3(app=app)
+app.config.from_mapping(google_captcha_version_3_conf)
+google_captcha_3 = captcha.getGoogleCaptcha3(name='first-google-captcha-v3') #-> return flask_captcha2.GoogleCaptcha.captcha2 object
 
-# or 
-captcha2 = FlaskCaptcha2()
-captcha3 = FlaskCaptcha3()
 
-captcha2.init_app(app=app)
-captcha3.init_app(app=app)
 ```
 
 ### 0.2 how use in templates for rendering Captcha Widget:
 
-### Use < captchaField > Filter to render captcha in html
+### Use < captcha.render_captcha > method to render captcha in html
 
 
 ### Version 2 Captcha rendering:
@@ -99,8 +96,10 @@ captcha3.init_app(app=app)
     <form method="POST">
         <input type="text" name="username">
         <input type="submit" value="submit">
-        {# With captchaField filter you can render captcha widget in your html code #}
-        {{ captchaField }}
+        {# With captcha.render_captcha method you can render captcha widget in your html code #}
+        {{ captcha.render_captcha(model_name='first-google-captcha-v2') }} 
+        {# model_name should be exactly same as the name provided in getGoogleCaptcha2() method #}
+        
     </form>
 </body>
 </html>
@@ -122,10 +121,12 @@ captcha3.init_app(app=app)
     <form method="POST" id="ParentForm">
         <input type="text" name="username">
         <input type="submit" value="submit">
-        {# With captchaField filter you can render captcha widget in your html code #}
+        {# With captcha.render_captcha method you can render captcha widget in your html code #}
         {{ 
-            captchaField
-            ( {
+            captcha.render_captcha
+            ( 
+            model_name='first-google-captcha-v3',
+            {
                  'btnText': "Submit", # required
                  'ParentFormID': 'ParentForm', # required
             } ) 
@@ -133,7 +134,8 @@ captcha3.init_app(app=app)
 
 <!--        
             full arguments in captcha version 3
-            captchaField(
+            captcha.render_captcha(
+            model_name='captcha object name',
             {
                 'btnText': "submit btn text", # required
                 'ParentFormID': 'put prent form id here', # required
@@ -153,13 +155,15 @@ captcha3.init_app(app=app)
 ### 0.3 How verify Captcha:
 ### Use is_verify method  
 ```python
-captcha = FlaskCaptcha2(app)
-captcha = FlaskCaptcha3(app)
+
+captcha = FlaskCaptcha(app=app)
+google_captcha_2 = captcha.getGoogleCaptcha2(name='name-of-the-captcha')
+
 
 @app.route("/", methods=["POST"])
 def index():
-    # with is_verify method verify the captcha 
-    if captcha.is_verify():
+    # with is_verify method verify the captcha in request
+    if google_captcha_2.is_verify():
         return "Captcha is ok."
     else:
         return "Try again!" 
@@ -195,4 +199,14 @@ def index():
   - Changes:
   
         fix install error for version 3.0.0 and 3.0.1
+
+  - version 3.0.3 Released: -
+  - Changes:
+  
+        change package structure
+        adding object naming for each captcha object
+            this feature helps us to create more than 1 captcha object in the app with 
+            the previous version allowed us to only make 1 captcha object for the whole app.
+            
+
 
