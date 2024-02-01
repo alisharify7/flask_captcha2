@@ -5,11 +5,13 @@ from flask import request, Flask
 from markupsafe import Markup
 
 from flask_captcha2.Logger import get_logger
+from .utils import CommandCaptchaUtils
+
 
 logger = get_logger("Google-Captcha-v2")
 
 
-class BaseCaptcha2:
+class BaseCaptcha2(CommandCaptchaUtils):
     """
        Base Google Captcha v2 class
     """

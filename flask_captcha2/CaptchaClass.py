@@ -30,13 +30,6 @@ class FlaskCaptcha:
         self.__app = app
         self.__logger = get_logger("Flask-Captcha")
 
-    def refresh_conf(self, app: Flask) -> None:
-        """Use This Method for refreshing Captcha object conf again base on flask app conf
-
-        args:
-            . app:Flask: flask application object
-        """
-        self.__init__(app)
 
     def getGoogleCaptcha2(self, name: str) -> FlaskCaptcha2:
         """return a flask captcha object for google captcha version 2
