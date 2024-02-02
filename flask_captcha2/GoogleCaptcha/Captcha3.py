@@ -102,7 +102,7 @@ class FlaskCaptcha3(BaseCaptcha3):
             else:
                 return False
 
-    def renderWidget(self, kw: dict = {}) -> Markup:
+    def renderWidget(self, conf: dict = {}, *args, **kwargs) -> Markup:
         """
             render captcha v3 widget
         :return: 
@@ -120,14 +120,14 @@ class FlaskCaptcha3(BaseCaptcha3):
         #     })
         # }}
         captchaField = (f"""
-            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kw.get("hidden-badge", "") == True else ''}
+            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if conf.get("hidden-badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
-            <script>function onSubmit(token) {{document.getElementById('{kw.get('ParentFormID', '')}').submit();}}</script>
-            <input type='submit' class="g-recaptcha {kw.get('class', '')}" 
-            {kw.get('dataset', '')}
-            {'id=' + kw.get('id', '') if kw.get('id', '') else ''}
-            value='{kw.get('btnText', 'submit')}'
-            {'style=' + "'" + kw.get('style', '') + "'" if kw.get('style', '') else ''}
+            <script>function onSubmit(token) {{document.getElementById('{conf.get('ParentFormID', '')}').submit();}}</script>
+            <input type='submit' class="g-recaptcha {conf.get('class', '')}" 
+            {conf.get('dataset', '')}
+            {'id=' + conf.get('id', '') if conf.get('id', '') else ''}
+            value='{conf.get('btnText', 'submit')}'
+            {'style=' + "'" + conf.get('style', '') + "'" if conf.get('style', '') else ''}
             data-sitekey="{self.PUBLIC_KEY}"
             data-action='submit'  
             data-callback='onSubmit'>

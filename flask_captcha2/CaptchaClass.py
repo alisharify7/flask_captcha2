@@ -66,10 +66,10 @@ class FlaskCaptcha:
         """Use this method in templates for rendering captcha widgets in your template"""
         return self.__render_captcha_in_template(*args, **kwargs)
 
-    def __render_captcha_in_template(self, model_name: str):
+    def __render_captcha_in_template(self, model_name: str, *args, **kwargs):
         """render a captcha base on captcha name in param"""
         if (captchaObject := self.__get_captcha_from_mapper(model_name)):
-            return captchaObject.renderWidget()
+            return captchaObject.renderWidget(*args, **kwargs)
         else:
             raise ValueError(f"invalid model name. {model_name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
 
