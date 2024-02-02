@@ -138,8 +138,8 @@ google_captcha_3 = captcha.getGoogleCaptcha3(name='first-google-captcha-v3') #->
             captcha.render_captcha(
             model_name='captcha object name',
             conf={
-                'btnText': "submit btn text", # required
-                'ParentFormID': 'put prent form id here', # required
+                'btn-text': "submit btn text", # required
+                'parent-form-id': 'put prent form id here', # required
                 'id':'if you want to set id for btn set id in here', # optional
                 'style': 'css style', # optional
                 'dataset': optional for giving dataset attribute to submit btn
