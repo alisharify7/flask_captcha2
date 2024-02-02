@@ -15,15 +15,16 @@
         <input placeholder="password" type="password" name="password" id="">
         <br>
         {{
-            captchaField(
-                {
-                    'ParentFormID':"parent",
-                    'btnText':"submit form",
-                    'id':"submitbutton",
-                    'style':"background-color:blue;color:white;",
-                    'dataset':"data-ok='true';",
-                    'hidden-badge':True,
-                }
+            captcha.render_captcha(
+                    model_name='captcha3',
+                      conf={
+                        'ParentFormID':"parent",
+                        'btnText':"submit form",
+                        'id':"submitbutton",
+                        'style':"background-color:blue;color:white;",
+                        'dataset':"data-ok='true';",
+                        'hidden-badge':True,
+                    }
                 )
         }}
     </form>
