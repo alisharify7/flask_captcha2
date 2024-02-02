@@ -107,8 +107,10 @@ class FlaskCaptcha3(BaseCaptcha3):
         """
         # {{
         #         how use context_processor in template
-        #     captchaField
-        #     ({
+        #     captcha.captcha_render
+        #     (
+        #       model_name='name',
+        #     conf={
         #         'btnText': "submit btn text", # required
         #         'ParentFormID': 'put prent form id here', # required
         #         'id':'if you want to set id for btn set id in here', # optional
@@ -134,4 +136,4 @@ class FlaskCaptcha3(BaseCaptcha3):
         if self.ENABLED:
             return Markup(captchaField)
         else:
-            return Markup("")
+            return Markup(" ")

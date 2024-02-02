@@ -126,17 +126,18 @@ google_captcha_3 = captcha.getGoogleCaptcha3(name='first-google-captcha-v3') #->
             captcha.render_captcha
             ( 
             model_name='first-google-captcha-v3',
-            {
-                 'btnText': "Submit", # required
-                 'ParentFormID': 'ParentForm', # required
-            } ) 
+            conf={
+                     'ParentFormID': 'ParentForm', # required
+                     'btnText': "Submit", # required
+                } 
+            ) 
         }}
 
 <!--        
             full arguments in captcha version 3
             captcha.render_captcha(
             model_name='captcha object name',
-            {
+            conf={
                 'btnText': "submit btn text", # required
                 'ParentFormID': 'put prent form id here', # required
                 'id':'if you want to set id for btn set id in here', # optional
