@@ -53,7 +53,7 @@ def googlecaptcha3(app):
         }
     )
     Master_captcha = FlaskCaptcha(app=app)
-    captcha = Master_captcha.getGoogleCaptcha2('flask-captcha-v2')
+    captcha = Master_captcha.getGoogleCaptcha3('flask-captcha-v3')
 
     yield captcha
 
@@ -62,3 +62,18 @@ def googlecaptcha3(app):
 def client(app):
     """Simple client for testing flask application"""
     yield app.test_client()
+
+
+
+@pytest.fixture()
+def captcha3_template_conf():
+    """captcha version3 render_captcha config"""
+    conf ={
+            'parent-form-id': 'id-of-parent-form',
+            'btn-text': 'submit form',
+            'dataset':' data-check="True" data-another="Checked" ',
+            'style': 'background-color:"red"',
+            'id': 'id-of-submit-form',
+            'class': 'class-of-submit-form'
+        }
+    yield conf

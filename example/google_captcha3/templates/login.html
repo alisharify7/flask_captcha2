@@ -18,9 +18,10 @@
             captcha.render_captcha(
                     model_name='captcha3',
                       conf={
-                        'ParentFormID':"parent",
-                        'btnText':"submit form",
-                        'id':"submitbutton",
+                        'class': 'custom-submit-input',
+                        'parent-form-id':"parent",
+                        'btn-text':"submit form",
+                        'id':"submit button",
                         'style':"background-color:blue;color:white;",
                         'dataset':"data-ok='true';",
                         'hidden-badge':True,
