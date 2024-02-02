@@ -122,15 +122,15 @@ class FlaskCaptcha3(BaseCaptcha3):
         captchaField = (f"""
             {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if conf.get("hidden-badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
-            <script>function onSubmit(token) {{document.getElementById('{conf.get('ParentFormID', '')}').submit();}}</script>
+            <script>function onSubmit(token) {{document.getElementById('{conf.get('parent-form-id', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {conf.get('class', '')}" 
             {conf.get('dataset', '')}
-            {'id=' + conf.get('id', '') if conf.get('id', '') else ''}
-            value='{conf.get('btnText', 'submit')}'
-            {'style=' + "'" + conf.get('style', '') + "'" if conf.get('style', '') else ''}
+            {f'id=\"{conf.get("id")}\"' if conf.get('id', None) else ''}
+            {f'style=\"{conf.get("style")}\"' if conf.get('style', None) else ''}
+            value=\"{conf.get('btn-text', 'submit')}\"
             data-sitekey="{self.PUBLIC_KEY}"
-            data-action='submit'  
-            data-callback='onSubmit'>
+            data-action=\"submit\"  
+            data-callback=\"onSubmit\">
             </input>
         """).strip()
         if self.ENABLED:
