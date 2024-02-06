@@ -125,12 +125,12 @@ class FlaskCaptcha3(BaseCaptcha3):
             <script>function onSubmit(token) {{document.getElementById('{conf.get('parent-form-id', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {conf.get('class', '')}" 
             {conf.get('dataset', '')}
-            {f'id=\"{conf.get("id")}\"' if conf.get('id', None) else ''}
-            {f'style=\"{conf.get("style")}\"' if conf.get('style', None) else ''}
-            value=\"{conf.get('btn-text', 'submit')}\"
+            {f'id="{conf.get("id")}"' if conf.get('id', None) else ''}
+            {f'style="{conf.get("style")}"' if conf.get('style', None) else ''}
+            value="{conf.get('btn-text', 'submit')}"
             data-sitekey="{self.PUBLIC_KEY}"
-            data-action=\"submit\"  
-            data-callback=\"onSubmit\">
+            data-action="submit"  
+            data-callback="onSubmit">
             </input>
         """).strip()
         if self.ENABLED:

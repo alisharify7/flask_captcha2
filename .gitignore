@@ -163,3 +163,4 @@ cython_debug/
 
 # local config
 make-local.bat
+make-local.sh
