@@ -99,16 +99,22 @@ class FlaskCaptcha2(BaseCaptcha2):
             else:
                 return False
 
-    def renderWidget(self) -> Markup:
+    def renderWidget(self, *args, **kwargs) -> Markup:
         """
             render captcha v2 widget
         :return:
         """
+
+        args = ""
+        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else '' # id, class internal text
+        args += kwargs.get('dataset') +"\t" if kwargs.get('dataset') else '' # dataset
+        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
+
         CaptchaField = (f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div class="g-recaptcha" data-sitekey="{self.PUBLIC_KEY}"
+            <div class="g-recaptcha {kwargs.get('class', '')}" data-sitekey="{self.PUBLIC_KEY}"
                 data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
-                data-tabindex="{self.TABINDEX}">
+                data-tabindex="{self.TABINDEX}" {args}>
             </div>
         """).strip()
         if self.ENABLED:
