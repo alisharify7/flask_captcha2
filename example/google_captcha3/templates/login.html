@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <form method="POST" action="" id="parent">
+    <form method="POST" action="" id="ParentForm">
         {# you can also use Flask-wtf forms #}
         <input placeholder="username" type="text" name="username" id="">
         <br>
@@ -16,17 +16,15 @@
         <br>
         {{
             captcha.render_captcha(
-                    model_name='captcha3',
-                      conf={
-                        'class': 'custom-submit-input',
-                        'parent-form-id':"parent",
-                        'btn-text':"submit form",
-                        'id':"submit button",
-                        'style':"background-color:blue;color:white;",
-                        'dataset':"data-ok='true';",
-                        'hidden-badge':True,
-                    }
-                )
+                model_name='captcha3',
+                class='custom-class-name',
+                ParentFormID="ParentForm",
+                BtnText="submit This Form",
+                id="SubmitBtnForm",
+                style=" background-color:blue; color:white; font-size:2rem;",
+                dataset="data-ok='true' data-test='test data set check' ",
+                hiddenBadge=True
+            )
         }}
     </form>
     

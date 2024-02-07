@@ -100,7 +100,7 @@ class FlaskCaptcha3(BaseCaptcha3):
             else:
                 return False
 
-    def renderWidget(self, conf: dict = {}, *args, **kwargs) -> Markup:
+    def renderWidget(self, *args, **kwargs) -> Markup:
         """
             render captcha v3 widget
         :return:
@@ -119,19 +119,19 @@ class FlaskCaptcha3(BaseCaptcha3):
         #         'hidden-badge':True or False, this value can hide or show captcha badge
         #     })
         # }}
+
+        arg = ""
+        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else '' # id, class internal text
+        arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else '' # dataset
+        arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
+        arg += f"value=\"{kwargs.get('BtnText')}\"\t" if kwargs.get('BtnText') else '' # style
+
         captchaField = (f"""
-            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if conf.get("hidden-badge", "") == True else ''}
+            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hiddenBadge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
-            <script>function onSubmit(token) {{document.getElementById('{conf.get('parent-form-id', '')}').submit();}}</script>
-            <input type='submit' class="g-recaptcha {conf.get('class', '')}" 
-            {conf.get('dataset', '')}
-            {f'id="{conf.get("id")}"' if conf.get('id', None) else ''}
-            {f'style="{conf.get("style")}"' if conf.get('style', None) else ''}
-            value="{conf.get('btn-text', 'submit')}"
-            data-sitekey="{self.PUBLIC_KEY}"
-            data-action="submit"  
-            data-callback="onSubmit">
-            </input>
+            <script>function onSubmit(token) {{document.getElementById('{kwargs.get('ParentFormID', '')}').submit();}}</script>
+            <input type='submit' class="g-recaptcha {kwargs.get('class', '')}" {arg}
+            value="{kwargs.get('btn-text', 'submit')}" data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
         """).strip()
         if self.ENABLED:
             return Markup(captchaField)
