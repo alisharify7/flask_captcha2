@@ -69,8 +69,8 @@ def client(app):
 def captcha3_template_conf():
     """captcha version3 render_captcha config"""
     conf ={
-            'parent-form-id': 'id-of-parent-form',
-            'btn-text': 'submit form',
+            'ParentFormID': 'id-of-parent-form',
+            'BtnText': 'submit form',
             'dataset':' data-check="True" data-another="Checked" ',
             'style': 'background-color:"red"',
             'id': 'id-of-submit-form',
