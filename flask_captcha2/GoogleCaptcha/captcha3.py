@@ -121,10 +121,10 @@ class FlaskCaptcha3(BaseCaptcha3):
         # }}
 
         arg = ""
-        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else '' # id, class internal text
-        arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else '' # dataset
-        arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
-        arg += f"value=\"{kwargs.get('BtnText')}\"\t" if kwargs.get('BtnText') else '' # style
+        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text
+        arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
+        arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
+        arg += f"value=\"{kwargs.get('BtnText')}\"\t" if kwargs.get('BtnText') else ''  # style
 
         captchaField = (f"""
             {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hiddenBadge", "") == True else ''}

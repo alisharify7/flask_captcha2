@@ -8,16 +8,16 @@
 </head>
 <body>
 
-    <form method="POST" action="" id="parent">
-        {# you can also use Flask-wtf forms #}
-        <input placeholder="username" type="text" name="username" id="">
-        <br>
-        <input placeholder="password" type="password" name="password" id="">
-        <br>
-        <input value="submit" type="submit">
-        {{ captcha.render_captcha(model_name='captcha2',class='random-class-form-this-captcha', style='text:red', id='captcha-v2', dataset="data-ok='true'")  }}
+<form method="POST" action="" id="parent">
+    {# you can also use Flask-wtf forms #}
+    <input placeholder="username" type="text" name="username" id="">
+    <br>
+    <input placeholder="password" type="password" name="password" id="">
+    <br>
+    <input value="submit" type="submit">
+    {{ captcha.render_captcha(model_name='captcha2',class='random-class-form-this-captcha', style='text:red', id='captcha-v2', dataset="data-ok='true'") }}
 
-    </form>
-    
+</form>
+
 </body>
 </html>

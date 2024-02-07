@@ -7,7 +7,6 @@ from markupsafe import Markup
 from flask_captcha2.Logger import get_logger
 from .utils import CommandCaptchaUtils
 
-
 logger = get_logger("Google-Captcha-v2")
 
 
@@ -106,9 +105,9 @@ class FlaskCaptcha2(BaseCaptcha2):
         """
 
         args = ""
-        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else '' # id, class internal text
-        args += kwargs.get('dataset') +"\t" if kwargs.get('dataset') else '' # dataset
-        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
+        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else ''  # id, class internal text
+        args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
+        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
 
         CaptchaField = (f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>
