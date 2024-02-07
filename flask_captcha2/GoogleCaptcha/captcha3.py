@@ -5,6 +5,7 @@ from flask import request, Flask
 from markupsafe import Markup
 
 from flask_captcha2.Logger import get_logger
+from flask_captcha2 import excep as ex
 from .utils import CommandCaptchaUtils
 
 logger = get_logger("Google-Captcha-v3")
@@ -30,11 +31,11 @@ class FlaskCaptcha3(BaseCaptcha3):
 
 
     Env variables:
-        RECAPTCHA_PUBLIC_KEY <str:: public Key from googleDevelopers panel>
-        RECAPTCHA_PRIVATE_KEY <str:: public Key from googleDevelopers panel>
-        RECAPTCHA_SCORE <Float:: score for verify each request between 0.5 - 1>
-        RECAPTCHA_ENABLED <Boolean::captcha status>
-        RECAPTCHA_LOG <Boolean:: Show each Request Log in terminal>
+        CAPTCHA_PUBLIC_KEY <str:: public Key from googleDevelopers panel>
+        CAPTCHA_PRIVATE_KEY <str:: public Key from googleDevelopers panel>
+        CAPTCHA_SCORE <Float:: score for verify each request between 0.5 - 1>
+        CAPTCHA_ENABLED <Boolean::captcha status>
+        CAPTCHA_LOG <Boolean:: Show each Request Log in terminal>
 
 
     """
@@ -56,15 +57,18 @@ class FlaskCaptcha3(BaseCaptcha3):
             self.CAPTCHA_LOG = kwargs.get("captcha_log", self.CAPTCHA_LOG)
 
     def init_app(self, app: Flask = None):
-        if not app.config.get("RECAPTCHA_PUBLIC_KEY", None) or not app.config.get("RECAPTCHA_PRIVATE_KEY", None):
+        if not isinstance(app , Flask):
+            raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
+        
+        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
             raise ValueError("Flask-Captcha2.GoogleCaptcha.captcha3: Private and Public Keys are Required")
 
         self.__init__(
-            public_key=app.config.get("RECAPTCHA_PUBLIC_KEY", None),
-            private_key=app.config.get("RECAPTCHA_PRIVATE_KEY", None),
-            enabled=app.config.get("RECAPTCHA_ENABLED", self.ENABLED),
-            score=app.config.get("RECAPTCHA_SCORE", self.SCORE),
-            captcha_log=app.config.get("RECAPTCHA_LOG", self.CAPTCHA_LOG)
+            public_key=app.config.get("CAPTCHA_PUBLIC_KEY", None),
+            private_key=app.config.get("CAPTCHA_PRIVATE_KEY", None),
+            enabled=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
+            score=app.config.get("CAPTCHA_SCORE", self.SCORE),
+            captcha_log=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         )
 
         # call this context_processor from upper class FlaskCaptcha.render_captcha

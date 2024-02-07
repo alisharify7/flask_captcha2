@@ -1,0 +1,1 @@
+from .Image import FlaskImageCaptcha

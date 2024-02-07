@@ -18,11 +18,11 @@ app = Flask(__name__)
 load_dotenv()
 
 app.config.update({
-    "RECAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", ""),
-    "RECAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", ""),
-    'RECAPTCHA_ENABLED': True,  # captcha enable status
-    "RECAPTCHA_LOG": True,
-    "RECAPTCHA_LANGUAGE": "en"
+    "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", ""),
+    "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", ""),
+    'CAPTCHA_ENABLED': True,  # captcha enable status
+    "CAPTCHA_LOG": True,
+    "CAPTCHA_LANGUAGE": "en"
 })
 
 Master_captcha = FlaskCaptcha(app=app)  # app is required

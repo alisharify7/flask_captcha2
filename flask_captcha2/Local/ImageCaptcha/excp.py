@@ -1,5 +1,0 @@
-
-
-
-class NotFlaskObject(BaseException):
-    pass

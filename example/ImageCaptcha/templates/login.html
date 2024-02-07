@@ -12,18 +12,10 @@
     {# you can also use Flask-wtf forms #}
     <input placeholder="username" type="text" name="username" id="">
     <br>
-    <input placeholder="password" type="password" name="password" id="">
+    <input placeholder="captcha" type="text" name="captcha" id="">
     <br>
-    {{ captcha.render_captcha(
-                model_name='captcha3',
-                class='custom-class-name',
-                ParentFormID="ParentForm",
-                BtnText="submit This Form",
-                id="SubmitBtnForm",
-                style=" background-color:blue; color:white; font-size:2rem;",
-                dataset="data-ok='true' data-test='test data set check' ",
-                hiddenBadge=True
-            ) }}
+    {{ captcha.render_captcha(model_name='imageCaptcha') }}
+    <input type="submit">
 </form>
 
 </body>

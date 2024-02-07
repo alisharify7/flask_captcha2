@@ -4,6 +4,7 @@ from flask import Flask
 
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
+from .LocalCaptcha.Image import FlaskImageCaptcha
 from .Logger import get_logger
 
 
@@ -31,7 +32,7 @@ class FlaskCaptcha:
         self.__logger = get_logger("Flask-Captcha")
 
 
-    def getGoogleCaptcha2(self, name: str) -> FlaskCaptcha2:
+    def getGoogleCaptcha2(self, name: str, *args, **kwargs) -> FlaskCaptcha2:
         """return a flask captcha object for google captcha version 2
 
         args:
@@ -46,7 +47,7 @@ class FlaskCaptcha:
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
         return self.__get_captcha_from_mapper(name=name)
 
-    def getGoogleCaptcha3(self, name: str) -> FlaskCaptcha3:
+    def getGoogleCaptcha3(self, name: str, *args, **kwargs) -> FlaskCaptcha3:
         """return a flask captcha object for google captcha version 3
 
         args:
@@ -61,6 +62,18 @@ class FlaskCaptcha:
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
 
         return self.__get_captcha_from_mapper(name=name)
+
+    def getLocalImageCaptcha(self, name: str, *args, **kwargs) -> FlaskImageCaptcha:
+        if not name:
+            raise ValueError("captcha should have a name!")
+        if not self.__check_duplicate_captcha_name(name):
+            raise ValueError("duplicated captcha name!")
+
+        captcha = FlaskImageCaptcha(app=self.__app)
+        self.__set_captcha_mapper(name=name, captchaObject=captcha)
+
+        return self.__get_captcha_from_mapper(name=name)
+
 
     def render_captcha(self, *args, **kwargs):
         """Use this method in templates for rendering captcha widgets in your template"""
