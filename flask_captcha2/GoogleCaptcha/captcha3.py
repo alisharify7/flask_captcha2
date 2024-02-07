@@ -4,8 +4,8 @@ import requests
 from flask import request, Flask
 from markupsafe import Markup
 
-from flask_captcha2.Logger import get_logger
 from flask_captcha2 import excep as ex
+from flask_captcha2.Logger import get_logger
 from .utils import CommandCaptchaUtils
 
 logger = get_logger("Google-Captcha-v3")
@@ -57,9 +57,9 @@ class FlaskCaptcha3(BaseCaptcha3):
             self.CAPTCHA_LOG = kwargs.get("captcha_log", self.CAPTCHA_LOG)
 
     def init_app(self, app: Flask = None):
-        if not isinstance(app , Flask):
+        if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
-        
+
         if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
             raise ValueError("Flask-Captcha2.GoogleCaptcha.captcha3: Private and Public Keys are Required")
 

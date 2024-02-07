@@ -4,8 +4,8 @@ import requests
 from flask import request, Flask
 from markupsafe import Markup
 
-from flask_captcha2.Logger import get_logger
 from flask_captcha2 import excep as ex
+from flask_captcha2.Logger import get_logger
 from .utils import CommandCaptchaUtils
 
 logger = get_logger("Google-Captcha-v2")
@@ -64,7 +64,6 @@ class FlaskCaptcha2(BaseCaptcha2):
             captcha_log=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
 
         )
-
 
     def is_verify(self) -> bool:
         """ Verify a Captcha v2 """

@@ -1,11 +1,10 @@
-import os
-import random
 import base64
+import random
 import string
 
+from captcha.image import ImageCaptcha
 # libs
 from flask import Flask, session
-from captcha.image import ImageCaptcha
 from markupsafe import Markup
 
 # flask-captcha2
@@ -16,11 +15,11 @@ from flask_captcha2.Logger import get_logger
 class BaseImageCaptcha:
     ENABLE: bool = True
     LOG: bool = True
-    LENGTH: int = 6 # length of captcha
-    SESSION_KEY_NAME:str = 'flask-captcha2-image-captcha-answer'
+    LENGTH: int = 6  # length of captcha
+    SESSION_KEY_NAME: str = 'flask-captcha2-image-captcha-answer'
 
-    HEIGHT:int= 220
-    WIDTH:int=180
+    HEIGHT: int = 220
+    WIDTH: int = 180
 
     INCLUDE_LETTERS: bool = False
     INCLUDE_NUMERIC: bool = True
@@ -28,11 +27,10 @@ class BaseImageCaptcha:
 
     _letters: str = string.ascii_lowercase
     _punctuations: str = string.punctuation
-    _numbers: str= string.digits
-    _imgGeneratorEngine :ImageCaptcha=None
+    _numbers: str = string.digits
+    _imgGeneratorEngine: ImageCaptcha = None
 
     Logger = get_logger("Flask-Captcha2-ImageCaptcha")
-
 
     @property
     def LETTERS(self):
@@ -40,18 +38,16 @@ class BaseImageCaptcha:
         return self._letters
 
     @LETTERS.setter
-    def LETTERS(self, value:str):
+    def LETTERS(self, value: str):
         """setter for letters """
         if not isinstance(value, str):
             raise ValueError(f"letters {value} must be a string not a {type(value)}")
         else:
             self._letters = value
 
-
     @property
     def NUMBERS(self):
         return self._numbers
-
 
     @NUMBERS.setter
     def NUMBERS(self, value: str):
@@ -60,11 +56,9 @@ class BaseImageCaptcha:
         else:
             self._numbers = value
 
-
     @property
     def PUNCTUATIONS(self):
         return self._punctuations
-
 
     @PUNCTUATIONS.setter
     def PUNCTUATIONS(self, value: str):
@@ -72,8 +66,6 @@ class BaseImageCaptcha:
             raise ValueError(f"punctuation must be a string not a {type(value)}")
         else:
             self._punctuations = value
-
-
 
     def random_number(self, length: int) -> list:
         """return a list contains only numbers randomly with fixed length of input args """
@@ -125,7 +117,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
             self.LETTERS = kwargs.get("CAPTCHA_IMAGE_LETTERS")  # setter call
             self.NUMBERS = kwargs.get("CAPTCHA_IMAGE_NUMBERS")  # setter call
-            self.PUNCTUATIONS = kwargs.get("CAPTCHA_IMAGE_PUNCTUATIONS")    # setter call
+            self.PUNCTUATIONS = kwargs.get("CAPTCHA_IMAGE_PUNCTUATIONS")  # setter call
 
             # session config
             self.SESSION_KEY_NAME = kwargs.get("CAPTCHA_IMAGE_SESSION_KEY_NAME")
@@ -137,9 +129,9 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
             self.WIDTH = kwargs.get("CAPTCHA_IMAGE_WIDTH")
             self.HEIGHT = kwargs.get("CAPTCHA_IMAGE_HEIGHT")
-            self.LENGTH = kwargs.get("CAPTCHA_IMAGE_CAPTCHA_LENGTH") # length of CAPTCHA code in image
+            self.LENGTH = kwargs.get("CAPTCHA_IMAGE_CAPTCHA_LENGTH")  # length of CAPTCHA code in image
 
-            self._imgGeneratorEngine = ImageCaptcha(height=self.HEIGHT, width= self.WIDTH)
+            self._imgGeneratorEngine = ImageCaptcha(height=self.HEIGHT, width=self.WIDTH)
 
     def init_app(self, app: Flask):
         if not isinstance(app, Flask):
@@ -155,12 +147,12 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             CAPTCHA_IMAGE_SESSION_KEY_NAME=app.config.get("CAPTCHA_IMAGE_SESSION_KEY_NAME", self.SESSION_KEY_NAME),
             CAPTCHA_IMAGE_INCLUDE_LETTERS=app.config.get("CAPTCHA_IMAGE_INCLUDE_LETTERS", self.INCLUDE_LETTERS),
             CAPTCHA_IMAGE_INCLUDE_NUMERIC=app.config.get("CAPTCHA_IMAGE_INCLUDE_NUMERIC", self.INCLUDE_NUMERIC),
-            CAPTCHA_IMAGE_INCLUDE_PUNCTUATION=app.config.get("CAPTCHA_IMAGE_INCLUDE_PUNCTUATION", self.INCLUDE_PUNCTUATION),
+            CAPTCHA_IMAGE_INCLUDE_PUNCTUATION=app.config.get("CAPTCHA_IMAGE_INCLUDE_PUNCTUATION",
+                                                             self.INCLUDE_PUNCTUATION),
             CAPTCHA_IMAGE_WIDTH=app.config.get("CAPTCHA_IMAGE_WIDTH", self.WIDTH),
             CAPTCHA_IMAGE_HEIGHT=app.config.get("CAPTCHA_IMAGE_HEIGHT", self.HEIGHT),
             CAPTCHA_IMAGE_CAPTCHA_LENGTH=app.config.get("CAPTCHA_IMAGE_CAPTCHA_LENGTH", self.LENGTH)
         )
-
 
     def renderWidget(self, *args, **kwargs) -> Markup:
         """render captcha widget -> image in template"""
@@ -225,15 +217,12 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
-
-
-    def is_verify(self, CaptchaAnswer:str="") -> bool:
+    def is_verify(self, CaptchaAnswer: str = "") -> bool:
         print(session[self.SESSION_KEY_NAME] == CaptchaAnswer)
         if session.get(self.SESSION_KEY_NAME):
             if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
                 return True
         return False
-
 
     def __validate(self):
         pass

@@ -64,16 +64,15 @@ def client(app):
     yield app.test_client()
 
 
-
 @pytest.fixture()
 def captcha3_template_conf():
     """captcha version3 render_captcha config"""
-    conf ={
-            'ParentFormID': 'id-of-parent-form',
-            'BtnText': 'submit form',
-            'dataset':' data-check="True" data-another="Checked" ',
-            'style': 'background-color:"red"',
-            'id': 'id-of-submit-form',
-            'class': 'class-of-submit-form'
-        }
+    conf = {
+        'ParentFormID': 'id-of-parent-form',
+        'BtnText': 'submit form',
+        'dataset': ' data-check="True" data-another="Checked" ',
+        'style': 'background-color:"red"',
+        'id': 'id-of-submit-form',
+        'class': 'class-of-submit-form'
+    }
     yield conf

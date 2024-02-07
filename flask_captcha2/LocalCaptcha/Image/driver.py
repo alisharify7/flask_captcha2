@@ -1,4 +1,2 @@
-import redis
-
 class RedisDriver:
     ...
