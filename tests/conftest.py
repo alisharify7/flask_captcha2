@@ -5,6 +5,7 @@ from flask import Flask
 
 from flask_captcha2 import FlaskCaptcha
 
+"""By default captcha log is False"""
 
 @pytest.fixture()
 def app():
@@ -23,15 +24,15 @@ def googlecaptcha2(app):
     """flask-captcha2 Google Captcha v2 object"""
     app.config.from_mapping(
         {
-            "RECAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", "sample key"),
-            "RECAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", "sample key"),
-            'RECAPTCHA_ENABLED': True,
-            "RECAPTCHA_LOG": True,
-            "RECAPTCHA_LANGUAGE": "en",
-            "RECAPTCHA_THEME": "light",
-            "RECAPTCHA_SIZE": "normal",
-            "RECAPTCHA_TABINDEX": 0,
-            "RECAPTCHA_TYPE": "image"
+            "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", "sample key"),
+            "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", "sample key"),
+            'CAPTCHA_ENABLED': True,
+            "CAPTCHA_LOG": False,
+            "CAPTCHA_LANGUAGE": "en",
+            "CAPTCHA_THEME": "light",
+            "CAPTCHA_SIZE": "normal",
+            "CAPTCHA_TABINDEX": 0,
+            "CAPTCHA_TYPE": "image"
         }
     )
     Master_captcha = FlaskCaptcha(app=app)
@@ -44,11 +45,11 @@ def googlecaptcha3(app):
     """flask-captcha2 Google Captcha v3 object"""
     app.config.from_mapping(
         {
-            "RECAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V3", ""),
-            "RECAPTCHA_PUBLIC_KEY": os.environ.get("PRIVATE_KEY_V3", ""),
-            'RECAPTCHA_ENABLED': True,  # captcha enable status
-            "RECAPTCHA_SCORE": 0.5,  #
-            "RECAPTCHA_LOG": True,
+            "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V3", ""),
+            "CAPTCHA_PUBLIC_KEY": os.environ.get("PRIVATE_KEY_V3", ""),
+            'CAPTCHA_ENABLED': True,  # captcha enable status
+            "CAPTCHA_SCORE": 0.5,  #
+            "CAPTCHA_LOG": False,
 
         }
     )
