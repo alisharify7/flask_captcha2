@@ -2,12 +2,12 @@ import logging
 import sys
 
 
-def get_logger(CaptchaName: str = "Flask-Captcha"):
+def get_logger(LogLevel, CaptchaName: str = "Flask-Captcha") -> logging.Logger:
     """ This function return a stdout Logger
     args:
         . CaptchaName:string: name of the logger
     """
-    logLevel = logging.INFO
+    logLevel = LogLevel or logging.DEBUG
     logformat = logging.Formatter(f"[{CaptchaName}" + "- %(levelname)s] [%(asctime)s] - %(message)s")
     logger = logging.getLogger(CaptchaName)
     logger.setLevel(logLevel)
