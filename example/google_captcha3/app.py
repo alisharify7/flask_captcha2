@@ -23,7 +23,7 @@ app.config.update({
     "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V3", ""),
     'CAPTCHA_ENABLED': True,  # captcha enable status
     "CAPTCHA_SCORE": 0.5,  #
-    "CAPTCHA_LOG": True
+    "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
 })
 
 Master_captcha = FlaskCaptcha(app=app)  # app is required
@@ -44,4 +44,4 @@ def index_get():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
