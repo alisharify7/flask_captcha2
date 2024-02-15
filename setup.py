@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.3"
+__version__ = "3.5.0"
 __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"
 __copyright__ = "ali sharify - 2023"
@@ -27,6 +27,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
@@ -39,9 +40,10 @@ setup(
     install_requires=[
         "flask>=2.2.5",
         "markupsafe>=2.1.2",
-        "requests>=2.30.0"
+        "requests>=2.30.0",
+        "captcha>=0.5.0"
     ],
-    python_requires=">=3.8",
-    keywords='flask security, Google captcha for flask, captcha , flask, flask-captcha, flask-captcha2, flask_captcha2'
+    python_requires=">=3.9",
+    keywords='flask security, Google captcha for flask, captcha , flask, flask-captcha, flask-captcha2, flask_captcha2, flask-images-captcha'
 
 )
