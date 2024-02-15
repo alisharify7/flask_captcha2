@@ -1,7 +1,10 @@
-# all captcha Classes
+# build in
+import logging
 
+# lib
 from flask import Flask
 
+# flask-captcha2
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
 from .LocalCaptcha.Image import FlaskImageCaptcha
@@ -17,7 +20,7 @@ class FlaskCaptcha:
         and also initiate the captcha_object_mapper storage in app.config
         """
         if not app or not isinstance(app, Flask):
-            raise ValueError("Flask App required. please provide app like FlaskCaptcha(app=app)")
+            raise ValueError("Flask App is required. please provide app like FlaskCaptcha(app=app)")
 
         @app.context_processor
         def app_context_processor():
@@ -29,7 +32,10 @@ class FlaskCaptcha:
         app.config["captcha_object_mapper"] = {}  # keep all captcha object and names
         self.__debug = app.debug
         self.__app = app
-        self.__logger = get_logger("Flask-Captcha")
+        self.__logger = get_logger(LogLevel=logging.INFO, CaptchaName="Flask-Captcha2-Master")
+
+    def print_log(self, message:str):
+        self.__logger.info(message)
 
     def getGoogleCaptcha2(self, name: str, *args, **kwargs) -> FlaskCaptcha2:
         """return a flask captcha object for google captcha version 2
@@ -44,6 +50,7 @@ class FlaskCaptcha:
 
         captcha = FlaskCaptcha2(app=self.__app)
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
+        self.print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name{name}")
         return self.__get_captcha_from_mapper(name=name)
 
     def getGoogleCaptcha3(self, name: str, *args, **kwargs) -> FlaskCaptcha3:
@@ -59,7 +66,7 @@ class FlaskCaptcha:
 
         captcha = FlaskCaptcha3(app=self.__app)
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
-
+        self.print_log(f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name{name}")
         return self.__get_captcha_from_mapper(name=name)
 
     def getLocalImageCaptcha(self, name: str, *args, **kwargs) -> FlaskImageCaptcha:
@@ -70,7 +77,7 @@ class FlaskCaptcha:
 
         captcha = FlaskImageCaptcha(app=self.__app)
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
-
+        self.print_log(f"local-image-captcha created successfully,\n\tcaptcha-name{name}")
         return self.__get_captcha_from_mapper(name=name)
 
     def render_captcha(self, *args, **kwargs):
