@@ -1,14 +1,16 @@
+# build in
 import json
+import logging
 
+# lib
 import requests
 from flask import request, Flask
 from markupsafe import Markup
 
+# flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.Logger import get_logger
 from .utils import CommandCaptchaUtils
-
-logger = get_logger("Google-Captcha-v3")
 
 
 class BaseCaptcha3(CommandCaptchaUtils):
@@ -22,6 +24,9 @@ class BaseCaptcha3(CommandCaptchaUtils):
     MINIMUM_SCORE: float = 0.5  # default minimum score
     CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
+
+    Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3")
+
 
 
 class FlaskCaptcha3(BaseCaptcha3):
@@ -95,8 +100,8 @@ class FlaskCaptcha3(BaseCaptcha3):
             # }
 
             if self.CAPTCHA_LOG:
-                logger.info(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                logger.info(f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}")
+                self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
+                self.debug_log(f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}")
 
             if responseGoogle.status_code == 200:
                 jsonResponse = responseGoogle.json()
@@ -140,4 +145,8 @@ class FlaskCaptcha3(BaseCaptcha3):
         if self.ENABLED:
             return Markup(captchaField)
         else:
-            return Markup(" ")
+            captchaField = f"""
+                <input type='submit' class="{kwargs.get('class', '')}" {arg}
+                value="{kwargs.get('btn-text', 'submit')}"></input>
+                """.strip()
+            return Markup(captchaField)

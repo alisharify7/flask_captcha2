@@ -1,14 +1,16 @@
+# build in
 import json
+import logging
 
+# lib
 import requests
 from flask import request, Flask
 from markupsafe import Markup
 
+# flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.Logger import get_logger
 from .utils import CommandCaptchaUtils
-
-logger = get_logger("Google-Captcha-v2")
 
 
 class BaseCaptcha2(CommandCaptchaUtils):
@@ -25,6 +27,9 @@ class BaseCaptcha2(CommandCaptchaUtils):
     TYPE: str = "image"
     SIZE: str = "normal"  # compact، normal، invisible
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
+
+    Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v2")
+
 
 
 class FlaskCaptcha2(BaseCaptcha2):
@@ -89,8 +94,8 @@ class FlaskCaptcha2(BaseCaptcha2):
             #     ]
             # }
             if self.CAPTCHA_LOG:
-                logger.info(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                logger.info(f"GOOGLE RESPONSE:\n {json.dumps(responseGoogle.json(), indent=4)}")
+                self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
+                self.debug_log(f"GOOGLE RESPONSE:\n {json.dumps(responseGoogle.json(), indent=4)}")
 
             if responseGoogle.status_code == 200:
                 return responseGoogle.json()["success"]

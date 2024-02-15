@@ -1,12 +1,15 @@
+# build in
 import base64
+import logging
 import secrets
 import string
 from random import SystemRandom
 
-from captcha.image import ImageCaptcha
 # libs
 from flask import Flask, session
 from markupsafe import Markup
+from captcha.image import ImageCaptcha
+
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
@@ -31,8 +34,8 @@ class BaseImageCaptcha:
     _numbers: str = string.digits
     _imgGeneratorEngine: ImageCaptcha = None
 
-    Logger = get_logger("Flask-Captcha2-ImageCaptcha")
     random = SystemRandom()
+    Logger = get_logger(LogLevel=logging.DEBUG ,CaptchaName="Flask-Captcha2-ImageCaptcha")
 
     @property
     def LETTERS(self):
@@ -86,6 +89,13 @@ class BaseImageCaptcha:
         self.random.shuffle(list_captcha)
 
 
+
+    def debug_log(self, message:str):
+        """Print logs to stdout if CAPTCHA_IMAGE_LOG: bool  is set"""
+        if self.LOG:
+            self.Logger.debug(message)
+
+
 class FlaskImageCaptcha(BaseImageCaptcha):
     def __init__(self, app: Flask, **kwargs):
         """
@@ -107,7 +117,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
                  CAPTCHA_IMAGE_NUMBERS:str
                  CAPTCHA_IMAGE_PUNCTUATIONS:str
         """
-
+        self.Logger.debug("H")
         if app:
             if not isinstance(app, Flask):
                 raise ex.NotFlaskApp(f'object {app} is not a flask instance!,')
@@ -171,6 +181,8 @@ class FlaskImageCaptcha(BaseImageCaptcha):
                 .. include_punctuations: bool: False
 
         """
+        if not self.ENABLE:
+            return Markup(" ")
 
         numeric = kwargs.get("include_numbers", self.INCLUDE_NUMERIC)
         letters = kwargs.get("include_letters", self.INCLUDE_LETTERS)
@@ -210,7 +222,8 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
 
-        self.Logger.debug(f'Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}')
+        self.debug_log(f'Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}')
+
         session[self.SESSION_KEY_NAME] = captcha_raw_code
 
         # external args
@@ -223,10 +236,13 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
     def is_verify(self, CaptchaAnswer: str = "") -> bool:
+        """Verify a image captcha answer """
+        if not self.ENABLE:
+            return True
+
         if session.get(self.SESSION_KEY_NAME, False):
             if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
                 session.pop(self.SESSION_KEY_NAME)
                 return True
             session.pop(self.SESSION_KEY_NAME)
-
         return False
