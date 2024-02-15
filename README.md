@@ -1,5 +1,6 @@
 # flask_captcha2
-a light and simple Flask extension for integrating google recaptcha with Flask Apps
+Flask plugin to integrate Google captcha (version 2, 3) and local captcha (image, voice) with Flask applications
+
 <p>
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2">
   <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2">

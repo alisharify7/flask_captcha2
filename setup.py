@@ -6,7 +6,7 @@ __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"
 __copyright__ = "ali sharify - 2023"
 __license__ = "MIT"
-__short_description__ = "a light and simple Flask extension for integrating google captcha with Flask Apps"
+__short_description__ = "Flask plugin to integrate Google captcha (version 2, 3) and local captcha (image, voice) with Flask applications"
 
 
 with open("./README.rst", "r") as f:
