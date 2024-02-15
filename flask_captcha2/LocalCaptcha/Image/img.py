@@ -1,6 +1,7 @@
 import base64
-import random
+import secrets
 import string
+from random import SystemRandom
 
 from captcha.image import ImageCaptcha
 # libs
@@ -31,6 +32,7 @@ class BaseImageCaptcha:
     _imgGeneratorEngine: ImageCaptcha = None
 
     Logger = get_logger("Flask-Captcha2-ImageCaptcha")
+    random = SystemRandom()
 
     @property
     def LETTERS(self):
@@ -69,19 +71,19 @@ class BaseImageCaptcha:
 
     def random_number(self, length: int) -> list:
         """return a list contains only numbers randomly with fixed length of input args """
-        return random.choices(self.NUMBERS, k=length)
+        return [secrets.choice(self.NUMBERS) for i in range(length)]  # replace random with secrets
 
     def random_punctuation(self, length: int) -> list:
         """return a list contains only punctuation randomly with fixed length of input args """
-        return random.choices(self.PUNCTUATIONS, k=length)
+        return [secrets.choice(self.PUNCTUATIONS) for i in range(length)]  # replace random with secrets
 
     def random_letters(self, length: int) -> list:
         """return a list contains only alphabet randomly with fixed length of input args """
-        return random.choices(self.LETTERS, k=length)
+        return [secrets.choice(self.LETTERS) for i in range(length)]  # replace random with secrets
 
     def shuffle_list(self, list_captcha: list) -> None:
         """This Method take a list and shuffle the list randomly"""
-        random.shuffle(list_captcha)
+        self.random.shuffle(list_captcha)
 
 
 class FlaskImageCaptcha(BaseImageCaptcha):
@@ -196,8 +198,10 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             each_round = self.LENGTH // total
             for each in selected:
                 captcha_raw_code += (selected[each](length=each_round))
-            captcha_raw_code += (self.random_letters(length=(self.LENGTH - len(captcha_raw_code))))
-            self.shuffle_list(captcha_raw_code)
+
+            captcha_raw_code += (
+                self.random_letters(length=(self.LENGTH - len(captcha_raw_code))))  # fix gap (odd number)
+            self.shuffle_list(captcha_raw_code)  # final shuffle
 
         captcha_raw_code = "".join(captcha_raw_code)
         image_data = self._imgGeneratorEngine.generate(captcha_raw_code)
@@ -206,9 +210,10 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
 
-        self.Logger.info(f'Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}')
+        self.Logger.debug(f'Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}')
         session[self.SESSION_KEY_NAME] = captcha_raw_code
 
+        # external args
         args = ""
         args += f"class=\"{kwargs.get('class')}\"\t" if kwargs.get('class') else ''
         args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else ''
@@ -218,11 +223,10 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
     def is_verify(self, CaptchaAnswer: str = "") -> bool:
-        print(session[self.SESSION_KEY_NAME] == CaptchaAnswer)
-        if session.get(self.SESSION_KEY_NAME):
+        if session.get(self.SESSION_KEY_NAME, False):
             if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
+                session.pop(self.SESSION_KEY_NAME)
                 return True
-        return False
+            session.pop(self.SESSION_KEY_NAME)
 
-    def __validate(self):
-        pass
+        return False
