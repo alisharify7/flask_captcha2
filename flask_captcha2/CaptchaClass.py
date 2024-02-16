@@ -11,7 +11,7 @@ from .GoogleCaptcha.captcha3 import FlaskCaptcha3
 from .LocalCaptcha.Image import FlaskImageCaptcha
 from .Logger import get_logger
 
-import excep as exceptions
+from . import excep as exceptions
 
 
 class FlaskCaptcha:
@@ -183,7 +183,7 @@ class FlaskCaptcha:
         if name in self.__app.config["captcha_object_mapper"]:
             return self.__app.config["captcha_object_mapper"][name]
         else:
-            raise exceptions.CaptchaNameNotExists(f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}"))
+            raise exceptions.CaptchaNameNotExists(f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
         
 
     def __get_all_available_captcha_names(self) -> list:
