@@ -10,15 +10,15 @@ from markupsafe import Markup
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.Logger import get_logger
-from .utils import CommandCaptchaUtils
+from .utils import CommonCaptchaUtils
 
 
-class BaseCaptcha2(CommandCaptchaUtils):
+class BaseCaptcha2(CommonCaptchaUtils):
     """
-       Base Google Captcha v2 class
+       Base Google Captcha v2 class, contain default settings and properties 
     """
-    PUBLIC_KEY: str = None
-    PRIVATE_KEY: str = None
+    PUBLIC_KEY: str = ''
+    PRIVATE_KEY: str = ''
     CAPTCHA_LOG: bool = True
     ENABLED: bool = False
     THEME: str = "light"
@@ -51,6 +51,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             self.CAPTCHA_LOG = kwargs.get('captcha_log', self.CAPTCHA_LOG)
 
     def init_app(self, app: Flask = None):
+        """Initial setting of the object base on Flask-Application configuration"""
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
@@ -67,11 +68,17 @@ class FlaskCaptcha2(BaseCaptcha2):
             language=app.config.get("CAPTCHA_LANGUAGE", self.LANGUAGE),
             tabindex=app.config.get("CAPTCHA_TABINDEX", self.TABINDEX),
             captcha_log=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
-
         )
 
     def is_verify(self) -> bool:
-        """ Verify a Captcha v2 """
+        """ This Method Verify a Captcha v2 request
+        
+        Args: 
+            None
+        
+        Returns:
+            Bool: `True` if the captcha verified successfully from google otherwise `False`
+        """
         if not self.ENABLED:
             return True
         else:
@@ -82,11 +89,13 @@ class FlaskCaptcha2(BaseCaptcha2):
 
             responseGoogle = requests.get(self.GOOGLE_VERIFY_URL, params=data)
             # response from Google is something like this
-            # {
+            #         successful answer 
+            #{
             #     "success": true,
             #     "challenge_ts": "2023-05-17T10:41:22Z",
             #     "hostname": "127.0.0.1"
             # }
+            #          failed answer
             # {
             #     "success": false,
             #     "error-codes": [
@@ -105,13 +114,24 @@ class FlaskCaptcha2(BaseCaptcha2):
     def renderWidget(self, *args, **kwargs) -> Markup:
         """
             render captcha v2 widget
-        :return:
+
+        Args:
+            id: str: id of captcha element
+            css: str: css of captcha element
+            style: str: style of captcha element
+            dataset: str: dataset of captcha element
+            event: str: javascript event of captcha element
+
+        Returns:
+            captchaFiled: str<Markup>: captcha 
         """
 
         args = ""
         args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else ''  # id, class internal text
         args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
         args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
+        args += f"{kwargs.get('event', '')}"  # js event
+
 
         CaptchaField = (f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>

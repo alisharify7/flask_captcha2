@@ -10,15 +10,15 @@ from markupsafe import Markup
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.Logger import get_logger
-from .utils import CommandCaptchaUtils
+from .utils import CommonCaptchaUtils
 
 
-class BaseCaptcha3(CommandCaptchaUtils):
+class BaseCaptcha3(CommonCaptchaUtils):
     """
        Base Config for Google Captcha v3 class
     """
-    PUBLIC_KEY: str = None
-    PRIVATE_KEY: str = None
+    PUBLIC_KEY: str = ''
+    PRIVATE_KEY: str = ''
     ENABLED: bool = False
     SCORE: float = 0.5
     MINIMUM_SCORE: float = 0.5  # default minimum score
@@ -53,13 +53,11 @@ class FlaskCaptcha3(BaseCaptcha3):
             self.PUBLIC_KEY = public_key
             self.PRIVATE_KEY = private_key
             self.ENABLED = kwargs.get("enabled", self.ENABLED)
+            self.CAPTCHA_LOG = kwargs.get("captcha_log", self.CAPTCHA_LOG)
             try:
-                self.SCORE = self.MINIMUM_SCORE if int(kwargs.get('score', self.SCORE)) < self.MINIMUM_SCORE else int(
-                    kwargs.get('score', self.SCORE))
+                self.SCORE = self.MINIMUM_SCORE if int(kwargs.get('score', self.SCORE)) < self.MINIMUM_SCORE else int(kwargs.get('score', self.SCORE))
             except ValueError:
                 self.SCORE = self.MINIMUM_SCORE
-
-            self.CAPTCHA_LOG = kwargs.get("captcha_log", self.CAPTCHA_LOG)
 
     def init_app(self, app: Flask = None):
         if not isinstance(app, Flask):
@@ -76,13 +74,15 @@ class FlaskCaptcha3(BaseCaptcha3):
             captcha_log=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         )
 
-        # call this context_processor from upper class FlaskCaptcha.render_captcha
-        # @app.context_processor
-        # def render_captcha() -> dict:
-        #     return {"captchaField": self.renderWidget}
-
     def is_verify(self) -> bool:
-        """ Verify request that contain captcha v3 """
+        """ This Method Verify a Captcha v3 request
+        
+        Args: 
+            None
+        
+        Returns:
+            Bool: `True` if the captcha verified successfully from google otherwise `False`
+        """
         if not self.ENABLED:
             return True
         else:
@@ -112,41 +112,40 @@ class FlaskCaptcha3(BaseCaptcha3):
     def renderWidget(self, *args, **kwargs) -> Markup:
         """
             render captcha v3 widget
-        :return:
+
+        Args:
+            id: str: id of captcha element
+            css: str: css of captcha element
+            style: str: style of captcha element
+            dataset: str: dataset of captcha element
+            event: str: javascript event of captcha element
+            BtnText: str: value of input submit button of the form
+            ParentFormID: str: id of parent for element
+            hiddenBadge: bool: set visibility of captcha widget in bottom right corner 
+
+
+        Returns:
+            captchaFiled: str<Markup>: captcha 
         """
-        # {{
-        #         how use context_processor in template
-        #     captcha.captcha_render
-        #     (
-        #       model_name='name',
-        #     conf={
-        #         'btnText': "submit btn text", # required
-        #         'ParentFormID': 'put prent form id here', # required
-        #         'id':'if you want to set id for btn set id in here', # optional
-        #         'style': 'css style', # optional
-        #         'dataset': optional for giving dataset attribute to submit btn
-        #         'hidden-badge':True or False, this value can hide or show captcha badge
-        #     })
-        # }}
 
         arg = ""
         arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text
         arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
         arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
-        arg += f"value=\"{kwargs.get('BtnText')}\"\t" if kwargs.get('BtnText') else ''  # style
+        arg += f"value=\"{kwargs.get('BtnText', 'Submit')}\"\t"  # style
+        args += f"{kwargs.get('event', '')}"  # js event
+
 
         captchaField = (f"""
             {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hiddenBadge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <script>function onSubmit(token) {{document.getElementById('{kwargs.get('ParentFormID', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {kwargs.get('class', '')}" {arg}
-            value="{kwargs.get('btn-text', 'submit')}" data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
-        """).strip()
+             data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
+            """).strip()
         if self.ENABLED:
             return Markup(captchaField)
         else:
-            captchaField = f"""
-                <input type='submit' class="{kwargs.get('class', '')}" {arg}
-                value="{kwargs.get('btn-text', 'submit')}"></input>
-                """.strip()
+            # if captcha is disabled render just a simple submit input
+            captchaField = f"""<input type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
             return Markup(captchaField)

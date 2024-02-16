@@ -17,6 +17,7 @@ from flask_captcha2.Logger import get_logger
 
 
 class BaseImageCaptcha:
+    """Base default configuration class for image captcha"""
     ENABLE: bool = True
     LOG: bool = True
     LENGTH: int = 6  # length of captcha
@@ -34,7 +35,8 @@ class BaseImageCaptcha:
     _numbers: str = string.digits
     _imgGeneratorEngine: ImageCaptcha = None
 
-    random = SystemRandom()
+    # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
+    random = SystemRandom() # https://docs.python.org/3/library/random.html
     Logger = get_logger(LogLevel=logging.DEBUG ,CaptchaName="Flask-Captcha2-ImageCaptcha")
 
     @property
@@ -117,7 +119,6 @@ class FlaskImageCaptcha(BaseImageCaptcha):
                  CAPTCHA_IMAGE_NUMBERS:str
                  CAPTCHA_IMAGE_PUNCTUATIONS:str
         """
-        self.Logger.debug("H")
         if app:
             if not isinstance(app, Flask):
                 raise ex.NotFlaskApp(f'object {app} is not a flask instance!,')
@@ -167,7 +168,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         )
 
     def renderWidget(self, *args, **kwargs) -> Markup:
-        """render captcha widget -> image in template"""
+        """render captcha widget image in template"""
         return self.__generate(*args, **kwargs)
 
     def __generate(self, *args, **kwargs) -> Markup:
@@ -228,21 +229,23 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         # external args
         args = ""
-        args += f"class=\"{kwargs.get('class')}\"\t" if kwargs.get('class') else ''
-        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else ''
-        args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''
-        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''
+        args += f"class=\"{kwargs.get('class')}\"\t" if kwargs.get('class') else '' # css class
+        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else '' # id
+        args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else '' # dataset
+        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
+        args += f"{kwargs.get('event', '')}"  # js event 
 
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
+
     def is_verify(self, CaptchaAnswer: str = "") -> bool:
-        """Verify a image captcha answer """
+        """Verify image captcha answer is correct """
         if not self.ENABLE:
             return True
 
         if session.get(self.SESSION_KEY_NAME, False):
             if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
-                session.pop(self.SESSION_KEY_NAME)
+                session.pop(self.SESSION_KEY_NAME) 
                 return True
             session.pop(self.SESSION_KEY_NAME)
         return False
