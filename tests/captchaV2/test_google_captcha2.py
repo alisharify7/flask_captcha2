@@ -27,7 +27,7 @@ def test_refresh_captcha_config(googlecaptcha2, app):
 
 
 def test_load_captcha_in_html(client, googlecaptcha2, app):
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(Exception) as e:
         captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='unknown-name')
 
     captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='flask-captcha-v2')

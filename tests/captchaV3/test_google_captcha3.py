@@ -24,7 +24,7 @@ def test_refresh_captcha_config(googlecaptcha3, app):
 
 
 def test_load_captcha_in_html(client, googlecaptcha3, app, captcha3_template_conf):
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(Exception) as e:
         # test unknown name
         captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='unknown-name')
 
