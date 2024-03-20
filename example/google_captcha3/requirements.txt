@@ -1,0 +1,3 @@
+python-dotnev
+flask
+flask-captcha2
