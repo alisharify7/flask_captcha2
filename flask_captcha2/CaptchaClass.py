@@ -37,36 +37,41 @@ class FlaskCaptcha:
             }
             return ctx
 
-        app.config["captcha_object_mapper"] = {}  # keep all captcha object and names
+        app.config["captcha_object_mapper"] = {}  # keep all captcha object : key:value -> name:object
         self.__debug = app.debug
         self.__app = app
         self.__logger = get_logger(LogLevel=logging.INFO, CaptchaName="Flask-Captcha2-Master")
 
     def print_log(self, message:str):
         """print a log message"""
-        return None
         self.__logger.info(message)
 
-    def getGoogleCaptcha2(self, name: str, *args, **kwargs) -> FlaskCaptcha2:
+
+    def getGoogleCaptcha2(self, name: str, conf:dict=None, *args, **kwargs) -> FlaskCaptcha2:
         """return a flask captcha object for google captcha version 2
 
         Args:
             name:str: a unique name for captcha object. it is better to be a combination of captcha type and version
-        
+            conf:dict: a dictionary with config for captcha object
         Returns:
             captchaObject: FlaskCaptcha2: an FlaskCaptcha2 object
         """
+
         if not name:
             raise ValueError("captcha should have a name!")
         if not self.__check_duplicate_captcha_name(name):
             raise ValueError("duplicated captcha name!")
 
-        captcha = FlaskCaptcha2(app=self.__app)
+        if conf and isinstance(conf, dict): # custom config is passed
+            captcha = FlaskCaptcha2(**conf)
+        else:
+            captcha = FlaskCaptcha2(app=self.__app)
+
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
         self.print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
-    def getGoogleCaptcha3(self, name: str, *args, **kwargs) -> FlaskCaptcha3:
+    def getGoogleCaptcha3(self, name: str, conf:dict=None, *args, **kwargs) -> FlaskCaptcha3:
         """return a flask captcha object for google captcha version 3
 
         Args:
@@ -80,7 +85,11 @@ class FlaskCaptcha:
         if not self.__check_duplicate_captcha_name(name):
             raise ValueError("duplicated captcha name!")
 
-        captcha = FlaskCaptcha3(app=self.__app)
+        if conf and isinstance(conf, dict): # custom config is passed
+            captcha = FlaskCaptcha3(**conf)
+        else:
+            captcha = FlaskCaptcha3(app=self.__app)
+
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
         self.print_log(f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
@@ -106,17 +115,16 @@ class FlaskCaptcha:
             css: str: css of captcha element [Optional]
             id:str: id of captcha element [Optional]
             dataset: str: dataset of captcha element [Optional]
-            javascriptEvents: str: js events [Optional]
+            event: str: js events [Optional]
 
         Returns: 
             Captcha: Markup: captcha widget
 
         """
         return self.__render_captcha_in_template(*args, **kwargs)
-
     def __render_captcha_in_template(self, model_name: str, *args, **kwargs) -> Markup:
         """render a captcha base on captcha name in param
-        this method check if captcha name is exists in app.config['captcha_object_mapper']
+        this method check if captcha name exists in app.config['captcha_object_mapper']
         then its call .renderWidget method in captcha object
         
         Args: 
@@ -130,7 +138,7 @@ class FlaskCaptcha:
         Returns: 
             Captcha: Markup: captcha widget
         
-        if the captcha name was not exists this method Raise a an exception
+        if the captcha name was not exists this method Raise an exception
 
         """
         if (captchaObject := self.__get_captcha_from_mapper(model_name)):
@@ -178,7 +186,7 @@ class FlaskCaptcha:
         Returns:
             captcha: captcha object: object of captcha
 
-        if the captcha name was not exists this method Raise a an exception
+        if the captcha name was not exists this method Raise an exception
         """
         if name in self.__app.config["captcha_object_mapper"]:
             return self.__app.config["captcha_object_mapper"][name]

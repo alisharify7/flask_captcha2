@@ -45,19 +45,15 @@ class FlaskCaptcha3(BaseCaptcha3):
 
     """
 
-    def __init__(self, app: Flask = None, private_key: str = None, public_key: str = None, **kwargs):
-        if app and isinstance(app, Flask):  # Flask app
+    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None, **kwargs):
+        if app and isinstance(app, Flask): # app is passed read configs from app.config
             self.init_app(app)
 
-        elif private_key and public_key:
-            self.PUBLIC_KEY = public_key
-            self.PRIVATE_KEY = private_key
-            self.ENABLED = kwargs.get("enabled", self.ENABLED)
-            self.CAPTCHA_LOG = kwargs.get("captcha_log", self.CAPTCHA_LOG)
-            try:
-                self.SCORE = self.MINIMUM_SCORE if int(kwargs.get('score', self.SCORE)) < self.MINIMUM_SCORE else int(kwargs.get('score', self.SCORE))
-            except ValueError:
-                self.SCORE = self.MINIMUM_SCORE
+
+        elif CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY: # app is not passed read config from args passed to this method
+            kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
+            kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
+            self.set_config(kwargs)
 
     def init_app(self, app: Flask = None):
         if not isinstance(app, Flask):
@@ -67,12 +63,30 @@ class FlaskCaptcha3(BaseCaptcha3):
             raise ValueError("Flask-Captcha2.GoogleCaptcha.captcha3: Private and Public Keys are Required")
 
         self.__init__(
-            public_key=app.config.get("CAPTCHA_PUBLIC_KEY", None),
-            private_key=app.config.get("CAPTCHA_PRIVATE_KEY", None),
-            enabled=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
-            score=app.config.get("CAPTCHA_SCORE", self.SCORE),
-            captcha_log=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+            CAPTCHA_PUBLIC_KEY=app.config.get("CAPTCHA_PUBLIC_KEY", None),
+            CAPTCHA_PRIVATE_KEY=app.config.get("CAPTCHA_PRIVATE_KEY", None),
+            CAPTCHA_ENABLED=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
+            CAPTCHA_SCORE=app.config.get("CAPTCHA_SCORE", self.SCORE),
+            CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         )
+
+    def set_config(self, conf_list:dict) -> None:
+        """setting config base on config list passed in arg
+
+        use this method for setting/refreshing configs for captcha object without passing flask main app
+        """
+        if not conf_list.get("CAPTCHA_PUBLIC_KEY", False) or not conf_list.get("CAPTCHA_PRIVATE_KEY", False):
+            raise ValueError("private_key and public_key are required for FlaskCaptcha3")
+
+        self.PUBLIC_KEY = conf_list.get("CAPTCHA_PUBLIC_KEY")
+        self.PRIVATE_KEY = conf_list.get("CAPTCHA_PRIVATE_KEY")
+        self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
+        self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+        try:
+            self.SCORE = self.MINIMUM_SCORE if int(conf_list.get('CAPTCHA_SCORE', self.SCORE)) < self.MINIMUM_SCORE else int(
+                conf_list.get('CAPTCHA_SCORE', self.SCORE))
+        except ValueError:
+            self.SCORE = self.MINIMUM_SCORE
 
     def is_verify(self) -> bool:
         """ This Method Verify a Captcha v3 request
@@ -127,13 +141,12 @@ class FlaskCaptcha3(BaseCaptcha3):
         Returns:
             captchaFiled: str<Markup>: captcha 
         """
-
         arg = ""
         arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text
         arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
         arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
         arg += f"value=\"{kwargs.get('BtnText', 'Submit')}\"\t"  # style
-        args += f"{kwargs.get('event', '')}"  # js event
+        arg += f"{kwargs.get('event', ' ')}"  # js event
 
 
         captchaField = (f"""
