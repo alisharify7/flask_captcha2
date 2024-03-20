@@ -31,17 +31,17 @@ class BaseCaptcha2(CommonCaptchaUtils):
     Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v2")
 
 
-
 class FlaskCaptcha2(BaseCaptcha2):
     """
     Google Captcha version 2 class
     """
 
-    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None, **kwargs) -> None:
-        if app and isinstance(app, Flask): # app is passed read configs from app.config
+    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None,
+                 **kwargs) -> None:
+        if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
-        elif CAPTCHA_PUBLIC_KEY and CAPTCHA_PRIVATE_KEY: # app is not passed read config from args passed to this method
+        elif CAPTCHA_PUBLIC_KEY and CAPTCHA_PRIVATE_KEY:  # app is not passed read config from args passed to this method
             kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
             kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
             self.set_config(kwargs)
@@ -68,7 +68,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         )
 
-    def set_config(self, conf_list:dict) -> None:
+    def set_config(self, conf_list: dict) -> None:
         """setting config base on config list passed in arg
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
@@ -106,7 +106,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             responseGoogle = requests.get(self.GOOGLE_VERIFY_URL, params=data)
             # response from Google is something like this
             #         successful answer 
-            #{
+            # {
             #     "success": true,
             #     "challenge_ts": "2023-05-17T10:41:22Z",
             #     "hostname": "127.0.0.1"
@@ -147,7 +147,6 @@ class FlaskCaptcha2(BaseCaptcha2):
         arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
         arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
         arg += f"{kwargs.get('event', '')}"  # js event
-
 
         CaptchaField = (f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>

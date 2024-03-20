@@ -28,7 +28,6 @@ class BaseCaptcha3(CommonCaptchaUtils):
     Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3")
 
 
-
 class FlaskCaptcha3(BaseCaptcha3):
     """
     Google Captcha version 3
@@ -46,11 +45,11 @@ class FlaskCaptcha3(BaseCaptcha3):
     """
 
     def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None, **kwargs):
-        if app and isinstance(app, Flask): # app is passed read configs from app.config
+        if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
 
-        elif CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY: # app is not passed read config from args passed to this method
+        elif CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY:  # app is not passed read config from args passed to this method
             kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
             kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
             self.set_config(kwargs)
@@ -70,7 +69,7 @@ class FlaskCaptcha3(BaseCaptcha3):
             CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         )
 
-    def set_config(self, conf_list:dict) -> None:
+    def set_config(self, conf_list: dict) -> None:
         """setting config base on config list passed in arg
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
@@ -83,7 +82,8 @@ class FlaskCaptcha3(BaseCaptcha3):
         self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
         self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         try:
-            self.SCORE = self.MINIMUM_SCORE if int(conf_list.get('CAPTCHA_SCORE', self.SCORE)) < self.MINIMUM_SCORE else int(
+            self.SCORE = self.MINIMUM_SCORE if int(
+                conf_list.get('CAPTCHA_SCORE', self.SCORE)) < self.MINIMUM_SCORE else int(
                 conf_list.get('CAPTCHA_SCORE', self.SCORE))
         except ValueError:
             self.SCORE = self.MINIMUM_SCORE
@@ -147,7 +147,6 @@ class FlaskCaptcha3(BaseCaptcha3):
         arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
         arg += f"value=\"{kwargs.get('BtnText', 'Submit')}\"\t"  # style
         arg += f"{kwargs.get('event', ' ')}"  # js event
-
 
         captchaField = (f"""
             {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hiddenBadge", "") == True else ''}

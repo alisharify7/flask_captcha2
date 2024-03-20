@@ -2,7 +2,7 @@ import logging
 import sys
 
 
-def get_logger(LogLevel:int, CaptchaName: str = "Flask-Captcha") -> logging.Logger:
+def get_logger(LogLevel: int, CaptchaName: str = "Flask-Captcha") -> logging.Logger:
     """ create a custom stdout Logger
     
     Args:

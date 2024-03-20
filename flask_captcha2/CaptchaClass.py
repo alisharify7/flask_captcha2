@@ -16,6 +16,7 @@ from . import excep as exceptions
 
 class FlaskCaptcha:
     """Master FlaskCaptcha Class"""
+
     def __init__(self, app: Flask) -> None:
         """Constructor function
         this function set captcha key in  app.context_processor for getting captcha object
@@ -42,12 +43,11 @@ class FlaskCaptcha:
         self.__app = app
         self.__logger = get_logger(LogLevel=logging.INFO, CaptchaName="Flask-Captcha2-Master")
 
-    def print_log(self, message:str):
+    def print_log(self, message: str):
         """print a log message"""
         self.__logger.info(message)
 
-
-    def getGoogleCaptcha2(self, name: str, conf:dict=None, *args, **kwargs) -> FlaskCaptcha2:
+    def getGoogleCaptcha2(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha2:
         """return a flask captcha object for google captcha version 2
 
         Args:
@@ -62,7 +62,7 @@ class FlaskCaptcha:
         if not self.__check_duplicate_captcha_name(name):
             raise ValueError("duplicated captcha name!")
 
-        if conf and isinstance(conf, dict): # custom config is passed
+        if conf and isinstance(conf, dict):  # custom config is passed
             captcha = FlaskCaptcha2(**conf)
         else:
             captcha = FlaskCaptcha2(app=self.__app)
@@ -71,7 +71,7 @@ class FlaskCaptcha:
         self.print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
-    def getGoogleCaptcha3(self, name: str, conf:dict=None, *args, **kwargs) -> FlaskCaptcha3:
+    def getGoogleCaptcha3(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha3:
         """return a flask captcha object for google captcha version 3
 
         Args:
@@ -85,7 +85,7 @@ class FlaskCaptcha:
         if not self.__check_duplicate_captcha_name(name):
             raise ValueError("duplicated captcha name!")
 
-        if conf and isinstance(conf, dict): # custom config is passed
+        if conf and isinstance(conf, dict):  # custom config is passed
             captcha = FlaskCaptcha3(**conf)
         else:
             captcha = FlaskCaptcha3(app=self.__app)
@@ -122,6 +122,7 @@ class FlaskCaptcha:
 
         """
         return self.__render_captcha_in_template(*args, **kwargs)
+
     def __render_captcha_in_template(self, model_name: str, *args, **kwargs) -> Markup:
         """render a captcha base on captcha name in param
         this method check if captcha name exists in app.config['captcha_object_mapper']
@@ -191,8 +192,8 @@ class FlaskCaptcha:
         if name in self.__app.config["captcha_object_mapper"]:
             return self.__app.config["captcha_object_mapper"][name]
         else:
-            raise exceptions.CaptchaNameNotExists(f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
-        
+            raise exceptions.CaptchaNameNotExists(
+                f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
 
     def __get_all_available_captcha_names(self) -> list:
         """

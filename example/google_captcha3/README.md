@@ -1,5 +1,4 @@
- ## flask application with google-captcha version3 example
- 
+## flask application with google-captcha version3 example
 
 ### before running app set these configs in environment variables
 

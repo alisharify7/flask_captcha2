@@ -10,7 +10,6 @@ from flask import Flask, session
 from markupsafe import Markup
 from captcha.image import ImageCaptcha
 
-
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.Logger import get_logger
@@ -36,8 +35,8 @@ class BaseImageCaptcha:
     _imgGeneratorEngine: ImageCaptcha = None
 
     # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
-    random = SystemRandom() # https://docs.python.org/3/library/random.html
-    Logger = get_logger(LogLevel=logging.DEBUG ,CaptchaName="Flask-Captcha2-ImageCaptcha")
+    random = SystemRandom()  # https://docs.python.org/3/library/random.html
+    Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Flask-Captcha2-ImageCaptcha")
 
     @property
     def LETTERS(self):
@@ -90,9 +89,7 @@ class BaseImageCaptcha:
         """This Method take a list and shuffle the list randomly"""
         self.random.shuffle(list_captcha)
 
-
-
-    def debug_log(self, message:str):
+    def debug_log(self, message: str):
         """Print logs to stdout if CAPTCHA_IMAGE_LOG: bool  is set"""
         if self.LOG:
             self.Logger.debug(message)
@@ -229,14 +226,13 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         # external args
         args = ""
-        args += f"class=\"{kwargs.get('class')}\"\t" if kwargs.get('class') else '' # css class
-        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else '' # id
-        args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else '' # dataset
-        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else '' # style
+        args += f"class=\"{kwargs.get('class')}\"\t" if kwargs.get('class') else ''  # css class
+        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get('id') else ''  # id
+        args += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
+        args += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
         args += f"{kwargs.get('event', '')}"  # js event 
 
         return Markup(f"<img src='{base64_captcha}' {args}>")
-
 
     def is_verify(self, CaptchaAnswer: str = "") -> bool:
         """Verify image captcha answer is correct """
@@ -245,7 +241,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         if session.get(self.SESSION_KEY_NAME, False):
             if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
-                session.pop(self.SESSION_KEY_NAME) 
+                session.pop(self.SESSION_KEY_NAME)
                 return True
             session.pop(self.SESSION_KEY_NAME)
         return False

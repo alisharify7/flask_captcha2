@@ -12,21 +12,19 @@
 <form method="POST" action="/v2" id="parent">
     {# you can also use Flask-wtf forms #}
     <input placeholder="username" type="text" name="username" id="">
-        <br>
+    <br>
     <input placeholder="password" type="password" name="password" id="">
-        <br>
+    <br>
     <input value="submit" type="submit">
 
     {# model name is required #}
-    {{
-            captcha.render_captcha (
+    {{ captcha.render_captcha (
                     model_name='g-captcha2',
                     class='custom-css-class-for-this-captcha',
                     style='text:red;',
                     id='g-captcha-v2',
                     dataset="data-ok='true';"
-                )
-    }}
+                ) }}
 
 </form>
 
@@ -37,8 +35,7 @@
     <br>
     <input placeholder="password" type="password" name="password" id="">
     <br>
-    {{
-            captcha.render_captcha (
+    {{ captcha.render_captcha (
                 model_name='g-captcha3',
                 class='custom-class-name',
                 id="SubmitBtnForm",
@@ -48,8 +45,7 @@
                 BtnText="submit This Form",
                 event=" onclick='alert('js alert');' ",
                 hiddenBadge=True
-            )
-    }}
+            ) }}
 </form>
 
 </body>

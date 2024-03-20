@@ -20,12 +20,12 @@ app.config.update({
     "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V3", ""),
     "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V3", ""),
     'CAPTCHA_ENABLED': True,  # captcha status <True, False> True: Production , False: development
-    "CAPTCHA_SCORE": 0.5,  #google captcha version3 works with scores
+    "CAPTCHA_SCORE": 0.5,  # google captcha version3 works with scores
     "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
 })
 
 Master_captcha = FlaskCaptcha(app=app)  # app is required
-captcha = Master_captcha.getGoogleCaptcha3(name='captcha3') # created a google captcha object
+captcha = Master_captcha.getGoogleCaptcha3(name='captcha3')  # created a google captcha object
 
 
 @app.post("/")
