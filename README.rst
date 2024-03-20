@@ -2,7 +2,12 @@
 flask_captcha2
 ==============
 
+.. image:: ./docs/flask-captcha2.png
+  :width: 100%
+  :alt: flask captcha2 logo
+
 Flask plugin to integrate Google captcha (version 2, 3) and local captcha (image, voice) with Flask applications
+
 
 
 .. raw:: html
