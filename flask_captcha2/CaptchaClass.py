@@ -8,7 +8,6 @@ from markupsafe import Markup
 # flask-captcha2
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
-from .LocalCaptcha.Image import FlaskImageCaptcha
 from .Logger import get_logger
 
 from . import excep as exceptions
@@ -43,7 +42,7 @@ class FlaskCaptcha:
         self.__app = app
         self.__logger = get_logger(LogLevel=logging.INFO, CaptchaName="Flask-Captcha2-Master")
 
-    def print_log(self, message: str):
+    def __print_log(self, message: str):
         """print a log message"""
         self.__logger.info(message)
 
@@ -68,7 +67,7 @@ class FlaskCaptcha:
             captcha = FlaskCaptcha2(app=self.__app)
 
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
-        self.print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
+        self.__print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
     def getGoogleCaptcha3(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha3:
@@ -91,18 +90,7 @@ class FlaskCaptcha:
             captcha = FlaskCaptcha3(app=self.__app)
 
         self.__set_captcha_mapper(name=name, captchaObject=captcha)
-        self.print_log(f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}")
-        return self.__get_captcha_from_mapper(name=name)
-
-    def getLocalImageCaptcha(self, name: str, *args, **kwargs) -> FlaskImageCaptcha:
-        if not name:
-            raise ValueError("captcha should have a name!")
-        if not self.__check_duplicate_captcha_name(name):
-            raise ValueError("duplicated captcha name!")
-
-        captcha = FlaskImageCaptcha(app=self.__app)
-        self.__set_captcha_mapper(name=name, captchaObject=captcha)
-        self.print_log(f"local-image-captcha created successfully,\n\tcaptcha-name:{name}")
+        self.__print_log(f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
     def render_captcha(self, *args, **kwargs):
