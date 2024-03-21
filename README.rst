@@ -75,8 +75,8 @@ Flask plugin to integrate Google captcha (version 2, 3) and local captcha (image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use < captcha.render_captcha > Filter to render a captcha in html
-
 remember name argument in crating a captcha object
+
 .. code-block:: python
 
 
@@ -201,12 +201,7 @@ Version History:
 * version 2.0.0 Released: May 18, 2023
 * 
   Changes:
-
-  .. code-block:
-
-  .. code-block::
-
-        None
+    - None
 
 * 
   version 2.0.1 Released: June 9, 2023
@@ -214,26 +209,26 @@ Version History:
 * 
   Changes:
 
-  .. code-block:
-
-     Change FlaskCaptcha Class to FlaskCaptcha2
-     Fix bug in rendering captcha widget when captcha-enable was False
+     - Change FlaskCaptcha Class to FlaskCaptcha2
+     - Fix bug in rendering captcha widget when captcha-enable was False
 
 
 * version 3.0.0 Released: September 9, 2023
 * 
   Changes:
 
-  .. code-block:
-
-     change Package structure
-     Add Captcha version 3 and fix some bugs in captcha version 2
+     - change Package structure
+     - Add Captcha version 3 and fix some bugs in captcha version 2
 
 
-* version 3.0.2 Released: October 27, 2023
+* version 3.5.0 Released: October 27, 2023
 * 
   Changes:
 
-  .. code-block:
-
-     fix install error for version 3.0.0 and 3.0.1
+    - reformat/Refactor project structure
+    - adding FlaskCaptcha Master class
+    - adding getFlaskCaptcha3 method for getting google-captcha version 3
+    - adding getFlaskCaptcha2 method for getting google-captcha version 2
+    - adding name spacing for each captcha
+    - adding the ability to create multiple captchas with different versions
+    - adding pytest base test
