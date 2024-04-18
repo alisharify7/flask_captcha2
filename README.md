@@ -6,6 +6,7 @@ flask\_captcha2
 Flask plugin to integrate Google captcha (version 2, 3) and local
 captcha (image, voice) with Flask applications
 
+<a href="https://www.coffeete.ir/alisharify7">Donate/Support [Optional]</a>
 
 <p>
   <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2">
