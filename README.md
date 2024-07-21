@@ -148,7 +148,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
              parent_form_id="ParentForm", #{Required} id of form that this captcha button is init
              button_text="submit This Form", #{Required} text context of submit button
              event=" onclick='alert('js alert');' ", #[Optional] add js event to captcha widget
-             hide_badge=True #[Optional] hide captcha banner in page <its just hide it but captcha stil works>
+             hide_badge=True #[Optional] hide captcha banner in page <its just hide it but captcha still works>
      )
  }}
  </form>
@@ -156,10 +156,10 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 </html>
 ```
 
-0.3 How verify Captcha:
+0.3 How to verify Captcha:
 -----------------------
 
-Use is_verify method on captcha objects for validating a request that
+Use the is_verify method on captcha objects for validating a request that
 contains a captcha 
 
 ```python
@@ -173,7 +173,7 @@ def index():
 
 @app.route("/v3-verify/", methods=["POST"])
 def index():
-    # with is_verify method verify the captcha
+    # with the is_verify method verify the captcha
     if google_captcha3.is_verify():
         return "Captcha is ok."
     else:
@@ -197,8 +197,8 @@ def index():
 
 -   Changes:
 
-    > -   change Package structure
-    > -   Add Captcha version 3 and fix some bugs in captcha version 2
+    > -   Change package structure
+    > -   Add Captcha version 3 and fix some bugs in Captcha version 2
 
 -   version 3.0.4 Released: October 27, 2023
 -   Changes:
@@ -208,7 +208,7 @@ def index():
     > -   adding getFlaskCaptcha3 method for getting google-captcha
     >     version 3
     > -   adding getFlaskCaptcha2 method for getting google-captcha version 2
-    > -   adding name spacing for each captcha
+    > -   adding namespacing for each captcha
     > -   adding the ability to create multiple captchas with different versions
     > -   adding pytest base test
 
