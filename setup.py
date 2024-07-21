@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.4"
+__version__ = "3.0.5"
 __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"
 __copyright__ = "ali sharify - 2023"
@@ -9,7 +9,7 @@ __license__ = "MIT"
 __short_description__ = "Flask plugin to integrate Google captcha (version 2, 3) and local captcha (image, voice) with Flask applications"
 
 
-with open("./README.rst", "r") as f:
+with open("./README.md", "r") as f:
     long_description = f.read()
 
 setup(
@@ -21,7 +21,6 @@ setup(
     author=__author__,
     url="https://github.com/alisharify7/flask_captcha2",
     long_description=long_description,
-    # long_description_content_type="text/x-rst",
     long_description_content_type="text/markdown",
     classifiers=[
         "License :: OSI Approved :: MIT License",
@@ -44,7 +43,7 @@ setup(
         "requests>=2.30.0",
         "captcha>=0.5.0"
     ],
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     keywords='flask security, Google captcha for flask, captcha , flask, flask-captcha, flask-captcha2, flask_captcha2, flask-images-captcha'
 
 )

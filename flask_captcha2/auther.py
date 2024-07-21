@@ -1,5 +1,5 @@
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.2"
+__version__ = "3.5.1"
 
 __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"

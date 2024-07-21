@@ -1,7 +1,7 @@
 flask\_captcha2
 ===============
 
-![flask captcha2 logo](./docs/flask-captcha2.png)
+<img src="https://github.com/alisharify7/flask_captcha2/blob/main/docs/flask-captcha2.png?raw=true">
 
 Flask plugin to integrate Google captcha (version 2, 3) and local
 captcha (image, voice) with Flask applications
@@ -200,7 +200,7 @@ def index():
     > -   change Package structure
     > -   Add Captcha version 3 and fix some bugs in captcha version 2
 
--   version 3.5.0 Released: October 27, 2023
+-   version 3.0.4 Released: October 27, 2023
 -   Changes:
 
     > -   reformat/Refactor project structure
@@ -213,7 +213,7 @@ def index():
     > -   adding pytest base test
 
   
-- version 3.5.1 Released: July 21, 2024
+- version 3.0.5 Released: July 21, 2024
 -   Changes:
 
     > -   reformat/Refactor code
