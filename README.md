@@ -52,10 +52,10 @@ app = Flask(__name__)
      "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
  }
 
- Master_captcha = FlaskCaptcha(app=app)  # app is required
+ MasterCaptcha = FlaskCaptcha(app=app)  # app is required
  # passing config list directly
- google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2', conf=google_captcha2_config_list)
- google_captcha3 = Master_captcha.getGoogleCaptcha3(name='g-captcha3', conf=google_captcha3_config_list)
+ google_captcha2 = MasterCaptcha.getGoogleCaptcha2(name='g-captcha2', conf=google_captcha2_config_list)
+ google_captcha3 = MasterCaptcha.getGoogleCaptcha3(name='g-captcha3', conf=google_captcha3_config_list)
  # Names are important. Do not use repeated names and choose names with meaning
 ```
 
@@ -76,13 +76,13 @@ app = Flask(__name__)
 ##### -> remember name argument in crating a captcha object
 
 ```python
-    google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2')
-    google_captcha3 = Master_captcha.getGoogleCaptcha3(name='g-captcha3')
+google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2') # name
+google_captcha3 = Master_captcha.getGoogleCaptcha3(name='g-captcha3') # name
 ```
 
-for rendering a captcha width you should pass < model_name > to < captcha.render_captcha >
+for rendering a captcha width you should pass name to < model_name > in < captcha.render_captcha >
 
-Version 2 Captcha rendering example:
+## rendering Google Version 2 Captcha:
 
 ```html
 <!DOCTYPE html>
@@ -96,21 +96,20 @@ Version 2 Captcha rendering example:
 <body>
 
  <form method="POST" action="some-url">
-     {# you can also use Flask-wtf forms #}
      <input placeholder="username" type="text" name="username" id="">
      <br>
      <input placeholder="password" type="password" name="password" id="">
      <br>
      <input value="submit" type="submit">
 
-     {# model name is required #}
+     {# model_name is required #}
      {{
          captcha.render_captcha (
                  model_name='g-captcha2', #{Required} name that are passed in getGoogleCaptcha2 method
                  class='custom-css-class-for-this-captcha', #[Optional] add class to captcha widget
-                 style='text:red;', #[Optional] add style to captcha widget
+                 style='text:red;', #[Optional] add inline style to captcha widget
                  id='g-captcha-v2', #[Optional] add id to captcha widget
-                 dataset="data-ok='true';" #[Optional] add dataset to captcha widget
+                 dataset="data-checked='true';" #[Optional] add dataset to captcha widget
          )
      }}
 
@@ -120,8 +119,7 @@ Version 2 Captcha rendering example:
 </html>
 ```
 
-Version 3 Captcha rendering:
-----------------------------
+## rendering Google Version 3 Captcha :
 
 ```html
 <!DOCTYPE html>
@@ -147,10 +145,10 @@ Version 3 Captcha rendering:
              id="SubmitBtnForm", #[Optional] add id to captcha widget
              style=" background-color:blue; color:white; font-size:2rem;", #[Optional] add style to captcha widget
              dataset="data-ok='true' data-test='test data set check' ", # [Optional]add dataset to captcha widget
-             ParentFormID="ParentForm", #{Required} id of form that this captcha button is init
-             BtnText="submit This Form", #{Required} text context of submit button
+             parent_form_id="ParentForm", #{Required} id of form that this captcha button is init
+             button_text="submit This Form", #{Required} text context of submit button
              event=" onclick='alert('js alert');' ", #[Optional] add js event to captcha widget
-             hiddenBadge=True #[Optional] hide captcha banner in page or nor
+             hide_badge=True #[Optional] hide captcha banner in page <its just hide it but captcha stil works>
      )
  }}
  </form>
@@ -203,7 +201,6 @@ def index():
     > -   Add Captcha version 3 and fix some bugs in captcha version 2
 
 -   version 3.5.0 Released: October 27, 2023
-
 -   Changes:
 
     > -   reformat/Refactor project structure
@@ -214,3 +211,10 @@ def index():
     > -   adding name spacing for each captcha
     > -   adding the ability to create multiple captchas with different versions
     > -   adding pytest base test
+
+  
+- version 3.5.1 Released: July 21, 2024
+-   Changes:
+
+    > -   reformat/Refactor code
+    > -   rename render_captcha parameters
