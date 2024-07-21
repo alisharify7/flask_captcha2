@@ -7,6 +7,7 @@ from flask_captcha2 import FlaskCaptcha
 
 """By default captcha log is False"""
 
+
 @pytest.fixture()
 def app():
     """Main Flask Application fixture"""
@@ -50,7 +51,6 @@ def googlecaptcha3(app):
             'CAPTCHA_ENABLED': True,  # captcha enable status
             "CAPTCHA_SCORE": 0.5,  #
             "CAPTCHA_LOG": False,
-
         }
     )
     Master_captcha = FlaskCaptcha(app=app)
@@ -69,11 +69,12 @@ def client(app):
 def captcha3_template_conf():
     """captcha version3 render_captcha config"""
     conf = {
-        'ParentFormID': 'id-of-parent-form',
-        'BtnText': 'submit form',
+        'parent_form_id': 'id-of-parent-form',
+        'button_text': 'submit form',
         'dataset': ' data-check="True" data-another="Checked" ',
         'style': 'background-color:"red"',
         'id': 'id-of-submit-form',
-        'class': 'class-of-submit-form'
+        'class': 'class-of-submit-form',
+        "CAPTCHA_LOG": False
     }
     yield conf

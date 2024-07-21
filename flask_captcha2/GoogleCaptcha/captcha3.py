@@ -1,7 +1,6 @@
 # build in
 import json
 import logging
-
 # lib
 import requests
 from flask import request, Flask
@@ -17,8 +16,8 @@ class BaseCaptcha3(CommonCaptchaUtils):
     """
        Base Config for Google Captcha v3 class
     """
-    PUBLIC_KEY: str = ''
-    PRIVATE_KEY: str = ''
+    PUBLIC_KEY: str = ""
+    PRIVATE_KEY: str = ""
     ENABLED: bool = False
     SCORE: float = 0.5
     MINIMUM_SCORE: float = 0.5  # default minimum score
@@ -44,7 +43,8 @@ class FlaskCaptcha3(BaseCaptcha3):
 
     """
 
-    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None, **kwargs):
+    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None,
+                 **kwargs) -> None:
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
@@ -54,7 +54,7 @@ class FlaskCaptcha3(BaseCaptcha3):
             kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
             self.set_config(kwargs)
 
-    def init_app(self, app: Flask = None):
+    def init_app(self, app: Flask = None) -> None:
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
@@ -133,25 +133,25 @@ class FlaskCaptcha3(BaseCaptcha3):
             style: str: style of captcha element
             dataset: str: dataset of captcha element
             event: str: javascript event of captcha element
-            BtnText: str: value of input submit button of the form
-            ParentFormID: str: id of parent for element
-            hiddenBadge: bool: set visibility of captcha widget in bottom right corner 
-
+            button_text: str: value of input submit button of the form
+            parent_form_id: str: id of parent for element
+            hide_badge: bool: set visibility of captcha widget in bottom right corner 
 
         Returns:
-            captchaFiled: str<Markup>: captcha 
+            captchaFiled: str<Markup>: captcha
+        
         """
         arg = ""
         arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text
         arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
         arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
-        arg += f"value=\"{kwargs.get('BtnText', 'Submit')}\"\t"  # style
+        arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"  # style
         arg += f"{kwargs.get('event', ' ')}"  # js event
 
         captchaField = (f"""
-            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hiddenBadge", "") == True else ''}
+            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hide_badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
-            <script>function onSubmit(token) {{document.getElementById('{kwargs.get('ParentFormID', '')}').submit();}}</script>
+            <script>function onSubmit(token) {{document.getElementById('{kwargs.get('parent_form_id', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {kwargs.get('class', '')}" {arg}
              data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
             """).strip()

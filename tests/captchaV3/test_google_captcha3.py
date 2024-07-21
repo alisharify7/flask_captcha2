@@ -35,10 +35,10 @@ def test_load_captcha_in_html(client, googlecaptcha3, app, captcha3_template_con
     assert f"class=\"g-recaptcha {captcha3_template_conf['class']}\"" in captcha
     assert f"{captcha3_template_conf['dataset']}" in captcha
     assert f"id=\"{captcha3_template_conf['id']}\"" in captcha
-    assert f"{captcha3_template_conf['BtnText']}" in captcha
+    assert f"{captcha3_template_conf['button_text']}" in captcha
 
     # check captcha badge in the eight bottom os the screen in hidden or not
-    captcha3_template_conf['hiddenBadge'] = True
+    captcha3_template_conf['hide_badge'] = True
     captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='flask-captcha-v3',
                                                                                     **captcha3_template_conf)
     hidden_badge_style = Markup("<style>.grecaptcha-badge {visibility: hidden;}</style>")
@@ -46,14 +46,14 @@ def test_load_captcha_in_html(client, googlecaptcha3, app, captcha3_template_con
 
 
 def test_captcha_enable_on(app, googlecaptcha3, client, captcha3_template_conf):
-    """if enable is false render_captcha always return " " and
+    """if enable is set to false render_captcha always return an empty string " " and
       is_verify method always return True
     """
 
     googlecaptcha3.ENABLED = False
     captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='flask-captcha-v3',
                                                                                     conf=captcha3_template_conf)
-    assert captcha != Markup(" ") # return default input-type submit
+    assert captcha != Markup(" ")  # return default input-type submit
 
     @app.post("/test-invalid-post/")
     def post_invalid():

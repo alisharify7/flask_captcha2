@@ -1,16 +1,14 @@
 # build in
 import logging
-
 # lib
 from flask import Flask
 from markupsafe import Markup
 
+from . import excep as exceptions
 # flask-captcha2
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
 from .Logger import get_logger
-
-from . import excep as exceptions
 
 
 class FlaskCaptcha:
