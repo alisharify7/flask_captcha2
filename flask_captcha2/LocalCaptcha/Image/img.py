@@ -3,12 +3,11 @@ import base64
 import logging
 import secrets
 import string
-from random import SystemRandom
-
+from captcha.image import ImageCaptcha
 # libs
 from flask import Flask, session
 from markupsafe import Markup
-from captcha.image import ImageCaptcha
+from random import SystemRandom
 
 # flask-captcha2
 from flask_captcha2 import excep as ex

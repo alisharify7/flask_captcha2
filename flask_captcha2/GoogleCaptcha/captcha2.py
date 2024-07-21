@@ -1,7 +1,6 @@
 # build in
 import json
 import logging
-
 # lib
 import requests
 from flask import request, Flask

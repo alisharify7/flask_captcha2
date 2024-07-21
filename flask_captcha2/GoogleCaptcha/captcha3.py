@@ -1,7 +1,6 @@
 # build in
 import json
 import logging
-
 # lib
 import requests
 from flask import request, Flask
@@ -44,7 +43,8 @@ class FlaskCaptcha3(BaseCaptcha3):
 
     """
 
-    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None, **kwargs) -> None:
+    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None,
+                 **kwargs) -> None:
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
@@ -138,7 +138,8 @@ class FlaskCaptcha3(BaseCaptcha3):
             hide_badge: bool: set visibility of captcha widget in bottom right corner 
 
         Returns:
-            captchaFiled: str<Markup>: captcha 
+            captchaFiled: str<Markup>: captcha
+        
         """
         arg = ""
         arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text

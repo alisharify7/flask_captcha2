@@ -53,7 +53,7 @@ def test_captcha_enable_on(app, googlecaptcha3, client, captcha3_template_conf):
     googlecaptcha3.ENABLED = False
     captcha = app.template_context_processors[None][-1]()['captcha'].render_captcha(model_name='flask-captcha-v3',
                                                                                     conf=captcha3_template_conf)
-    assert captcha != Markup(" ") # return default input-type submit
+    assert captcha != Markup(" ")  # return default input-type submit
 
     @app.post("/test-invalid-post/")
     def post_invalid():
