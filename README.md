@@ -1,4 +1,4 @@
-flask\_captcha2
+flask captcha2
 ===============
 
 <img src="https://github.com/alisharify7/flask_captcha2/blob/main/docs/flask-captcha2-white.png?raw=true">
