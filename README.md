@@ -42,7 +42,7 @@ app = Flask(__name__)
  google_captcha2_config_list = {
      "CAPTCHA_PRIVATE_KEY": "hish !",
      "CAPTCHA_PUBLIC_KEY": "hish !",
-     'CAPTCHA_ENABLED': True,  # captcha status <True, False> True: Production , False: development
+     'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
      "CAPTCHA_LOG": True, # show captcha logs in console
      "CAPTCHA_LANGUAGE": "en" # captcha language
  }
@@ -50,23 +50,26 @@ app = Flask(__name__)
  google_captcha3_config_list = {
      "CAPTCHA_PRIVATE_KEY": "hish !",
      "CAPTCHA_PUBLIC_KEY": "hish !",
-     'CAPTCHA_ENABLED': True,  # captcha status <True, False> True: Production , False: development
+     'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
      "CAPTCHA_SCORE": 0.5,  #google captcha version3 works with scores
      "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
  }
 
- MasterCaptcha = FlaskCaptcha(app=app)  # app is required
+ MainCaptcha = FlaskCaptcha(app=app)  # app is required
  # passing config list directly
- google_captcha2 = MasterCaptcha.getGoogleCaptcha2(name='g-captcha2', conf=google_captcha2_config_list)
- google_captcha3 = MasterCaptcha.getGoogleCaptcha3(name='g-captcha3', conf=google_captcha3_config_list)
- # Names are important. Do not use repeated names and choose names with meaning
+ google_captcha2 = MainCaptcha.getGoogleCaptcha2(name='g-captcha2', conf=google_captcha2_config_list)
+ google_captcha3 = MainCaptcha.getGoogleCaptcha3(name='g-captcha3', conf=google_captcha3_config_list)
+ # Namespaces are important. Do not use repeated names and choose names with meaning.
 ```
 
+google captcha docs
+https://developers.google.com/recaptcha/docs/v3
 ## example:
+
 ```python
 # you can also pass nothing and it will be uses app.config for filling configs
  app.config.update(google_captcha3_config_list) # set configs in app.config
- Master_captcha = FlaskCaptcha(app=app)  # app is required
+ MainCaptcha = FlaskCaptcha(app=app)
  # No need to send conf_list, it will be set automatically from app.config
  google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2')
 ```
@@ -76,11 +79,11 @@ app = Flask(__name__)
 
 #### Use < captcha.render_captcha > Filter to render a captcha in html
 
-##### -> remember name argument in crating a captcha object
+##### -> Remember namespaces argument in crating a captcha object
 
 ```python
-google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2') # name
-google_captcha3 = Master_captcha.getGoogleCaptcha3(name='g-captcha3') # name
+google_captcha2 = MainCaptcha.getGoogleCaptcha2(name='g-captcha2') # name
+google_captcha3 = MainCaptcha.getGoogleCaptcha3(name='g-captcha3') # name
 ```
 
 for rendering a captcha width you should pass name to < model_name > in < captcha.render_captcha >
@@ -108,11 +111,11 @@ for rendering a captcha width you should pass name to < model_name > in < captch
      {# model_name is required #}
      {{
          captcha.render_captcha (
-                 model_name='g-captcha2', #{Required} name that are passed in getGoogleCaptcha2 method
-                 class='custom-css-class-for-this-captcha', #[Optional] add class to captcha widget
-                 style='text:red;', #[Optional] add inline style to captcha widget
-                 id='g-captcha-v2', #[Optional] add id to captcha widget
-                 dataset="data-checked='true';" #[Optional] add dataset to captcha widget
+                 model_name='g-captcha2', # [Required] namespace 
+                 class='custom-css-class-for-this-captcha', # [Optional] add custom css class to captcha widget
+                 style='text:red;', # [Optional] add inline css to captcha widget
+                 id='g-captcha-v2', # [Optional] add id to captcha widget
+                 dataset="data-checked='true';" # [Optional] add dataset to captcha widget
          )
      }}
 
@@ -135,23 +138,24 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 </head>
 <body>
 
- <form method="POST" action="/v3" id="ParentForm">
- {# you can also use Flask-wtf forms #}
+ <form method="POST" action="/v3" id="ParentForm"> # <---- parent_form_id 
+
+{# you can also use Flask-wtf forms #}
  <input placeholder="username" type="text" name="username" id="">
  <br>
  <input placeholder="password" type="password" name="password" id="">
  <br>
  {{
      captcha.render_captcha (
-             model_name='g-captcha3', #{Required} name that are passed in getGoogleCaptcha3 method
-             class='custom-class-name', #[Optional] add css class to captcha widget
-             id="SubmitBtnForm", #[Optional] add id to captcha widget
-             style=" background-color:blue; color:white; font-size:2rem;", #[Optional] add style to captcha widget
-             dataset="data-ok='true' data-test='test data set check' ", # [Optional]add dataset to captcha widget
-             parent_form_id="ParentForm", #{Required} id of form that this captcha button is init
-             button_text="submit This Form", #{Required} text context of submit button
-             event=" onclick='alert('js alert');' ", #[Optional] add js event to captcha widget
-             hide_badge=True #[Optional] hide captcha banner in page <its just hide it but captcha still works>
+             model_name='g-captcha3', # [Required] Namespace
+             class='custom-class-name', #[Optional] add custom css class to captcha widget
+             id="SubmitBtnForm", # [Optional] add id to captcha widget
+             style="background-color:blue; color:white; font-size:2rem;", # [Optional] add custom inline style to captcha widget
+             dataset="data-ok='true' data-test='test data set check' ", # [Optional] add dataset to captcha widget
+             parent_form_id="ParentForm", # [Required] if of parent form 
+             button_text="submit This Form", # [Required] text content of submit button
+             event="onclick='alert('this is inline event');' ", # [Optional] add inline js event to captcha widget
+             hide_badge=True # [Optional] hide captcha banner in page <it's just hide it but captcha will still work>
      )
  }}
  </form>
@@ -166,7 +170,7 @@ Use the is_verify method on captcha objects for validating a request that
 contains a captcha 
 
 ```python
-@app.route("/v2-verify/", methods=["POST"])
+@app.route("/g-v2-verify/", methods=["POST"])
 def index():
     # with is_verify method verify the captcha 
     if google_captcha2.is_verify():
@@ -174,7 +178,7 @@ def index():
     else:
         return "Try again!"
 
-@app.route("/v3-verify/", methods=["POST"])
+@app.route("/g-v3-verify/", methods=["POST"])
 def index():
     # with the is_verify method verify the captcha
     if google_captcha3.is_verify():
