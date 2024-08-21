@@ -16,17 +16,14 @@ class FlaskCaptcha:
 
     def __init__(self, app: Flask) -> None:
         """Constructor function
-        this function set captcha key in  app.context_processor for getting captcha object
-            across the application templates and also initiate the captcha_object_mapper storage in app.config
-        
-        Args: 
-            app: Flask: flask instance
+        :param app: flask application object
+        :type app: Flask
 
-        Returns:
-            None
+        :retrun: None
+        :rtype: None
         """
         if not app or not isinstance(app, Flask):
-            raise ValueError("Flask App is required. please provide app like FlaskCaptcha(app=app)")
+            raise ValueError("Flask App is required. please provide flask app like FlaskCaptcha(app=app)")
 
         @app.context_processor
         def app_context_processor():
@@ -44,14 +41,17 @@ class FlaskCaptcha:
         """print a log message"""
         self.__logger.info(message)
 
-    def getGoogleCaptcha2(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha2:
-        """return a flask captcha object for google captcha version 2
+    def get_google_captcha_v2(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha2:
+        """this method return `FlaskCaptcha2` object
 
-        Args:
-            name:str: a unique name for captcha object. it is better to be a combination of captcha type and version
-            conf:dict: a dictionary with config for captcha object
-        Returns:
-            captchaObject: FlaskCaptcha2: an FlaskCaptcha2 object
+        :parama name: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type name: str
+        :param conf: a dictionary with config for captcha object
+        :type conf: dict
+        
+        :return: an FlaskCaptcha2 object
+        :rtype: FlaskCaptcha2
+        
         """
 
         if not name:
