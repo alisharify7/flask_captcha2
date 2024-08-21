@@ -158,29 +158,28 @@ class FlaskCaptcha:
         return self.__render_captcha_in_template(*args, **kwargs)
 
     def __render_captcha_in_template(self, model_name: str, *args, **kwargs) -> Markup:
-        """render a captcha base on captcha name in param
-        this method check if captcha name exists in app.config['captcha_object_mapper']
-        then its call .renderWidget method in captcha object
+        """render a captcha (`Markup`) object.
         
-        Args: 
-            model_name: str: required, name of the captcha object
-            
-            css: str: css of captcha element [Optional]
-            id:str: id of captcha element [Optional]
-            dataset: str: dataset of captcha element [Optional]
-            javascriptEvents: str: js events [Optional]
+        `Dont` Use this method directlly inside template !
+        instead use `render_captcha` method for safely 
+        rendering captcha widget inside html templates
 
-        Returns: 
-            Captcha: Markup: captcha widget
+        If the captcha name (namespace) was not exists
+        this method will raise an exception.
+
+        :param model_name: [Required] namespace of captcha
+        :type model_name: str
+
+        :return: captcha widget
+        :rtype: Markup
         
-        if the captcha name was not exists this method Raise an exception
-
         """
         if (captchaObject := self.__get_captcha_from_mapper(model_name)):
             return captchaObject.renderWidget(*args, **kwargs)
         else:
             raise exceptions.CaptchaNameNotExists(
-                f"invalid model name. {model_name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
+                f"""model_name {model_name} was not set to any captcha object in app.\n
+                available captcha names: {self.__get_all_available_captcha_names()}""")
 
     def __check_duplicate_captcha_name(self, name: str) -> bool:
         """check a captcha object name is not duplicated in app
