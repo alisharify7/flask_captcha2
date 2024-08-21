@@ -239,3 +239,10 @@ class FlaskCaptcha:
             list: list: a list of name of captcha objects that registered in app 
         """
         return list(self.__app.config.get('captcha_object_mapper').keys())
+
+
+    def __str__() -> str:
+        return f"<FlaskCaptcha {self.app} >"
+
+    def __repr__() -> str:
+        return self.__str__()
