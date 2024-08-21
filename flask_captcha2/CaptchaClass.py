@@ -12,7 +12,27 @@ from .Logger import get_logger
 
 
 class FlaskCaptcha:
-    """Master FlaskCaptcha Class"""
+    """Master FlaskCaptcha Class
+    this is master class, you should use object of this class for getting other captcha objects.
+    
+    Why we should first initializing this class? Because for creating other captcha objects we need
+    to pass config every time we create them, but with this class we only pass config once to this
+    class and this class will be hide all of that issues and (`Composite`) and give us a nice simple
+    layer over all other captcha classes.
+
+    `Example` initializing  class:
+        ..code-block::python
+
+                >> MasterCaptcha = FlaskCaptcha(app=app)
+
+    `Example` Getting captcha object :
+
+    ..code-block::python
+
+                >> MasterCaptcha = FlaskCaptcha(app=app)
+                >> google_captcha2 = MasterCaptcha.get_google_captcha_v2(..params)
+    
+    """
 
     def __init__(self, app: Flask) -> None:
         """Constructor function
@@ -48,7 +68,18 @@ class FlaskCaptcha:
         :type name: str
         :param conf: a dictionary with config for captcha object
         :type conf: dict
-        
+
+        `Example` config object:
+            ..code-block::python
+                
+             {
+                 "CAPTCHA_PRIVATE_KEY": "hish !",
+                 "CAPTCHA_PUBLIC_KEY": "hish !",
+                 'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
+                 "CAPTCHA_LOG": True, # show captcha logs in console
+                 "CAPTCHA_LANGUAGE": "en" # captcha language
+             }
+                
         :return: an FlaskCaptcha2 object
         :rtype: FlaskCaptcha2
         
@@ -68,14 +99,28 @@ class FlaskCaptcha:
         self.__print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
-    def getGoogleCaptcha3(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha3:
-        """return a flask captcha object for google captcha version 3
+    def get_google_captcha_v3(self, name: str, conf: dict = None, *args, **kwargs) -> FlaskCaptcha3:
+        """this method return `FlaskCaptcha3` object.
 
-        Args:
-        name:str: a unique name for captcha object. it is better to be a combination of captcha type and version
         
-        Returns:
-            captchaObject: FlaskCaptcha2: an FlaskCaptcha3 object
+        :param name: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type name: str
+        :param conf: a dictionary with config for captcha object
+        :type conf: dict
+
+        `Example` config object:
+            ..code-block::python
+                        
+                 {
+                     "CAPTCHA_PRIVATE_KEY": "hish !",
+                     "CAPTCHA_PUBLIC_KEY": "hish !",
+                     'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
+                     "CAPTCHA_SCORE": 0.5,  #google captcha version3 works with scores
+                     "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
+                 }
+        
+        :return: an FlaskCaptcha3 object
+        :rtype: FlaskCaptcha3
         """
         if not name:
             raise ValueError("captcha should have a name!")
@@ -92,19 +137,22 @@ class FlaskCaptcha:
         return self.__get_captcha_from_mapper(name=name)
 
     def render_captcha(self, *args, **kwargs):
-        """
-        Use this method in templates for rendering captcha widgets in your template
+        """ `render` a captcha widget into html template.
+        Use this method in templates for rendering captcha widgets in html tempaltes
         
-        Args: 
-            model_name: str: required, name of the captcha object
-            
-            css: str: css of captcha element [Optional]
-            id:str: id of captcha element [Optional]
-            dataset: str: dataset of captcha element [Optional]
-            event: str: js events [Optional]
+        :param model_name: [Required] name of the captcha object (namespace)
+        :type model_name: str
+        :param css: [Optional] css of captcha element 
+        :type css: str
+        :param id: [Optional] id of captcha element 
+        :type id: str
+        :param dataset:[Optional] dataset of captcha element
+        :type dataset: str
+        :param event: [Optional] javascript inline events 
+        :type event: str
 
-        Returns: 
-            Captcha: Markup: captcha widget
+        :return: captcha widget
+        :rtype: Markup
 
         """
         return self.__render_captcha_in_template(*args, **kwargs)
