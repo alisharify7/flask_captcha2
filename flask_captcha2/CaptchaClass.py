@@ -1,5 +1,7 @@
 # build in
 import logging
+import typing 
+
 # lib
 from flask import Flask
 from markupsafe import Markup
@@ -95,7 +97,7 @@ class FlaskCaptcha:
         else:
             captcha = FlaskCaptcha2(app=self.__app)
 
-        self.__set_captcha_mapper(name=name, captchaObject=captcha)
+        self.__set_captcha_mapper(name=name, captcha_object=captcha)
         self.__print_log(f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
@@ -132,7 +134,7 @@ class FlaskCaptcha:
         else:
             captcha = FlaskCaptcha3(app=self.__app)
 
-        self.__set_captcha_mapper(name=name, captchaObject=captcha)
+        self.__set_captcha_mapper(name=name, captcha_object=captcha)
         self.__print_log(f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}")
         return self.__get_captcha_from_mapper(name=name)
 
@@ -179,7 +181,7 @@ class FlaskCaptcha:
         else:
             raise exceptions.CaptchaNameNotExists(
                 f"""model_name {model_name} was not set to any captcha object in app.\n
-                available captcha names: {self.__get_all_available_captcha_names()}""")
+                available captcha names: {self.__get_all_captcha_names()}""")
 
     def __check_duplicate_captcha_name(self, name: str) -> bool:
         """check a captcha object name is not duplicated in app
@@ -194,49 +196,52 @@ class FlaskCaptcha:
             return False
         return True
 
-    def __set_captcha_mapper(self, name: str, captchaObject) -> bool:
-        """This Method get a captcha and name of it and save it in app.config[captcha_object_mapper] 
-        
-        Args:
-            name:str: name of captcha object
-            captchaObject: class object : captcha object
+    def __set_captcha_mapper(self, name: str, captcha_object) -> bool:
+        """Set a captcha object with the given name (Namespace) in captcha mapper repo.
 
-        Returns:
-            bool: `True` if captcha set in config successfully, `False` otherwise
+        this method save (set) a captcha with the given name in
+        captcha mapper repo.
+        
+        :param name: name of captcha object
+        :type name: str
+        
+        :param captcha_object: captcha object
+        :type captcha_object: object
+
+        :return: `True` if captcha set correctlly in mapper, otherwise `False`
         """
         try:
-            self.__app.config["captcha_object_mapper"][name] = captchaObject
+            self.__app.config["captcha_object_mapper"][name] = captcha_object
         except Exception as e:
             return False
         return True
 
     def __get_captcha_from_mapper(self, name: str) -> object:
-        """
-        This Method get a captcha name and return that captcha objects from app.config
-        
-        Args:
-            name:str: name of captcha object
-        
-        Returns:
-            captcha: captcha object: object of captcha
+        """ getting captcha object from mapper repo.
+        this method returns captcha object with the given name
+        (Namespace) that registered in app.
 
         if the captcha name was not exists this method Raise an exception
+        
+        :param name: name of captcha object
+        :type name: str
+        
+        :return: object of captcha
+        :rtpe: object
+
         """
         if name in self.__app.config["captcha_object_mapper"]:
             return self.__app.config["captcha_object_mapper"][name]
         else:
             raise exceptions.CaptchaNameNotExists(
-                f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_available_captcha_names()}")
+                f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_captcha_names()}")
 
-    def __get_all_available_captcha_names(self) -> list:
-        """
-        This method return all captcha names that registered in app.config
+    def __get_all_captcha_names(self) -> typing.List[str]:
+        """ return all registered NameSpaces.
+        This method return all captcha names that `registered` in app.config.
 
-        Args:
-            None
-
-        Returns:
-            list: list: a list of name of captcha objects that registered in app 
+        :return: list of namespaces of all captcha objects that registered in app
+        :rtype: List
         """
         return list(self.__app.config.get('captcha_object_mapper').keys())
 
