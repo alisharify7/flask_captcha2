@@ -77,7 +77,7 @@ class FlaskCaptcha:
         self.__logger.info(message)
 
     def get_google_captcha_v2(
-        self, name: str, conf: dict = None, *args, **kwargs
+        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
     ) -> FlaskCaptcha2:
         """this method return `FlaskCaptcha2` object
 
@@ -119,7 +119,7 @@ class FlaskCaptcha:
         return self.__get_captcha_from_mapper(name=name)
 
     def get_google_captcha_v3(
-        self, name: str, conf: dict = None, *args, **kwargs
+        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
     ) -> FlaskCaptcha3:
         """this method return `FlaskCaptcha3` object.
 
@@ -159,7 +159,7 @@ class FlaskCaptcha:
         )
         return self.__get_captcha_from_mapper(name=name)
 
-    def render_captcha(self, *args, **kwargs):
+    def render_captcha(self, *args, **kwargs) -> str:
         """`render` a captcha widget into html template.
         Use this method in templates for rendering captcha widgets in html tempaltes
 
@@ -220,7 +220,7 @@ class FlaskCaptcha:
             return False
         return True
 
-    def __set_captcha_mapper(self, name: str, captcha_object) -> bool:
+    def __set_captcha_mapper(self, name: str, captcha_object: object) -> bool:
         """Set a captcha object with the given name (Namespace) in captcha mapper repo.
 
         this method save (set) a captcha with the given name in
