@@ -108,15 +108,37 @@ for rendering a captcha width you should pass name to < model_name > in < captch
      <br>
      <input value="submit" type="submit">
 
-     {# model_name is required #}
+     {# 
+        all available parameter for google captcha version 2:
+            model_name: required,
+            id: optional,
+            css_class: optional,
+            inline_css: optional,
+            js_event: optional,
+            dataset: optional,
+     #}
+    
+     
      {{
-         captcha.render_captcha (
-                 model_name='g-captcha2', # [Required] namespace 
-                 class='custom-css-class-for-this-captcha', # [Optional] add custom css class to captcha widget
-                 style='text:red;', # [Optional] add inline css to captcha widget
-                 id='g-captcha-v2', # [Optional] add id to captcha widget
-                 dataset="data-checked='true';" # [Optional] add dataset to captcha widget
-         )
+     captcha.render_captcha (
+            # [Required] namespace
+             model_name='g-captcha2', 
+                
+            # [Optional] add id to captcha widget
+             id='g-captcha-v2',
+                 
+            # [Optional] add css class to captcha widget
+            css_class='p-2 btn btn-primary',
+            
+            # [Optional] add inline css to captcha widget
+            inline_css='font-size:10px;', 
+            
+            # [Optional] add dataset to captcha widget
+            dataset="data-checked='true';"
+            
+            # [Optional] add js event to captcha widget
+            js_event="onclick(alert('clicked!'))", 
+        )
      }}
 
  </form>
