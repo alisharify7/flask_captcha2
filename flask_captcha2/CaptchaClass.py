@@ -200,13 +200,13 @@ class FlaskCaptcha:
             )
 
     def __check_duplicate_captcha_name(self, name: str) -> bool:
-        """check a captcha object name is not duplicated in app
+        """check a captcha name (NameSpace) is not duplicated.
 
-        Args:
-            name: str: name of captcha
+        :param name: name of captcha
+        :type name: str
 
-        Returns:
-            Bool `False` if captcha name is already exists, otherwise `True`
+        :return: `False` if captcha name is already exists, otherwise `True`
+        :rtype: bool
         """
         if name in self.__app.config["captcha_object_mapper"]:
             return False
@@ -262,8 +262,8 @@ class FlaskCaptcha:
         """
         return list(self.__app.config.get("captcha_object_mapper").keys())
 
-    def __str__() -> str:
-        return f"<FlaskCaptcha {self.app} >"
+    def __str__(self) -> str:
+        return f"<FlaskCaptcha MasterClass {self.app} >"
 
-    def __repr__() -> str:
+    def __repr__(self) -> str:
         return self.__str__()
