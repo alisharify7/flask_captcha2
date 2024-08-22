@@ -1,3 +1,12 @@
+"""
+ * flask_captcha2 OSS
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * license: see LICENSE for more details.
+ * Copyright (c) 2023 - ali sharifi
+ * https://github.com/alisharify7/flask_captcha2
+"""
+
 # build in
 import logging
 import typing
@@ -6,9 +15,8 @@ import typing
 from flask import Flask
 from markupsafe import Markup
 
-from . import excep as exceptions
-
 # flask-captcha2
+from . import excep as exceptions
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
 from .Logger import get_logger
