@@ -8,19 +8,10 @@ captcha (image, voice) with Flask applications
 
 <a href="https://www.coffeete.ir/alisharify7">Donate/Support [Optional]</a>
 
-<p>
-  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2">
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2">
-  <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
+<img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2"> <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2"> <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
 
-[![Latest version](https://img.shields.io/pypi/v/Flask-captcha2)](https://pypi.python.org/pypi/Flask-captcha2)
-[![Supported python versions](https://img.shields.io/pypi/pyversions/Flask-captcha2)](https://pypi.python.org/pypi/flask_captcha2)
+[![Latest version](https://img.shields.io/pypi/v/Flask-captcha2)](https://pypi.python.org/pypi/Flask-captcha2)[![Supported python versions](https://img.shields.io/pypi/pyversions/Flask-captcha2)](https://pypi.python.org/pypi/flask_captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
   
-[![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2)
-[![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
-  
-  <br>
-</p>
 
 0.0 how to install:
 -------------------
