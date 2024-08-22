@@ -142,10 +142,20 @@ for rendering a captcha width you should pass name to < model_name > in < captch
      }}
 
  </form>
-
 </body>
 </html>
 ```
+
+## Google captcha version 2 `render` parameters
+
+| parameter  | description                     | type | status     | 
+|------------|---------------------------------|------|------------|
+| model_name | namespace                       | str  | `Required` |
+| id         | id of captcha widget in html    | str  | `Optional` |
+| css_class  | add css class to captcha widget | str  | `Optional` |
+| inline_css | dd inline css to captcha widget | str  | `Optional` |
+| dataset    | add dataset to captcha widget   | str  | `Optional` |
+| js_event   | add js event to captcha widget  | str  | `Optional` |
 
 ## rendering Google Version 3 Captcha :
 
@@ -169,21 +179,53 @@ for rendering a captcha width you should pass name to < model_name > in < captch
  <br>
  {{
      captcha.render_captcha (
-             model_name='g-captcha3', # [Required] Namespace
-             class='custom-class-name', #[Optional] add custom css class to captcha widget
-             id="SubmitBtnForm", # [Optional] add id to captcha widget
-             style="background-color:blue; color:white; font-size:2rem;", # [Optional] add custom inline style to captcha widget
-             dataset="data-ok='true' data-test='test data set check' ", # [Optional] add dataset to captcha widget
-             parent_form_id="ParentForm", # [Required] if of parent form 
-             button_text="submit This Form", # [Required] text content of submit button
-             event="onclick='alert('this is inline event');' ", # [Optional] add inline js event to captcha widget
-             hide_badge=True # [Optional] hide captcha banner in page <it's just hide it but captcha will still work>
+     # [Required] Namespace
+     model_name='g-captcha3'
+
+     # [Optional] add id to captcha widget
+     id="SubmitBtnForm"
+
+     # [Optional] add custom css class to captcha widget
+     css_class='custom-class-name'
+
+     # [Optional] inline css of captcha widget
+     inline_css="background-color:blue; color:white; font-size:2rem;"
+
+     # [Optional] add dataset to captcha widget
+     dataset="data-ok='true' data-test='test data set check' "
+
+     # [Required] if of parent form
+     parent_form_id="ParentForm"
+
+     # [Required] text content of the submit button
+     button_text="submit This Form"
+
+     # [Optional] javascript event of captcha widget
+     js_event="onclick='alert('this is inline event');' "
+
+     # [Optional] set visibility of captcha widget in bottom right corner,
+     # this parameter doesn't disable captcha, its only hidden the captcha in
+     # the page, but captcha still works
+     hide_badge=True
      )
  }}
  </form>
 </body>
 </html>
 ```
+
+## Google captcha version 3 `render` parameters
+
+| parameter      | description                                                                                                                                                       | type | status     | 
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|------------|
+| model_name     | namespace                                                                                                                                                         | str  | `Required` |
+| id             | id of captcha widget in html                                                                                                                                      | str  | `Optional` |
+| css_class      | add css class to captcha widget                                                                                                                                   | str  | `Optional` |
+| inline_css     | dd inline css to captcha widget                                                                                                                                   | str  | `Optional` |
+| dataset        | add dataset to captcha widget                                                                                                                                     | str  | `Optional` |
+| js_event       | add js event to captcha widget                                                                                                                                    | str  | `Optional` |
+| parent_form_id | id of parent form element                                                                                                                                         | str  | `Required` |
+| hide_badge     | set visibility of captcha widget in bottom right corner, this parameter doesn't disable captcha, its only hidden the captcha in the page, but captcha still works | str  | `Required` |
 
 0.3 How to verify Captcha:
 -----------------------

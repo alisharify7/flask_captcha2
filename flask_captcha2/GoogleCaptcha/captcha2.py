@@ -50,6 +50,16 @@ class FlaskCaptcha2(BaseCaptcha2):
     `Don't` use this model directly, instead use
     FlaskCaptcha object for getting an instance
     of this model
+
+    available config parameter:
+
+    CAPTCHA_PRIVATE_KEY: "hish !"
+    CAPTCHA_PUBLIC_KEY: "hish !"
+    CAPTCHA_ENABLED: True  # captcha status <True, False>
+    CAPTCHA_LOG: True # show captcha logs in console
+    CAPTCHA_LANGUAGE: "en" # captcha language
+
+
     """
 
     def __init__(
@@ -129,19 +139,21 @@ class FlaskCaptcha2(BaseCaptcha2):
         from POST data and send it to google server.
 
         response from Google is something like this
-            - successful answer
-            {
-                "success": true,
-                "challenge_ts": "2023-05-17T10:41:22Z",
-                "hostname": "127.0.0.1"
-            }
-            - failed answer
-            {
-                "success": false,
-                "error-codes": [
-                    "invalid-input-response"
-                ]
-            }
+            ..code-block:: python
+
+                - successful answer
+                {
+                    "success": true,
+                    "challenge_ts": "2023-05-17T10:41:22Z",
+                    "hostname": "127.0.0.1"
+                }
+                - failed answer
+                {
+                    "success": false,
+                    "error-codes": [
+                        "invalid-input-response"
+                    ]
+                }
 
         :return: `True` if the captcha verified successfully by google otherwise `False`
         :rtype: bool

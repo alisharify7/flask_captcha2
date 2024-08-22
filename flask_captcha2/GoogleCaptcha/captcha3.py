@@ -24,8 +24,8 @@ from .utils import CommonCaptchaUtils
 
 
 class BaseCaptcha3(CommonCaptchaUtils):
-    """
-    Base Config for Google Captcha v3 class
+    """base config class fpr holding default configurations
+    Base Google Captcha v3 class, contain default settings and properties
     """
 
     PUBLIC_KEY: str = ""
@@ -40,19 +40,23 @@ class BaseCaptcha3(CommonCaptchaUtils):
         LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3"
     )
 
+    HIDE_CAPTCHA_WIDGET_CSS = '<style>.grecaptcha-badge {visibility: hidden;}</style>'
+
 
 class FlaskCaptcha3(BaseCaptcha3):
-    """
-    Google Captcha version 3
-        Score Base
+    """Main Google Captcha version 3 captcha Class,
 
+    `Don't` use this model directly, instead use
+    FlaskCaptcha object for getting an instance
+    of this model
 
-    Env variables:
-        CAPTCHA_PUBLIC_KEY <str:: public Key from googleDevelopers panel>
-        CAPTCHA_PRIVATE_KEY <str:: public Key from googleDevelopers panel>
-        CAPTCHA_SCORE <Float:: score for verify each request between 0.5 - 1>
-        CAPTCHA_ENABLED <Boolean::captcha status>
-        CAPTCHA_LOG <Boolean:: Show each Request Log in terminal>
+    available config parameter:
+
+    CAPTCHA_PUBLIC_KEY <str:: public Key from googleDevelopers panel>
+    CAPTCHA_PRIVATE_KEY <str:: public Key from googleDevelopers panel>
+    CAPTCHA_SCORE <Float:: score for verify each request between 0.5 - 1>
+    CAPTCHA_ENABLED <Boolean::captcha status>
+    CAPTCHA_LOG <Boolean:: Show each Request Log in terminal>
 
 
     """
@@ -122,14 +126,26 @@ class FlaskCaptcha3(BaseCaptcha3):
             self.SCORE = self.MINIMUM_SCORE
 
     def is_verify(self) -> bool:
-        """This Method Verify a Captcha v3 request
+        """This Method Verify a Captcha v2 request
 
-        Args:
-            None
+        no need to pass any value to this method, its grab `g-recaptcha-response`
+        from POST data and send it to google server.
 
-        Returns:
-            Bool: `True` if the captcha verified successfully from google otherwise `False`
+        example google response
+        ..code-block::python
+
+            {
+                 'success': True,
+                 'challenge_ts': '2023-04-04T07:39:45Z',
+                 'hostname': '127.0.0.1',
+                 'score': 0.9,
+                 'action': 'submit'
+            }
+
+        :return: `True` if the captcha verified successfully by google otherwise `False`
+        :rtype: bool
         """
+
         if not self.ENABLED:
             return True
         else:
@@ -138,15 +154,6 @@ class FlaskCaptcha3(BaseCaptcha3):
             responseGoogle = requests.post(
                 f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
             )
-
-            # response from Google is something like this
-            # {
-            #      'success': True,
-            #      'challenge_ts': '2023-04-04T07:39:45Z',
-            #      'hostname': '127.0.0.1',
-            #      'score': 0.9,
-            #      'action': 'submit'
-            # }
 
             if self.CAPTCHA_LOG:
                 self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
@@ -166,42 +173,57 @@ class FlaskCaptcha3(BaseCaptcha3):
                 return False
 
     def renderWidget(self, *args, **kwargs) -> Markup:
+        """render captcha widget
+
+        :param id: id of captcha widget
+        :type id: str
+
+        :param css_class: css class of captcha widget
+        :type css_class: str
+
+        :param inline_css: inline css of captcha widget
+        :type inline_css: str
+
+        :param dataset: dataset of captcha widget
+        :type dataset: str
+
+        :param js_event: javascript event of captcha widget
+        :type js_event: str
+
+        :param button_text: value of input submit button of the form
+        :type button_text: str
+
+        :param parent_form_id: id of parent form element
+        :type parent_form_id: str
+
+        :param hide_badge: set visibility of captcha widget in bottom right corner,
+            this parameter doesn't disable captcha, its only hidden the captcha in
+            the page, but captcha still works
+        :type hide_badge: bool
+
+        :return: captcha widget
+        :rtype: Markup
         """
-            render captcha v3 widget
 
-        Args:
-            id: str: id of captcha element
-            css: str: css of captcha element
-            style: str: style of captcha element
-            dataset: str: dataset of captcha element
-            event: str: javascript event of captcha element
-            button_text: str: value of input submit button of the form
-            parent_form_id: str: id of parent for element
-            hide_badge: bool: set visibility of captcha widget in bottom right corner
-
-        Returns:
-            captchaFiled: str<Markup>: captcha
-
-        """
         arg = ""
         arg += (
-            f"id=\"{kwargs.get('id')}\" \t" if kwargs.get("id") else ""
-        )  # id, class internal text
+            f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ""
+        )
         arg += (
             kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
-        )  # dataset
+        )
         arg += (
-            f"style=\"{kwargs.get('style')}\"\t" if kwargs.get("style") else ""
-        )  # style
-        arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"  # style
-        arg += f"{kwargs.get('event', ' ')}"  # js event
+            f"style=\"{kwargs.get('inline_css')}\"\t" if kwargs.get('inline_css') else ""
+        )
+        arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"
+        arg += f"{kwargs.get('js_event', ' ')}"
 
         captchaField = (
             f"""
-            {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hide_badge", "") == True else ''}
+            { self.HIDE_CAPTCHA_WIDGET_CSS if kwargs.get("hide_badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <script>function onSubmit(token) {{document.getElementById('{kwargs.get('parent_form_id', '')}').submit();}}</script>
-            <input type='submit' class="g-recaptcha {kwargs.get('class', '')}" {arg}
+            <input type='submit' class="g-recaptcha {kwargs.get('css_class', '')}" {arg}
              data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
             """
         ).strip()
