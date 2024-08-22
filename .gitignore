@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# local config
+make-local.bat
+make-local.sh
+
+
+/tests/result/
+
 # Distribution / packaging
 .Python
 build/
@@ -160,7 +167,3 @@ cython_debug/
 #.idea/
 .idea/
 
-
-# local config
-make-local.bat
-make-local.sh
