@@ -1,6 +1,7 @@
 # build in
 import json
 import logging
+
 # lib
 import requests
 from flask import request, Flask
@@ -14,8 +15,9 @@ from .utils import CommonCaptchaUtils
 
 class BaseCaptcha3(CommonCaptchaUtils):
     """
-       Base Config for Google Captcha v3 class
+    Base Config for Google Captcha v3 class
     """
+
     PUBLIC_KEY: str = ""
     PRIVATE_KEY: str = ""
     ENABLED: bool = False
@@ -24,7 +26,9 @@ class BaseCaptcha3(CommonCaptchaUtils):
     CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
-    Logger = get_logger(LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3")
+    Logger = get_logger(
+        LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3"
+    )
 
 
 class FlaskCaptcha3(BaseCaptcha3):
@@ -43,13 +47,21 @@ class FlaskCaptcha3(BaseCaptcha3):
 
     """
 
-    def __init__(self, app: Flask = None, CAPTCHA_PUBLIC_KEY: str = None, CAPTCHA_PRIVATE_KEY: str = None,
-                 **kwargs) -> None:
-        if app and isinstance(app, Flask):  # app is passed read configs from app.config
+    def __init__(
+        self,
+        app: Flask = None,
+        CAPTCHA_PUBLIC_KEY: str = None,
+        CAPTCHA_PRIVATE_KEY: str = None,
+        **kwargs,
+    ) -> None:
+        if app and isinstance(
+            app, Flask
+        ):  # app is passed read configs from app.config
             self.init_app(app)
 
-
-        elif CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY:  # app is not passed read config from args passed to this method
+        elif (
+            CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY
+        ):  # app is not passed read config from args passed to this method
             kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
             kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
             self.set_config(kwargs)
@@ -58,15 +70,19 @@ class FlaskCaptcha3(BaseCaptcha3):
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
-            raise ValueError("Flask-Captcha2.GoogleCaptcha.captcha3: Private and Public Keys are Required")
+        if not app.config.get(
+            "CAPTCHA_PUBLIC_KEY", None
+        ) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
+            raise ValueError(
+                "Flask-Captcha2.GoogleCaptcha.captcha3: Private and Public Keys are Required"
+            )
 
         self.__init__(
             CAPTCHA_PUBLIC_KEY=app.config.get("CAPTCHA_PUBLIC_KEY", None),
             CAPTCHA_PRIVATE_KEY=app.config.get("CAPTCHA_PRIVATE_KEY", None),
             CAPTCHA_ENABLED=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
             CAPTCHA_SCORE=app.config.get("CAPTCHA_SCORE", self.SCORE),
-            CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+            CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG),
         )
 
     def set_config(self, conf_list: dict) -> None:
@@ -74,35 +90,44 @@ class FlaskCaptcha3(BaseCaptcha3):
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
         """
-        if not conf_list.get("CAPTCHA_PUBLIC_KEY", False) or not conf_list.get("CAPTCHA_PRIVATE_KEY", False):
-            raise ValueError("private_key and public_key are required for FlaskCaptcha3")
+        if not conf_list.get("CAPTCHA_PUBLIC_KEY", False) or not conf_list.get(
+            "CAPTCHA_PRIVATE_KEY", False
+        ):
+            raise ValueError(
+                "private_key and public_key are required for FlaskCaptcha3"
+            )
 
         self.PUBLIC_KEY = conf_list.get("CAPTCHA_PUBLIC_KEY")
         self.PRIVATE_KEY = conf_list.get("CAPTCHA_PRIVATE_KEY")
         self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
         self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
         try:
-            self.SCORE = self.MINIMUM_SCORE if int(
-                conf_list.get('CAPTCHA_SCORE', self.SCORE)) < self.MINIMUM_SCORE else int(
-                conf_list.get('CAPTCHA_SCORE', self.SCORE))
+            self.SCORE = (
+                self.MINIMUM_SCORE
+                if int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
+                < self.MINIMUM_SCORE
+                else int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
+            )
         except ValueError:
             self.SCORE = self.MINIMUM_SCORE
 
     def is_verify(self) -> bool:
-        """ This Method Verify a Captcha v3 request
-        
-        Args: 
+        """This Method Verify a Captcha v3 request
+
+        Args:
             None
-        
+
         Returns:
             Bool: `True` if the captcha verified successfully from google otherwise `False`
         """
         if not self.ENABLED:
             return True
         else:
-            response = request.form.get('g-recaptcha-response', None)
+            response = request.form.get("g-recaptcha-response", None)
 
-            responseGoogle = requests.post(f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}")
+            responseGoogle = requests.post(
+                f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
+            )
 
             # response from Google is something like this
             # {
@@ -115,11 +140,18 @@ class FlaskCaptcha3(BaseCaptcha3):
 
             if self.CAPTCHA_LOG:
                 self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                self.debug_log(f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}")
+                self.debug_log(
+                    f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}"
+                )
 
             if responseGoogle.status_code == 200:
                 jsonResponse = responseGoogle.json()
-                return True if jsonResponse["success"] and jsonResponse["score"] >= self.SCORE else False
+                return (
+                    True
+                    if jsonResponse["success"]
+                    and jsonResponse["score"] >= self.SCORE
+                    else False
+                )
             else:
                 return False
 
@@ -135,26 +167,34 @@ class FlaskCaptcha3(BaseCaptcha3):
             event: str: javascript event of captcha element
             button_text: str: value of input submit button of the form
             parent_form_id: str: id of parent for element
-            hide_badge: bool: set visibility of captcha widget in bottom right corner 
+            hide_badge: bool: set visibility of captcha widget in bottom right corner
 
         Returns:
             captchaFiled: str<Markup>: captcha
-        
+
         """
         arg = ""
-        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ''  # id, class internal text
-        arg += kwargs.get('dataset') + "\t" if kwargs.get('dataset') else ''  # dataset
-        arg += f"style=\"{kwargs.get('style')}\"\t" if kwargs.get('style') else ''  # style
+        arg += (
+            f"id=\"{kwargs.get('id')}\" \t" if kwargs.get("id") else ""
+        )  # id, class internal text
+        arg += (
+            kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
+        )  # dataset
+        arg += (
+            f"style=\"{kwargs.get('style')}\"\t" if kwargs.get("style") else ""
+        )  # style
         arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"  # style
         arg += f"{kwargs.get('event', ' ')}"  # js event
 
-        captchaField = (f"""
+        captchaField = (
+            f"""
             {'<style>.grecaptcha-badge {visibility: hidden;}</style>' if kwargs.get("hide_badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <script>function onSubmit(token) {{document.getElementById('{kwargs.get('parent_form_id', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {kwargs.get('class', '')}" {arg}
              data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
-            """).strip()
+            """
+        ).strip()
         if self.ENABLED:
             return Markup(captchaField)
         else:
