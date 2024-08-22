@@ -1,3 +1,13 @@
+"""
+ * flask_captcha2 OSS
+ * main import entrypoint
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * license: see LICENSE for more details.
+ * Copyright (c) 2023 - ali sharifi
+ * https://github.com/alisharify7/flask_captcha2
+"""
+
 # build in
 import json
 import logging
@@ -14,7 +24,7 @@ from .utils import CommonCaptchaUtils
 
 
 class BaseCaptcha2(CommonCaptchaUtils):
-    """
+    """base config class fpr holding default configurations
     Base Google Captcha v2 class, contain default settings and properties
     """
 
@@ -35,8 +45,11 @@ class BaseCaptcha2(CommonCaptchaUtils):
 
 
 class FlaskCaptcha2(BaseCaptcha2):
-    """
-    Google Captcha version 2 class
+    """Main Google Captcha version 2 captcha Class,
+
+    `Don't` use this model directly, instead use
+    FlaskCaptcha object for getting an instance
+    of this model
     """
 
     def __init__(
@@ -46,6 +59,9 @@ class FlaskCaptcha2(BaseCaptcha2):
         CAPTCHA_PRIVATE_KEY: str = None,
         **kwargs,
     ) -> None:
+        """
+        if `app` object directly passed, then `init_app` method will be called.
+        """
         if app and isinstance(
             app, Flask
         ):  # app is passed read configs from app.config
@@ -109,11 +125,26 @@ class FlaskCaptcha2(BaseCaptcha2):
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
 
-        Args:
-            None
+        no need to pass any value to this method, its grab `g-recaptcha-response`
+        from POST data and send it to google server.
 
-        Returns:
-            Bool: `True` if the captcha verified successfully from google otherwise `False`
+        response from Google is something like this
+            - successful answer
+            {
+                "success": true,
+                "challenge_ts": "2023-05-17T10:41:22Z",
+                "hostname": "127.0.0.1"
+            }
+            - failed answer
+            {
+                "success": false,
+                "error-codes": [
+                    "invalid-input-response"
+                ]
+            }
+
+        :return: `True` if the captcha verified successfully by google otherwise `False`
+        :rtype: bool
         """
         if not self.ENABLED:
             return True
@@ -124,20 +155,7 @@ class FlaskCaptcha2(BaseCaptcha2):
             }
 
             responseGoogle = requests.get(self.GOOGLE_VERIFY_URL, params=data)
-            # response from Google is something like this
-            #         successful answer
-            # {
-            #     "success": true,
-            #     "challenge_ts": "2023-05-17T10:41:22Z",
-            #     "hostname": "127.0.0.1"
-            # }
-            #          failed answer
-            # {
-            #     "success": false,
-            #     "error-codes": [
-            #         "invalid-input-response"
-            #     ]
-            # }
+
             if self.CAPTCHA_LOG:
                 self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
                 self.debug_log(
@@ -150,36 +168,45 @@ class FlaskCaptcha2(BaseCaptcha2):
                 return False
 
     def renderWidget(self, *args, **kwargs) -> Markup:
-        """
-            render captcha v2 widget
+        """render captcha widget
 
-        Args:
-            id: str: id of captcha element
-            css: str: css of captcha element
-            style: str: style of captcha element
-            dataset: str: dataset of captcha element
-            event: str: javascript event of captcha element
+        :param id: html id of captcha widget
+        :type id: str
 
-        Returns:
-            captchaFiled: str<Markup>: captcha
+        :param css_class: css class of captcha widget
+        :type css_class: str
+
+        :param inline_css: inline css style of captcha widget
+        :type inline_css: str
+
+        :param dataset: dataset of captcha widget
+        :type dataset: str
+
+        :param js_event: javascript inline event of captcha widget
+        :type js_event: str
+
+        :return: captcha widget
+        :rtype: Markup
         """
 
         arg = ""
+        # id
+        arg += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""
+        # dataset
+        arg += kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
+        # inline css style
         arg += (
-            f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""
-        )  # id, class internal text
-        arg += (
-            kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
-        )  # dataset
-        arg += (
-            f"style=\"{kwargs.get('style')}\"\t" if kwargs.get("style") else ""
-        )  # style
-        arg += f"{kwargs.get('event', '')}"  # js event
+            f"style=\"{kwargs.get('inline_css')}\"\t"
+            if kwargs.get("inline_css")
+            else ""
+        )
+        # js event
+        arg += f"{kwargs.get('js_event', '')}"
 
         CaptchaField = (
             f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div class="g-recaptcha {kwargs.get('class', '')}" data-sitekey="{self.PUBLIC_KEY}"
+            <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
                 data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
                 data-tabindex="{self.TABINDEX}" {arg}>
             </div>
