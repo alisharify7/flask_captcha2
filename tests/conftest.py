@@ -36,8 +36,8 @@ def googlecaptcha2(app):
             "CAPTCHA_TYPE": "image"
         }
     )
-    Master_captcha = FlaskCaptcha(app=app)
-    captcha = Master_captcha.getGoogleCaptcha2('flask-captcha-v2')
+    MainCaptcha = FlaskCaptcha(app=app)
+    captcha = MainCaptcha.get_google_captcha_v2('flask-captcha-v2')
     yield captcha
 
 
@@ -53,8 +53,8 @@ def googlecaptcha3(app):
             "CAPTCHA_LOG": False,
         }
     )
-    Master_captcha = FlaskCaptcha(app=app)
-    captcha = Master_captcha.getGoogleCaptcha3('flask-captcha-v3')
+    MainCaptcha = FlaskCaptcha(app=app)
+    captcha = MainCaptcha.get_google_captcha_v3('flask-captcha-v3')
 
     yield captcha
 
