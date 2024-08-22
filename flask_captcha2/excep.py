@@ -7,6 +7,7 @@
  * https://github.com/alisharify7/flask_captcha2
 """
 
+
 class BaseFlaskCaptchaException(Exception):
     """Base FlaskCaptcha Exception"""
 
