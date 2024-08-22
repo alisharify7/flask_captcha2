@@ -57,8 +57,8 @@ app = Flask(__name__)
 
  MainCaptcha = FlaskCaptcha(app=app)  # app is required
  # passing config list directly
- google_captcha2 = MainCaptcha.getGoogleCaptcha2(name='g-captcha2', conf=google_captcha2_config_list)
- google_captcha3 = MainCaptcha.getGoogleCaptcha3(name='g-captcha3', conf=google_captcha3_config_list)
+ google_captcha2 = MainCaptcha.get_google_captcha_v2(name='g-captcha2', conf=google_captcha2_config_list)
+ google_captcha3 = MainCaptcha.get_google_captcha_v3(name='g-captcha3', conf=google_captcha3_config_list)
  # Namespaces are important. Do not use repeated names and choose names with meaning.
 ```
 
@@ -71,7 +71,7 @@ https://developers.google.com/recaptcha/docs/v3
  app.config.update(google_captcha3_config_list) # set configs in app.config
  MainCaptcha = FlaskCaptcha(app=app)
  # No need to send conf_list, it will be set automatically from app.config
- google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2')
+ google_captcha2 = MainCaptcha.get_google_captcha_v2(name='g-captcha2')
 ```
 
 0.2 how use in templates for rendering Captcha Widget:
@@ -82,8 +82,8 @@ https://developers.google.com/recaptcha/docs/v3
 ##### -> Remember namespaces argument in crating a captcha object
 
 ```python
-google_captcha2 = MainCaptcha.getGoogleCaptcha2(name='g-captcha2') # name
-google_captcha3 = MainCaptcha.getGoogleCaptcha3(name='g-captcha3') # name
+google_captcha2 = MainCaptcha.get_google_captcha_v2(name='g-captcha2') # name
+google_captcha3 = MainCaptcha.get_google_captcha_v3(name='g-captcha3') # name
 ```
 
 for rendering a captcha width you should pass name to < model_name > in < captcha.render_captcha >
