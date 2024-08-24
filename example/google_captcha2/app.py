@@ -25,7 +25,7 @@ app.config.update({
 })
 
 Master_captcha = FlaskCaptcha(app=app)  # app is required
-captcha = Master_captcha.getGoogleCaptcha2(name='captcha2')  # created a google captcha object
+captcha = Master_captcha.get_google_captcha_v2(name='captcha2')  # created a google captcha object
 
 
 @app.post("/")
