@@ -34,9 +34,9 @@ google_captcha3_config_list = {
 }
 
 Master_captcha = FlaskCaptcha(app=app)  # app is required
-google_captcha2 = Master_captcha.getGoogleCaptcha2(name='g-captcha2',
+google_captcha2 = Master_captcha.get_google_captcha_v2(name='g-captcha2',
                                                    conf=google_captcha2_config_list)  # pass config directly to method
-google_captcha3 = Master_captcha.getGoogleCaptcha3(name='g-captcha3',
+google_captcha3 = Master_captcha.get_google_captcha_v3(name='g-captcha3',
                                                    conf=google_captcha3_config_list)  # pass config directly to method
 
 
