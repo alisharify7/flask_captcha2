@@ -216,7 +216,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 | dataset        | add dataset to captcha widget                                                                                                                                     | str  | `Optional` |
 | js_event       | add js event to captcha widget                                                                                                                                    | str  | `Optional` |
 | parent_form_id | id of parent form element                                                                                                                                         | str  | `Required` |
-| hide_badge     | set visibility of captcha widget in bottom right corner, this parameter doesn't disable captcha, its only hidden the captcha in the page, but captcha still works | str  | `Required` |
+| hide_badge     | set visibility of captcha widget in bottom right corner, this parameter doesn't disable captcha, its only hidden the captcha in the page, but captcha still works | str  | `Optional` |
 | button_text    | text context of the captcha button                                                                                                                                | str  | `Required` |
 
 0.3 How to verify Captcha:
