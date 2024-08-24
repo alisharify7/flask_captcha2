@@ -17,14 +17,14 @@
     <br>
     <input value="submit" type="submit">
 
-    {# model name is required #}
+    {# version 2 google captcha  #}
     {{ captcha.render_captcha (
-                    model_name='g-captcha2',
-                    class='custom-css-class-for-this-captcha',
-                    style='text:red;',
-                    id='g-captcha-v2',
-                    dataset="data-ok='true';"
-                ) }}
+        model_name='g-captcha2',
+        css_class='custom-css-class-for-this-captcha',
+        inline_css	='text:red;',
+        id='g-captcha-v2',
+        dataset="data-ok='true';"
+    ) }}
 
 </form>
 
@@ -37,14 +37,14 @@
     <br>
     {{ captcha.render_captcha (
                 model_name='g-captcha3',
-                class='custom-class-name',
+                css_class='custom-class-name',
                 id="SubmitBtnForm",
-                style=" background-color:blue; color:white; font-size:2rem;",
+                inline_css=" background-color:blue; color:white; font-size:2rem;",
                 dataset="data-ok='true' data-test='test data set check' ",
-                ParentFormID="ParentForm",
-                BtnText="submit This Form",
-                event=" onclick='alert('js alert');' ",
-                hiddenBadge=True
+                parent_form_id="ParentForm",
+                button_text="submit This Form",
+                js_event=" onclick='alert('js alert');' ",
+                hide_badge=True
             ) }}
 </form>
 
