@@ -3,7 +3,7 @@ flask captcha2
 
 <img src="https://github.com/alisharify7/flask_captcha2/blob/main/docs/flask-captcha2-white.png?raw=true">
 
-Flask plugin to integrate Google captcha (version 2, 3) and local
+Flask plugin to integrate Google-captcha (version 2, 3) and local
 captcha (image, voice) with Flask applications
 
 <a href="https://www.coffeete.ir/alisharify7">Donate/Support [Optional]</a>
