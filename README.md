@@ -1,7 +1,7 @@
 flask captcha2
 ===============
 
-<img src="https://github.com/alisharify7/flask_captcha2/blob/main/docs/flask-captcha2-white.png?raw=true">
+<img src="https://github.com/alisharify7/flask_captcha2/blob/main/docs/flask-captcha2-black.png?raw=true">
 
 Flask plugin to integrate Google-captcha (version 2, 3) and local
 captcha (image, voice) with Flask applications
@@ -139,14 +139,14 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 
 ## Google captcha version 2 `render` parameters
 
-| parameter  | description                     | type | status     | 
-|------------|---------------------------------|------|------------|
-| model_name | namespace                       | str  | `Required` |
-| id         | id of captcha widget in html    | str  | `Optional` |
-| css_class  | add css class to captcha widget | str  | `Optional` |
-| inline_css | dd inline css to captcha widget | str  | `Optional` |
-| dataset    | add dataset to captcha widget   | str  | `Optional` |
-| js_event   | add js event to captcha widget  | str  | `Optional` |
+| parameter  | description                      | type | status     | 
+|------------|----------------------------------|------|------------|
+| model_name | namespace                        | str  | `Required` |
+| id         | id of captcha widget in html     | str  | `Optional` |
+| css_class  | add css class to captcha widget  | str  | `Optional` |
+| inline_css | add inline css to captcha widget | str  | `Optional` |
+| dataset    | add dataset to captcha widget    | str  | `Optional` |
+| js_event   | add js event to captcha widget   | str  | `Optional` |
 
 ## rendering Google Version 3 Captcha :
 
@@ -212,7 +212,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 | model_name     | namespace                                                                                                                                                         | str  | `Required` |
 | id             | id of captcha widget in html                                                                                                                                      | str  | `Optional` |
 | css_class      | add css class to captcha widget                                                                                                                                   | str  | `Optional` |
-| inline_css     | dd inline css to captcha widget                                                                                                                                   | str  | `Optional` |
+| inline_css     | add inline css to captcha widget                                                                                                                                  | str  | `Optional` |
 | dataset        | add dataset to captcha widget                                                                                                                                     | str  | `Optional` |
 | js_event       | add js event to captcha widget                                                                                                                                    | str  | `Optional` |
 | parent_form_id | id of parent form element                                                                                                                                         | str  | `Required` |
