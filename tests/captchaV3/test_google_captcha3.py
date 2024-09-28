@@ -32,10 +32,11 @@ def test_load_captcha_in_html(client, googlecaptcha3, app, captcha3_template_con
                                                                                     **captcha3_template_conf)
     assert isinstance(captcha, Markup)
     assert f"data-sitekey=\"{googlecaptcha3.PUBLIC_KEY}\"" in captcha
-    assert f"class=\"g-recaptcha {captcha3_template_conf['class']}\"" in captcha
+    assert f"class=\"g-recaptcha {captcha3_template_conf['css_class']}\"" in captcha
     assert f"{captcha3_template_conf['dataset']}" in captcha
     assert f"id=\"{captcha3_template_conf['id']}\"" in captcha
     assert f"{captcha3_template_conf['button_text']}" in captcha
+    assert f"{captcha3_template_conf['inline_css']}" in captcha
 
     # check captcha badge in the eight bottom os the screen in hidden or not
     captcha3_template_conf['hide_badge'] = True

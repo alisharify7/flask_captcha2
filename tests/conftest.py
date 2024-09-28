@@ -72,9 +72,8 @@ def captcha3_template_conf():
         'parent_form_id': 'id-of-parent-form',
         'button_text': 'submit form',
         'dataset': ' data-check="True" data-another="Checked" ',
-        'style': 'background-color:"red"',
+        'inline_css': 'background-color:"red"',
         'id': 'id-of-submit-form',
-        'class': 'class-of-submit-form',
-        "CAPTCHA_LOG": False
+        'css_class': 'class-of-submit-form',
     }
     yield conf
