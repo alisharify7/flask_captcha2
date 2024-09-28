@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-captcha2"
-__version__ = "3.0.5"
+__version__ = "3.1.0"
 __author__ = "ali sharify"
 __author_mail__ = "alisharifyofficial@gmail.com"
 __copyright__ = "ali sharify - 2023"

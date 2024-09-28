@@ -281,3 +281,11 @@ def index():
 
     > -   reformat/Refactor code
     > -   rename render_captcha parameters
+  
+- version 3.1.0 Released: September 28, 2024
+-   Changes:
+
+    > -   reformat/Refactor code
+    > -   Refactoring all method and function signatures to adhere to PEP8 input parameter naming conventions.
+    > -   minor changes.
+
