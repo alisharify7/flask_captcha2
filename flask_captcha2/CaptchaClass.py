@@ -69,7 +69,7 @@ class FlaskCaptcha:
         self.__debug = app.debug
         self.__app = app
         self.__logger = get_logger(
-            LogLevel=logging.INFO, CaptchaName="Flask-Captcha2-Master"
+            log_level=logging.INFO, captcha_name="Flask-Captcha2-Master"
         )
 
     def __print_log(self, message: str):

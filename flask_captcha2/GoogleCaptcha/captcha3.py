@@ -37,7 +37,7 @@ class BaseCaptcha3(CommonCaptchaUtils):
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
     Logger = get_logger(
-        LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v3"
+        log_level=logging.DEBUG, captcha_name="Google-Captcha-v3"
     )
 
     HIDE_CAPTCHA_WIDGET_CSS = '<style>.grecaptcha-badge {visibility: hidden;}</style>'

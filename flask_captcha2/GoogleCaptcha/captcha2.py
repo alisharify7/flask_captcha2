@@ -40,7 +40,7 @@ class BaseCaptcha2(CommonCaptchaUtils):
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
     Logger = get_logger(
-        LogLevel=logging.DEBUG, CaptchaName="Google-Captcha-v2"
+        log_level=logging.DEBUG, captcha_name="Google-Captcha-v2"
     )
 
 
