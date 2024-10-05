@@ -12,12 +12,12 @@ import sys
 
 
 def get_logger(
-    log_level: int, captcha_name: str = "Flask-Captcha"
+    log_level: int, logger_name: str = "Flask-Captcha"
 ) -> logging.Logger:
     """create a custom stdout Logger with given level and name
 
-    :param captcha_name: name of the logger
-    :type captcha_name: str
+    :param logger_name: name of the logger
+    :type logger_name: str
 
     :param log_level: logging level
     :type log_level: int
@@ -27,7 +27,7 @@ def get_logger(
     """
     log_level = log_level or logging.DEBUG
     logformat = logging.Formatter(
-        f"[{captcha_name}" + "- %(levelname)s] [%(asctime)s] - %(message)s"
+        f"[{logger_name}" + "- %(levelname)s] [%(asctime)s] - %(message)s"
     )
     logger = logging.getLogger(captcha_name)
     logger.setLevel(log_level)
