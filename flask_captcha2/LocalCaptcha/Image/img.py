@@ -1,3 +1,12 @@
+"""
+ * flask_captcha2 OSS
+ * author: github.com/alisharify7
+ * email: alisharifyofficial@gmail.com
+ * license: see LICENSE for more details.
+ * Copyright (c) 2023 - ali sharifi
+ * https://github.com/alisharify7/flask_captcha2
+"""
+
 # build in
 import base64
 import logging
@@ -16,7 +25,7 @@ from flask_captcha2.Logger import get_logger
 
 
 class BaseImageCaptcha:
-    """Base default configuration class for image captcha"""
+    """ Base default configuration class for image captcha """
 
     ENABLE: bool = True
     LOG: bool = True
@@ -38,12 +47,12 @@ class BaseImageCaptcha:
     # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
     random = SystemRandom()  # https://docs.python.org/3/library/random.html
     Logger = get_logger(
-        LogLevel=logging.DEBUG, CaptchaName="Flask-Captcha2-ImageCaptcha"
+        LogLevel=logging.DEBUG, logger_name="Flask-Captcha2-ImageCaptcha"
     )
 
     @property
     def LETTERS(self):
-        """getter for letters"""
+        """getter method for letters"""
         return self._letters
 
     @LETTERS.setter
