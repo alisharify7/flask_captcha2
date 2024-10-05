@@ -69,12 +69,12 @@ class FlaskCaptcha:
         self.__debug = app.debug
         self.__app = app
         self.__logger = get_logger(
-            log_level=logging.INFO, captcha_name="Flask-Captcha2-Master"
+            log_level=logging.INFO, logger_name="Flask-Captcha2-Master"
         )
 
     def __print_log(self, message: str):
         """print a log message"""
-        self.__logger.info(message)
+        self.__logger.info(message) 
 
     def get_google_captcha_v2(
         self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
