@@ -1,6 +1,5 @@
 """
  * flask_captcha2 OSS
- * main import entrypoint
  * author: github.com/alisharify7
  * email: alisharifyofficial@gmail.com
  * license: see LICENSE for more details.
