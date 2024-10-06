@@ -260,7 +260,9 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
     def __generate(self, *args, **kwargs) -> Markup:
         """
-        Generate image captcha with base on given args
+        Generate image captcha base on given args.
+
+        don't call this method directly, use `renderWidget` instead !.
 
 
         :param include_numbers: include the numbers (0-9) in the captcha or not 
