@@ -122,37 +122,44 @@ class BaseImageCaptcha:
 class FlaskImageCaptcha(BaseImageCaptcha):
     def __init__(self, app: Flask, **kwargs):
         """
-         :param CAPTCHA_IMAGE_ENABLE:
+        constructor method.
+
+        :param app: Flask application
+        :type app: Flask
+
+        this method can accept a flask app and extract configs from app.config it self,
+        or you can pass the config directly using kwargs.
+        
+        Available config params:
+         :param CAPTCHA_IMAGE_ENABLE: status of the captcha, is it enable or off
          :type CAPTCHA_IMAGE_ENABLE: bool
          
-         :param CAPTCHA_IMAGE_LOG:
+         :param CAPTCHA_IMAGE_LOG: log the messages in the `stdout` or not
          :type CAPTCHA_IMAGE_LOG: bool
 
          :param CAPTCHA_IMAGE_CAPTCHA_LENGTH: length of CAPTCHA code in image
          :type CAPTCHA_IMAGE_CAPTCHA_LENGTH: int
          
-         :param CAPTCHA_IMAGE_INCLUDE_LETTERS:
+         :param CAPTCHA_IMAGE_INCLUDE_LETTERS: include the alphabet (a-z) in the captcha code or not
          :type CAPTCHA_IMAGE_INCLUDE_LETTERS: bool
          
-         :param CAPTCHA_IMAGE_INCLUDE_NUMERIC:
+         :param CAPTCHA_IMAGE_INCLUDE_NUMERIC: include the numbers in the captcha code
          :type CAPTCHA_IMAGE_INCLUDE_NUMERIC: bool
          
-         :param CAPTCHA_IMAGE_INCLUDE_PUNCTUATION:
+         :param CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: include the punctuation in the captcha code or not
          :type CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: bool
          
-         :param CAPTCHA_IMAGE_HEIGHT:
+         :param CAPTCHA_IMAGE_HEIGHT: height of the captcha image
          ؛type CAPTCHA_IMAGE_HEIGHT: bool
          
-         :param CAPTCHA_IMAGE_WIDTH
+         :param CAPTCHA_IMAGE_WIDTH: width of the captcha image 
          :type CAPTCHA_IMAGE_WIDTH: int
 
-         :param CAPTCHA_IMAGE_SESSION_KEY_NAME:
+         :param CAPTCHA_IMAGE_SESSION_KEY_NAME: name of the captcha answer in the user session, [Optional],
+         don't touch this if you don't know what it is
          :type CAPTCHA_IMAGE_SESSION_KEY_NAME: str
 
-         custom captcha params:
-             CAPTCHA_IMAGE_LETTERS:str
-             CAPTCHA_IMAGE_NUMBERS:str
-                 CAPTCHA_IMAGE_PUNCTUATIONS:str
+  
         """
         if app:
             if not isinstance(app, Flask):
@@ -192,6 +199,10 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             )
 
     def init_app(self, app: Flask):
+        """ 
+            app init method, use this method when you using factory design and
+            want to separate your extensions in  different file.
+        """
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"object {app} is not a flask instance!,")
 
@@ -322,8 +333,15 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
-    def is_verify(self, CaptchaAnswer: str = "") -> bool:
-        """Verify image captcha answer is correct"""
+    def is_verify(self, captcha_answer: str = "") -> bool:
+        """Verify the answer of the image captcha
+        
+        :param captcha_answer: 
+        :type captcha_answer: str
+
+        :return: True or False
+        :rtype: bool
+        """
         if not self.ENABLE:
             return True
 
