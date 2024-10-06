@@ -30,7 +30,7 @@ captcha = MainCaptcha.getLocalImageCaptcha(
 
 @app.post("/")
 def index_post():
-    if captcha.is_verify(CaptchaAnswer=request.form.get("captcha")):
+    if captcha.is_verify(captcha_answer=request.form.get("captcha")):
         # we should captcha answer to is_verify method
         return "captcha is ok"
     else:
