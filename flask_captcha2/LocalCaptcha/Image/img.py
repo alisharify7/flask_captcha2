@@ -346,7 +346,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
     def is_verify(self, captcha_answer: str = "") -> bool:
         """Verify the answer of the image captcha
         
-        :param captcha_answer: 
+        :param captcha_answer: answer that user type enter.
         :type captcha_answer: str
 
         :return: True or False
@@ -356,7 +356,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             return True
 
         if session.get(self.SESSION_KEY_NAME, False):
-            if session.get(self.SESSION_KEY_NAME) == CaptchaAnswer:
+            if session.get(self.SESSION_KEY_NAME) == captcha_answer:
                 session.pop(self.SESSION_KEY_NAME)
                 return True
             session.pop(self.SESSION_KEY_NAME)
