@@ -122,22 +122,36 @@ class BaseImageCaptcha:
 class FlaskImageCaptcha(BaseImageCaptcha):
     def __init__(self, app: Flask, **kwargs):
         """
-        :param:
-             CAPTCHA_IMAGE_ENABLE: bool,
-             CAPTCHA_IMAGE_LOG: bool ,
+         :param CAPTCHA_IMAGE_ENABLE:
+         :type CAPTCHA_IMAGE_ENABLE: bool
+         
+         :param CAPTCHA_IMAGE_LOG:
+         :type CAPTCHA_IMAGE_LOG: bool
 
-             CAPTCHA_IMAGE_CAPTCHA_LENGTH: int, # length of CAPTCHA code in image
-             CAPTCHA_IMAGE_INCLUDE_LETTERS: bool,
-             CAPTCHA_IMAGE_INCLUDE_NUMERIC: bool ,
-             CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: bool,
-             CAPTCHA_IMAGE_HEIGHT: int,
-             CAPTCHA_IMAGE_WIDTH: int,
+         :param CAPTCHA_IMAGE_CAPTCHA_LENGTH: length of CAPTCHA code in image
+         :type CAPTCHA_IMAGE_CAPTCHA_LENGTH: int
+         
+         :param CAPTCHA_IMAGE_INCLUDE_LETTERS:
+         :type CAPTCHA_IMAGE_INCLUDE_LETTERS: bool
+         
+         :param CAPTCHA_IMAGE_INCLUDE_NUMERIC:
+         :type CAPTCHA_IMAGE_INCLUDE_NUMERIC: bool
+         
+         :param CAPTCHA_IMAGE_INCLUDE_PUNCTUATION:
+         :type CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: bool
+         
+         :param CAPTCHA_IMAGE_HEIGHT:
+         ؛type CAPTCHA_IMAGE_HEIGHT: bool
+         
+         :param CAPTCHA_IMAGE_WIDTH
+         :type CAPTCHA_IMAGE_WIDTH: int
 
-             CAPTCHA_IMAGE_SESSION_KEY_NAME: str
+         :param CAPTCHA_IMAGE_SESSION_KEY_NAME:
+         :type CAPTCHA_IMAGE_SESSION_KEY_NAME: str
 
-             custom image captcha:
-                 CAPTCHA_IMAGE_LETTERS:str
-                 CAPTCHA_IMAGE_NUMBERS:str
+         custom captcha params:
+             CAPTCHA_IMAGE_LETTERS:str
+             CAPTCHA_IMAGE_NUMBERS:str
                  CAPTCHA_IMAGE_PUNCTUATIONS:str
         """
         if app:
@@ -220,7 +234,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         )
 
     def renderWidget(self, *args, **kwargs) -> Markup:
-        """render captcha widget image in template"""
+        """Render captcha widget image in template """
         return self.__generate(*args, **kwargs)
 
     def __generate(self, *args, **kwargs) -> Markup:
@@ -228,10 +242,14 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         Generate image captcha with base on given args
 
 
-        params:
-                .. include_numbers: bool: True
-                .. include_letters: bool: False
-                .. include_punctuations: bool: False
+        :param include_numbers:
+        :type include_numbers: bool
+        
+        :param include_letters:
+        :type include_letters: bool
+        
+        :param include_punctuations:
+        :type include_punctuations: bool
 
         """
         if not self.ENABLE:
