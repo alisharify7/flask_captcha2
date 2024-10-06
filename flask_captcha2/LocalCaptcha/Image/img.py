@@ -263,13 +263,13 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         Generate image captcha with base on given args
 
 
-        :param include_numbers:
+        :param include_numbers: include the numbers (0-9) in the captcha or not 
         :type include_numbers: bool
         
-        :param include_letters:
+        :param include_letters: include the alphabet (a-z) in the captcha or not
         :type include_letters: bool
         
-        :param include_punctuations:
+        :param include_punctuations: include the punctuations (symbols) in the captcha or not
         :type include_punctuations: bool
 
         """
@@ -302,7 +302,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
             total = sum([letters, numeric, punctuation])
             each_round = self.LENGTH // total
-            for each in selected:
+            for each in selected: # fill the gap
                 captcha_raw_code += selected[each](length=each_round)
 
             captcha_raw_code += self.random_letters(
