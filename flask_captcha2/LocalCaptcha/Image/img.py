@@ -129,7 +129,17 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
         this method can accept a flask app and extract configs from app.config it self,
         or you can pass the config directly using kwargs.
+
+        :example of direct passing app:
+            ..code-block:: python
+                $> app.config.update(config_dict)
+                $> FlaskImageCaptcha(app=app)
         
+        :example passing config directly:
+            ..code-block:: python
+                $> FlaskImageCaptcha(CAPTCHA_IMAGE_ENABLE=True,  etc)
+
+
         Available config params:
          :param CAPTCHA_IMAGE_ENABLE: status of the captcha, is it enable or off
          :type CAPTCHA_IMAGE_ENABLE: bool
