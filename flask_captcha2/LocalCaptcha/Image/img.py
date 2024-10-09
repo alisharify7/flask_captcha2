@@ -57,7 +57,7 @@ class BaseImageCaptcha:
 
     @LETTERS.setter
     def LETTERS(self, value: str):
-        """setter for letters"""
+        """letters setter, make sure inpur is str value."""
         if not isinstance(value, str):
             raise ValueError(
                 f"letters {value} must be a string not a {type(value)}"
@@ -71,6 +71,7 @@ class BaseImageCaptcha:
 
     @NUMBERS.setter
     def NUMBERS(self, value: str):
+        """ numbers settter, make sure the input is a str value """
         if not isinstance(value, str):
             raise ValueError(
                 f"numbers {value} must be a string not a {type(value)}"
@@ -346,11 +347,10 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
     def is_verify(self, captcha_answer: str = "") -> bool:
-        """Verify the answer of the image captcha
+        """Verify the answer of the image captcha     
         
         :param captcha_answer: answer that user type enter.
         :type captcha_answer: str
-
         :return: True or False
         :rtype: bool
         """
