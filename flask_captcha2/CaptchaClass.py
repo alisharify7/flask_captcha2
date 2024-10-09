@@ -80,7 +80,8 @@ class FlaskCaptcha:
         self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
     ) -> FlaskCaptcha2:
         """this method return `FlaskCaptcha2` object
-
+        
+        instead of direct using, use this method for generating a captcha version2 object 
         :parama name: a unique name for captcha object. it is better to be a combination of captcha type and version
         :type name: str
         :param conf: a dictionary with config for captcha object
@@ -88,7 +89,6 @@ class FlaskCaptcha:
 
         `Example` config object:
             ..code-block::python
-
              {
                  "CAPTCHA_PRIVATE_KEY": "hish !",
                  "CAPTCHA_PUBLIC_KEY": "hish !",
