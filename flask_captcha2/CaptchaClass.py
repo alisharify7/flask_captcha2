@@ -19,7 +19,7 @@ from markupsafe import Markup
 from . import excep as exceptions
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
-from .LocalCaptcha.Image.img import FlaskSessionImageCaptcha
+from .LocalCaptcha.Image import FlaskSessionImageCaptcha
 from .Logger import get_logger
 
 

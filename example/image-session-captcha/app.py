@@ -15,11 +15,13 @@ app.config.update(
         "CAPTCHA_IMAGE_ENABLE": True,  # captcha status <True, False> True: Production , False: development
         "CAPTCHA_IMAGE_LOG": True,  # show captcha logs in terminal > stdout
         # captcha settings
-        "CAPTCHA_IMAGE_INCLUDE_LETTERS": True,
+        "CAPTCHA_IMAGE_INCLUDE_LETTERS": False,
         "CAPTCHA_IMAGE_INCLUDE_NUMERIC": True,
         "CAPTCHA_IMAGE_INCLUDE_PUNCTUATION": False,
         # length of captcha string
-        "CAPTCHA_IMAGE_CAPTCHA_LENGTH": 4,
+        "CAPTCHA_IMAGE_CAPTCHA_LENGTH": 5,
+        "CAPTCHA_IMAGE_HEIGHT": 120,
+        "CAPTCHA_IMAGE_WIDTH":340,
     }
 )
 

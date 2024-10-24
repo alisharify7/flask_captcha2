@@ -323,7 +323,7 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
 
         self.debug_log(
-            f"Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}"
+            f"Flask-Captcha2.ImageCaptcha.captcha generated:key: {captcha_raw_code}"
         )
 
         self.set_answer(captcha_raw_code)
