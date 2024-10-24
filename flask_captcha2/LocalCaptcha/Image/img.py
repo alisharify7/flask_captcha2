@@ -25,7 +25,7 @@ from flask_captcha2.Logger import get_logger
 
 
 class BaseImageCaptcha:
-    """ Base default configuration class for image captcha """
+    """Base default configuration class for image captcha"""
 
     ENABLE: bool = True
     LOG: bool = True
@@ -71,7 +71,7 @@ class BaseImageCaptcha:
 
     @NUMBERS.setter
     def NUMBERS(self, value: str):
-        """ numbers settter, make sure the input is a str value """
+        """numbers settter, make sure the input is a str value"""
         if not isinstance(value, str):
             raise ValueError(
                 f"numbers {value} must be a string not a {type(value)}"
@@ -135,7 +135,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             ..code-block:: python
                 $> app.config.update(config_dict)
                 $> FlaskImageCaptcha(app=app)
-        
+
         :example passing config directly:
             ..code-block:: python
                 $> FlaskImageCaptcha(CAPTCHA_IMAGE_ENABLE=True,  etc)
@@ -144,33 +144,33 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         Available config params:
          :param CAPTCHA_IMAGE_ENABLE: status of the captcha, is it enable or off
          :type CAPTCHA_IMAGE_ENABLE: bool
-         
+
          :param CAPTCHA_IMAGE_LOG: log the messages in the `stdout` or not
          :type CAPTCHA_IMAGE_LOG: bool
 
          :param CAPTCHA_IMAGE_CAPTCHA_LENGTH: length of CAPTCHA code in image
          :type CAPTCHA_IMAGE_CAPTCHA_LENGTH: int
-         
+
          :param CAPTCHA_IMAGE_INCLUDE_LETTERS: include the alphabet (a-z) in the captcha code or not
          :type CAPTCHA_IMAGE_INCLUDE_LETTERS: bool
-         
+
          :param CAPTCHA_IMAGE_INCLUDE_NUMERIC: include the numbers in the captcha code
          :type CAPTCHA_IMAGE_INCLUDE_NUMERIC: bool
-         
+
          :param CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: include the punctuation in the captcha code or not
          :type CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: bool
-         
+
          :param CAPTCHA_IMAGE_HEIGHT: height of the captcha image
          ؛type CAPTCHA_IMAGE_HEIGHT: bool
-         
-         :param CAPTCHA_IMAGE_WIDTH: width of the captcha image 
+
+         :param CAPTCHA_IMAGE_WIDTH: width of the captcha image
          :type CAPTCHA_IMAGE_WIDTH: int
 
          :param CAPTCHA_IMAGE_SESSION_KEY_NAME: name of the captcha answer in the user session, [Optional],
          don't touch this if you don't know what it is
          :type CAPTCHA_IMAGE_SESSION_KEY_NAME: str
 
-  
+
         """
         if app:
             if not isinstance(app, Flask):
@@ -210,9 +210,9 @@ class FlaskImageCaptcha(BaseImageCaptcha):
             )
 
     def init_app(self, app: Flask):
-        """ 
-            app init method, use this method when you using factory design and
-            want to separate your extensions in  different file.
+        """
+        app init method, use this method when you using factory design and
+        want to separate your extensions in  different file.
         """
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"object {app} is not a flask instance!,")
@@ -256,7 +256,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         )
 
     def renderWidget(self, *args, **kwargs) -> Markup:
-        """Render captcha widget image in template """
+        """Render captcha widget image in template"""
         return self.__generate(*args, **kwargs)
 
     def __generate(self, *args, **kwargs) -> Markup:
@@ -266,12 +266,12 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         don't call this method directly, use `renderWidget` instead !.
 
 
-        :param include_numbers: include the numbers (0-9) in the captcha or not 
+        :param include_numbers: include the numbers (0-9) in the captcha or not
         :type include_numbers: bool
-        
+
         :param include_letters: include the alphabet (a-z) in the captcha or not
         :type include_letters: bool
-        
+
         :param include_punctuations: include the punctuations (symbols) in the captcha or not
         :type include_punctuations: bool
 
@@ -305,7 +305,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
 
             total = sum([letters, numeric, punctuation])
             each_round = self.LENGTH // total
-            for each in selected: # fill the gap
+            for each in selected:  # fill the gap
                 captcha_raw_code += selected[each](length=each_round)
 
             captcha_raw_code += self.random_letters(
@@ -347,8 +347,8 @@ class FlaskImageCaptcha(BaseImageCaptcha):
         return Markup(f"<img src='{base64_captcha}' {args}>")
 
     def is_verify(self, captcha_answer: str = "") -> bool:
-        """Verify the answer of the image captcha     
-        
+        """Verify the answer of the image captcha
+
         :param captcha_answer: answer that user type enter.
         :type captcha_answer: str
         :return: True or False

@@ -74,14 +74,14 @@ class FlaskCaptcha:
 
     def __print_log(self, message: str):
         """print a log message"""
-        self.__logger.info(message) 
+        self.__logger.info(message)
 
     def get_google_captcha_v2(
         self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
     ) -> FlaskCaptcha2:
         """this method return `FlaskCaptcha2` object
-        
-        instead of direct using, use this method for generating a captcha version2 object 
+
+        instead of direct using, use this method for generating a captcha version2 object
         :parama name: a unique name for captcha object. it is better to be a combination of captcha type and version
         :type name: str
         :param conf: a dictionary with config for captcha object

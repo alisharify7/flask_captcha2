@@ -50,9 +50,8 @@ setup(
         "flask>=2.2.5",
         "markupsafe>=2.1.2",
         "requests>=2.30.0",
-        "captcha>=0.5.0"
+        "captcha>=0.5.0",
     ],
     python_requires=">=3.8",
-    keywords='flask security, Google captcha for flask, captcha , flask, flask-captcha, flask-captcha2, flask_captcha2, flask-images-captcha'
-
+    keywords="flask security, Google captcha for flask, captcha , flask, flask-captcha, flask-captcha2, flask_captcha2, flask-images-captcha",
 )

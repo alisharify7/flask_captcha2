@@ -39,7 +39,9 @@ class BaseCaptcha3(CommonCaptchaUtils):
         log_level=logging.DEBUG, logger_name="Google-Captcha-v3"
     )
 
-    HIDE_CAPTCHA_WIDGET_CSS = '<style>.grecaptcha-badge {visibility: hidden;}</style>'
+    HIDE_CAPTCHA_WIDGET_CSS = (
+        "<style>.grecaptcha-badge {visibility: hidden;}</style>"
+    )
 
 
 class FlaskCaptcha3(BaseCaptcha3):
@@ -205,14 +207,12 @@ class FlaskCaptcha3(BaseCaptcha3):
         """
 
         arg = ""
+        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get("id") else ""
+        arg += kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
         arg += (
-            f"id=\"{kwargs.get('id')}\" \t" if kwargs.get('id') else ""
-        )
-        arg += (
-            kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
-        )
-        arg += (
-            f"style=\"{kwargs.get('inline_css')}\"\t" if kwargs.get('inline_css') else ""
+            f"style=\"{kwargs.get('inline_css')}\"\t"
+            if kwargs.get("inline_css")
+            else ""
         )
         arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"
         arg += f"{kwargs.get('js_event', ' ')}"
