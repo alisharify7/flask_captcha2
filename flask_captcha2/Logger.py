@@ -29,7 +29,7 @@ def get_logger(
     logformat = logging.Formatter(
         f"[{logger_name}" + "- %(levelname)s] [%(asctime)s] - %(message)s"
     )
-    logger = logging.getLogger(captcha_name)
+    logger = logging.getLogger(logger_name)
     logger.setLevel(log_level)
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(log_level)

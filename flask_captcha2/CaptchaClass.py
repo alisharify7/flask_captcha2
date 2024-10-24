@@ -19,6 +19,7 @@ from markupsafe import Markup
 from . import excep as exceptions
 from .GoogleCaptcha.captcha2 import FlaskCaptcha2
 from .GoogleCaptcha.captcha3 import FlaskCaptcha3
+from .LocalCaptcha.Image.img import FlaskSessionImageCaptcha
 from .Logger import get_logger
 
 
@@ -156,6 +157,67 @@ class FlaskCaptcha:
         self.__set_captcha_mapper(name=name, captcha_object=captcha)
         self.__print_log(
             f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}"
+        )
+        return self.__get_captcha_from_mapper(name=name)
+
+    def get_session_image_captcha(
+        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
+    ) -> FlaskSessionImageCaptcha:
+        """this method return `FlaskSessionImageCaptcha` object.
+
+
+        :param name: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type name: str
+        :param conf: a dictionary with config for captcha object
+        :type conf: dict
+
+        `Example` config object:
+            ..code-block::python
+
+                :param CAPTCHA_IMAGE_ENABLE: status of the captcha, is it enable or off
+                :type CAPTCHA_IMAGE_ENABLE: bool
+
+                :param CAPTCHA_IMAGE_LOG: log the messages in the `stdout` or not
+                :type CAPTCHA_IMAGE_LOG: bool
+
+                :param CAPTCHA_IMAGE_CAPTCHA_LENGTH: length of CAPTCHA code in image
+                :type CAPTCHA_IMAGE_CAPTCHA_LENGTH: int
+
+                :param CAPTCHA_IMAGE_INCLUDE_LETTERS: include the alphabet (a-z) in the captcha code or not
+                :type CAPTCHA_IMAGE_INCLUDE_LETTERS: bool
+
+                :param CAPTCHA_IMAGE_INCLUDE_NUMERIC: include the numbers in the captcha code
+                :type CAPTCHA_IMAGE_INCLUDE_NUMERIC: bool
+
+                :param CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: include the punctuation in the captcha code or not
+                :type CAPTCHA_IMAGE_INCLUDE_PUNCTUATION: bool
+
+                :param CAPTCHA_IMAGE_HEIGHT: height of the captcha image
+                ؛type CAPTCHA_IMAGE_HEIGHT: bool
+
+                :param CAPTCHA_IMAGE_WIDTH: width of the captcha image
+                :type CAPTCHA_IMAGE_WIDTH: int
+
+                :param CAPTCHA_IMAGE_SESSION_KEY_NAME: name of the captcha answer in the user session, [Optional],
+                don't touch this if you don't know what it is
+                :type CAPTCHA_IMAGE_SESSION_KEY_NAME: str
+
+        :return: an FlaskCaptcha3 object
+        :rtype: FlaskCaptcha3
+        """
+        if not name:
+            raise ValueError("captcha should have a name!")
+        if not self.__check_duplicate_captcha_name(name):
+            raise ValueError("duplicated captcha name!")
+
+        if conf and isinstance(conf, dict):  # custom config is passed
+            captcha = FlaskSessionImageCaptcha(**conf)
+        else:
+            captcha = FlaskSessionImageCaptcha(app=self.__app)
+
+        self.__set_captcha_mapper(name=name, captcha_object=captcha)
+        self.__print_log(
+            f"Flask-Session-Image-Captcha created successfully,\n\tcaptcha-name:{name}"
         )
         return self.__get_captcha_from_mapper(name=name)
 

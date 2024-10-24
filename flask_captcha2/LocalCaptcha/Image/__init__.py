@@ -1,1 +1,1 @@
-from .img import FlaskImageCaptcha
+from .img import FlaskSessionImageCaptcha

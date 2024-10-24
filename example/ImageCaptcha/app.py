@@ -24,7 +24,7 @@ app.config.update(
 )
 
 MainCaptcha = FlaskCaptcha(app=app)  # app is required
-captcha = MainCaptcha.getLocalImageCaptcha(
+captcha = MainCaptcha.get_session_image_captcha(
     name="imageCaptcha"
 )  # created a local Image captcha object, name is required
 

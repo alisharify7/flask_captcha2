@@ -47,7 +47,7 @@ class BaseImageCaptcha:
     # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
     random = SystemRandom()  # https://docs.python.org/3/library/random.html
     Logger = get_logger(
-        LogLevel=logging.DEBUG, logger_name="Flask-Captcha2-ImageCaptcha"
+        log_level=logging.DEBUG, logger_name="Flask-Captcha2-ImageCaptcha"
     )
 
     @property
@@ -360,9 +360,7 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         session_captcha_answer = self.get_answer()
         self.revoke_answer()
         return session_captcha_answer == captcha_answer
-    
 
-    
     def revoke_answer(self) -> None:
         """revoke answer from user's session
         this method will pop the asnwer from user's session
@@ -370,12 +368,11 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         if self.SESSION_KEY_NAME in session:
             session.pop(self.SESSION_KEY_NAME)
 
-
     def set_answer(self, answer: str) -> None:
         """set captcha answer in user's session"""
         if self.ENABLE:
             session[self.SESSION_KEY_NAME] = answer
-    
+
     def get_answer(self) -> str:
         """get the current captcha answer from user's session"""
         if self.SESSION_KEY_NAME in session:
