@@ -120,7 +120,7 @@ class BaseImageCaptcha:
             self.Logger.debug(message)
 
 
-class FlaskImageCaptcha(BaseImageCaptcha):
+class FlaskSessionImageCaptcha(BaseImageCaptcha):
     def __init__(self, app: Flask, **kwargs):
         """
         constructor method.
@@ -349,7 +349,7 @@ class FlaskImageCaptcha(BaseImageCaptcha):
     def is_verify(self, captcha_answer: str = "") -> bool:
         """Verify the answer of the image captcha
 
-        :param captcha_answer: answer that user type enter.
+        :param captcha_answer: answer that user typed in.
         :type captcha_answer: str
         :return: True or False
         :rtype: bool
@@ -363,3 +363,18 @@ class FlaskImageCaptcha(BaseImageCaptcha):
                 return True
             session.pop(self.SESSION_KEY_NAME)
         return False
+
+    
+    def revoke_answer(self):
+        """revoke answer from user's session
+        this method will pop the asnwer from user's session
+        """
+        if self.SESSION_KEY_NAME in session:
+            session.pop(self.SESSION_KEY_NAME)
+
+
+    def set_answer(self, answer: str):
+        """set captcha answer in user's session"""
+        if self.ENABLE:
+            session[self.SESSION_KEY_NAME] = answer
+    
