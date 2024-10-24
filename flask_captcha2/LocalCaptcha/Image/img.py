@@ -326,7 +326,7 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
             f"Flask-Captcha2.ImageCaptcha.captcha generated:\tKey:{captcha_raw_code}"
         )
 
-        session[self.SESSION_KEY_NAME] = captcha_raw_code
+        self.set_answer(captcha_raw_code)
 
         # external args
         args = ""
@@ -357,15 +357,13 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         if not self.ENABLE:
             return True
 
-        if session.get(self.SESSION_KEY_NAME, False):
-            if session.get(self.SESSION_KEY_NAME) == captcha_answer:
-                session.pop(self.SESSION_KEY_NAME)
-                return True
-            session.pop(self.SESSION_KEY_NAME)
-        return False
+        session_captcha_answer = self.get_answer()
+        self.revoke_answer()
+        return session_captcha_answer == captcha_answer
+    
 
     
-    def revoke_answer(self):
+    def revoke_answer(self) -> None:
         """revoke answer from user's session
         this method will pop the asnwer from user's session
         """
@@ -373,8 +371,12 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
             session.pop(self.SESSION_KEY_NAME)
 
 
-    def set_answer(self, answer: str):
+    def set_answer(self, answer: str) -> None:
         """set captcha answer in user's session"""
         if self.ENABLE:
             session[self.SESSION_KEY_NAME] = answer
     
+    def get_answer(self) -> str:
+        """get the current captcha answer from user's session"""
+        if self.SESSION_KEY_NAME in session:
+            return session[self.SESSION_KEY_NAME]
