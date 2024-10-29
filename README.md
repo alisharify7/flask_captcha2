@@ -21,7 +21,7 @@ captcha (image, voice) with Flask applications
 <img src="./docs/session-image-captcha-1.png">
 <img src="./docs/google-captcha.webp" width="50%">
 
-🔨 0.0 how to install:
+🔨 0.0 How to install:
 -------------------
 
 ``` {.}
@@ -62,7 +62,8 @@ app = Flask(__name__)
 ```
 
 google captcha docs
-https://developers.google.com/recaptcha/docs/v3
+https://developers.google.com/recaptcha/docs/v3 v3
+https://developers.google.com/recaptcha/docs/display v2
 ## example:
 
 ```python
