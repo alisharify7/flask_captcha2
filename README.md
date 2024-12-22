@@ -252,6 +252,12 @@ def index():
         return "Try again!"
 ```
 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=alisharify7/flask_captcha2&type=Date)](https://star-history.com/#alisharify7/flask_captcha2&Date)
+
+
 ### Version History:
 
 -   version 2.0.0 Released: May 18, 2023
