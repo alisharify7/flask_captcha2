@@ -288,7 +288,7 @@ def index():
     > -   adding getFlaskCaptcha2 method for getting google-captcha version 2
     > -   adding namespacing for each captcha
     > -   adding the ability to create multiple captchas with different versions
-    > -   adding pytest base test
+    > -   adding Pytest base test
 
   
 - version 3.0.5 Released: July 21, 2024
