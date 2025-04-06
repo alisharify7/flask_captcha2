@@ -13,7 +13,6 @@ captcha (image, voice) with Flask applications
 [![Latest version](https://img.shields.io/pypi/v/Flask-captcha2)](https://pypi.python.org/pypi/Flask-captcha2)[![Supported python versions](https://img.shields.io/pypi/pyversions/Flask-captcha2)](https://pypi.python.org/pypi/flask_captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
   
 
-
 🚀 demo 
 ------------------
 
@@ -303,4 +302,3 @@ def index():
     > -   reformat/Refactor code
     > -   Refactoring all method and function signatures to adhere to PEP8 input parameter naming conventions.
     > -   minor changes.
-
