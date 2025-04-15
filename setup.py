@@ -7,6 +7,8 @@
  * https://github.com/alisharify7/flask_captcha2
 """
 
+#TODO: replace with pyproject.toml file
+
 from setuptools import setup, find_packages
 
 __NAME__ = "Flask-captcha2"
