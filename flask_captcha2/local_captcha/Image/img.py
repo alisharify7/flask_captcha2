@@ -21,7 +21,7 @@ from random import SystemRandom
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
-from flask_captcha2.Logger import get_logger
+from flask_captcha2.logger import get_logger
 
 
 class BaseImageCaptcha:

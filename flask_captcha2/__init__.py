@@ -8,4 +8,7 @@
  * https://github.com/alisharify7/flask_captcha2
 """
 
-from .CaptchaClass import FlaskCaptcha
+from .captcha_classes import FlaskCaptcha
+
+
+__all__ = ("FlaskCaptcha", )

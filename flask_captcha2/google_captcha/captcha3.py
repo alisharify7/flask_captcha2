@@ -22,29 +22,30 @@ from flask_captcha2.logger import get_logger
 from .utils import CommonCaptchaUtils
 
 
-class BaseCaptcha2(CommonCaptchaUtils):
+class BaseCaptcha3(CommonCaptchaUtils):
     """base config class fpr holding default configurations
-    Base Google Captcha v2 class, contain default settings and properties
+    Base Google Captcha v3 class, contain default settings and properties
     """
 
     PUBLIC_KEY: str = ""
     PRIVATE_KEY: str = ""
-    CAPTCHA_LOG: bool = True
     ENABLED: bool = False
-    THEME: str = "light"
-    TABINDEX: int = 0
-    LANGUAGE: str = "en"
-    TYPE: str = "image"
-    SIZE: str = "normal"  # compact، normal، invisible
+    SCORE: float = 0.5
+    MINIMUM_SCORE: float = 0.5  # default minimum score
+    CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
     Logger = get_logger(
-        log_level=logging.DEBUG, logger_name="Google-Captcha-v2"
+        log_level=logging.DEBUG, logger_name="Google-Captcha-v3"
+    )
+
+    HIDE_CAPTCHA_WIDGET_CSS = (
+        "<style>.grecaptcha-badge {visibility: hidden;}</style>"
     )
 
 
-class FlaskCaptcha2(BaseCaptcha2):
-    """Main Google Captcha version 2 captcha Class,
+class FlaskCaptcha3(BaseCaptcha3):
+    """Main Google Captcha version 3 captcha Class,
 
     `Don't` use this model directly, instead use
     FlaskCaptcha object for getting an instance
@@ -52,11 +53,11 @@ class FlaskCaptcha2(BaseCaptcha2):
 
     available config parameter:
 
-    CAPTCHA_PRIVATE_KEY: "hish !"
-    CAPTCHA_PUBLIC_KEY: "hish !"
-    CAPTCHA_ENABLED: True  # captcha status <True, False>
-    CAPTCHA_LOG: True # show captcha logs in console
-    CAPTCHA_LANGUAGE: "en" # captcha language
+    CAPTCHA_PUBLIC_KEY <str:: public Key from googleDevelopers panel>
+    CAPTCHA_PRIVATE_KEY <str:: public Key from googleDevelopers panel>
+    CAPTCHA_SCORE <Float:: score for verify each request between 0.5 - 1>
+    CAPTCHA_ENABLED <Boolean::captcha status>
+    CAPTCHA_LOG <Boolean:: Show each Request Log in terminal>
 
 
     """
@@ -68,25 +69,19 @@ class FlaskCaptcha2(BaseCaptcha2):
         CAPTCHA_PRIVATE_KEY: str = None,
         **kwargs,
     ) -> None:
-        """
-        if `app` object directly passed, then `init_app` method will be called.
-        """
         if app and isinstance(
             app, Flask
         ):  # app is passed read configs from app.config
             self.init_app(app)
 
         elif (
-            CAPTCHA_PUBLIC_KEY and CAPTCHA_PRIVATE_KEY
+            CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY
         ):  # app is not passed read config from args passed to this method
             kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
             kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
             self.set_config(kwargs)
 
-    def init_app(self, app: Flask = None):
-        """
-        Initial setting of the object base on Flask-Application configuration
-        """
+    def init_app(self, app: Flask = None) -> None:
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
@@ -94,18 +89,14 @@ class FlaskCaptcha2(BaseCaptcha2):
             "CAPTCHA_PUBLIC_KEY", None
         ) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
             raise ValueError(
-                "Flask-Captcha2.GoogleCaptcha.captcha2: Private and Public Keys are Required"
+                "Flask-Captcha2.google_captcha.captcha3: Private and Public Keys are Required"
             )
 
         self.__init__(
             CAPTCHA_PUBLIC_KEY=app.config.get("CAPTCHA_PUBLIC_KEY", None),
             CAPTCHA_PRIVATE_KEY=app.config.get("CAPTCHA_PRIVATE_KEY", None),
             CAPTCHA_ENABLED=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
-            CAPTCHA_THEME=app.config.get("CAPTCHA_THEME", self.THEME),
-            CAPTCHA_TYPE=app.config.get("CAPTCHA_TYPE", self.TYPE),
-            CAPTCHA_SIZE=app.config.get("CAPTCHA_SIZE", self.SIZE),
-            CAPTCHA_LANGUAGE=app.config.get("CAPTCHA_LANGUAGE", self.LANGUAGE),
-            CAPTCHA_TABINDEX=app.config.get("CAPTCHA_TABINDEX", self.TABINDEX),
+            CAPTCHA_SCORE=app.config.get("CAPTCHA_SCORE", self.SCORE),
             CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG),
         )
 
@@ -118,18 +109,22 @@ class FlaskCaptcha2(BaseCaptcha2):
             "CAPTCHA_PRIVATE_KEY", False
         ):
             raise ValueError(
-                "private_key and public_key are required for FlaskCaptcha2"
+                "private_key and public_key are required for FlaskCaptcha3"
             )
 
         self.PUBLIC_KEY = conf_list.get("CAPTCHA_PUBLIC_KEY")
         self.PRIVATE_KEY = conf_list.get("CAPTCHA_PRIVATE_KEY")
         self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
-        self.THEME = conf_list.get("CAPTCHA_THEME", self.THEME)
-        self.TYPE = conf_list.get("CAPTCHA_TYPE", self.TYPE)
-        self.SIZE = conf_list.get("CAPTCHA_SIZE", self.SIZE)
-        self.LANGUAGE = conf_list.get("CAPTCHA_LANGUAGE", self.LANGUAGE)
-        self.TABINDEX = conf_list.get("CAPTCHA_TABINDEX", self.TABINDEX)
         self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+        try:
+            self.SCORE = (
+                self.MINIMUM_SCORE
+                if int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
+                < self.MINIMUM_SCORE
+                else int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
+            )
+        except ValueError:
+            self.SCORE = self.MINIMUM_SCORE
 
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
@@ -137,93 +132,103 @@ class FlaskCaptcha2(BaseCaptcha2):
         no need to pass any value to this method, its grab `g-recaptcha-response`
         from POST data and send it to google server.
 
-        response from Google is something like this
-            ..code-block:: python
+        example google response
+        ..code-block::python
 
-                - successful answer
-                {
-                    "success": true,
-                    "challenge_ts": "2023-05-17T10:41:22Z",
-                    "hostname": "127.0.0.1"
-                }
-                - failed answer
-                {
-                    "success": false,
-                    "error-codes": [
-                        "invalid-input-response"
-                    ]
-                }
+            {
+                 'success': True,
+                 'challenge_ts': '2023-04-04T07:39:45Z',
+                 'hostname': '127.0.0.1',
+                 'score': 0.9,
+                 'action': 'submit'
+            }
 
         :return: `True` if the captcha verified successfully by google otherwise `False`
         :rtype: bool
         """
+
         if not self.ENABLED:
             return True
         else:
-            data = {
-                "secret": self.PRIVATE_KEY,
-                "response": request.form.get("g-recaptcha-response", None),
-            }
+            response = request.form.get("g-recaptcha-response", None)
 
-            responseGoogle = requests.get(self.GOOGLE_VERIFY_URL, params=data)
+            responseGoogle = requests.post(
+                f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
+            )
 
             if self.CAPTCHA_LOG:
                 self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
                 self.debug_log(
-                    f"GOOGLE RESPONSE:\n {json.dumps(responseGoogle.json(), indent=4)}"
+                    f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}"
                 )
 
             if responseGoogle.status_code == 200:
-                return responseGoogle.json()["success"]
+                jsonResponse = responseGoogle.json()
+                return (
+                    True
+                    if jsonResponse["success"]
+                    and jsonResponse["score"] >= self.SCORE
+                    else False
+                )
             else:
                 return False
 
     def renderWidget(self, *args, **kwargs) -> Markup:
         """render captcha widget
 
-        :param id: html id of captcha widget
+        :param id: id of captcha widget
         :type id: str
 
         :param css_class: css class of captcha widget
         :type css_class: str
 
-        :param inline_css: inline css style of captcha widget
+        :param inline_css: inline css of captcha widget
         :type inline_css: str
 
         :param dataset: dataset of captcha widget
         :type dataset: str
 
-        :param js_event: javascript inline event of captcha widget
+        :param js_event: javascript event of captcha widget
         :type js_event: str
+
+        :param button_text: value of input submit button of the form
+        :type button_text: str
+
+        :param parent_form_id: id of parent form element
+        :type parent_form_id: str
+
+        :param hide_badge: set visibility of captcha widget in bottom right corner,
+            this parameter doesn't disable captcha, its only hidden the captcha in
+            the page, but captcha still works
+        :type hide_badge: bool
 
         :return: captcha widget
         :rtype: Markup
         """
 
         arg = ""
-        # id
-        arg += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""
-        # dataset
+        arg += f"id=\"{kwargs.get('id')}\" \t" if kwargs.get("id") else ""
         arg += kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
-        # inline css style
         arg += (
             f"style=\"{kwargs.get('inline_css')}\"\t"
             if kwargs.get("inline_css")
             else ""
         )
-        # js event
-        arg += f"{kwargs.get('js_event', '')}"
+        arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"
+        arg += f"{kwargs.get('js_event', ' ')}"
 
-        CaptchaField = (
+        captchaField = (
             f"""
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
-                data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
-                data-tabindex="{self.TABINDEX}" {arg}>
-            </div>
-        """
+            { self.HIDE_CAPTCHA_WIDGET_CSS if kwargs.get("hide_badge", "") == True else ''}
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+            <script>function onSubmit(token) {{document.getElementById('{kwargs.get('parent_form_id', '')}').submit();}}</script>
+            <input type='submit' class="g-recaptcha {kwargs.get('css_class', '')}" {arg}
+             data-sitekey="{self.PUBLIC_KEY}" data-action="submit" data-callback="onSubmit"> </input>
+            """
         ).strip()
         if self.ENABLED:
-            return Markup(CaptchaField)
+            return Markup(captchaField)
         else:
-            return Markup(" ")
+            # if captcha is disabled render just a simple submit input
+            captchaField = f"""<input type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
+            return Markup(captchaField)
