@@ -9,14 +9,14 @@ authors = [
 license = { text = "MIT" }
 requires-python = ">=3.8"
 keywords = [
-    "flask security",
-    "Google captcha for flask",
-    "captcha",
     "flask",
+    "captcha",
     "flask-captcha",
     "flask-captcha2",
     "flask_captcha2",
-    "flask-images-captcha"
+    "flask security",
+    "flask-images-captcha",
+    "Google captcha for flask",
 ]
 dependencies = [
     "flask>=2.2.5",
@@ -36,7 +36,6 @@ exclude = ["tests*"]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
-[project.classifiers]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -50,6 +49,14 @@ classifiers = [
     "Topic :: Security",
     "Topic :: Internet :: WWW/HTTP",
     "Framework :: Flask"
+]
+
+[dependency-groups]
+dev = [
+    "black>=24.8.0",
+    "flake8>=5.0.4",
+    "mypy>=1.14.1",
+    "pylint>=3.2.7",
 ]
 
 [tool.black]
