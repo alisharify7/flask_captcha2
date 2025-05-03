@@ -35,14 +35,14 @@ class FlaskCaptcha:
     `Example` initializing  class:
         ..code-block::python
 
-                >> MasterCaptcha = FlaskCaptcha(app=app)
+            >>> MasterCaptcha = FlaskCaptcha(app=app)
 
     `Example` Getting captcha object :
 
     ..code-block::python
 
-                >> MasterCaptcha = FlaskCaptcha(app=app)
-                >> google_captcha2 = MasterCaptcha.get_google_captcha_v2(..params)
+            >>> MasterCaptcha = FlaskCaptcha(app=app)
+            >>> google_captcha2 = MasterCaptcha.get_google_captcha_v2(..params)
 
     """
 
@@ -51,7 +51,7 @@ class FlaskCaptcha:
         :param app: flask application object
         :type app: Flask
 
-        :retrun: None
+        :return: None
         :rtype: None
         """
         if not app or not isinstance(app, Flask):
