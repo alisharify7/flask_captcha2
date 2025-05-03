@@ -53,10 +53,10 @@ app = Flask(__name__)
      "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
  }
 
- MainCaptcha = FlaskCaptcha(app=app)  # app is required
+ captcha_manager = FlaskCaptcha(app=app)  # app is required
  # passing config list directly
- google_captcha2 = MainCaptcha.get_google_captcha_v2(name='g-captcha2', conf=google_captcha2_config_list)
- google_captcha3 = MainCaptcha.get_google_captcha_v3(name='g-captcha3', conf=google_captcha3_config_list)
+ google_captcha2 = captcha_manager.get_google_captcha_v2(name='g-captcha2', conf=google_captcha2_config_list)
+ google_captcha3 = captcha_manager.get_google_captcha_v3(name='g-captcha3', conf=google_captcha3_config_list)
  # Namespaces are important. Do not use repeated names and choose names with meaning.
 ```
 

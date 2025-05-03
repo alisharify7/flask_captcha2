@@ -46,6 +46,8 @@ class FlaskCaptcha:
 
     """
 
+    CAPTCHA_TYPES = ["google-captcha-v2", "google-captcha-v3", "local-captcha-image"]
+
     def __init__(self, app: Flask) -> None:
         """Constructor function
         :param app: flask application object
@@ -118,6 +120,19 @@ class FlaskCaptcha:
             f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}"
         )
         return self.__get_captcha_from_mapper(name=name)
+
+    @classmethod
+    def create(cls, type: str, *args, **kwargs):
+        # Factory method for creating captcha object manafer
+        if type not in cls.CAPTCHA_TYPES:
+            raise RuntimeError("invalid type, type must be one of ")
+
+        if type == "google-captcha-v2":
+            return cls.get_google_captcha_v2(*args, **kwargs)
+        elif type == "google-captcha-v3":
+            return cls.get_google_captcha_v3(*args, **kwargs)
+        else: # "local-captcha-image":
+            return cls.get_session_image_captcha(*args, **kwargs)
 
     def get_google_captcha_v3(
         self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
@@ -313,7 +328,7 @@ class FlaskCaptcha:
         :type name: str
 
         :return: object of captcha
-        :rtpe: object
+        :rtype: object
 
         """
         if name in self.__app.config["captcha_object_mapper"]:
@@ -336,4 +351,4 @@ class FlaskCaptcha:
         return f"<FlaskCaptcha MasterClass {self.app} >"
 
     def __repr__(self) -> str:
-        return self.__str__()
+        return f"{self.__class__.__name__}(app={self.app})"
