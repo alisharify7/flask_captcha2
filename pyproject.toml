@@ -53,9 +53,8 @@ classifiers = [
 ]
 
 [tool.black]
-line-length = 79
-target-version = ['py37', 'py38', 'py39', 'py310']
-include = '\.pyi?$'
+line-length = 88
+target-version = ['py310', 'py311', 'py313']
 exclude = '''
 /(
     \.git
@@ -69,5 +68,40 @@ exclude = '''
   | dist
   | venv
   | .venv
+  | data
 )/
 '''
+fast = true
+color = true
+verbose = true
+check = false
+
+
+[tool.flake8]
+max-line-length = 88
+ignore = [
+    "E501",  # Ignore line length warnings
+    "W503",  # Ignore "line break before binary operator" warnings
+    "E203"   # Ignore spacing around operators warnings
+]
+exclude = [
+    ".git",
+    ".tox",
+    ".venv",
+    "build",
+    "dist",
+    "_build"
+]
+max-complexity = 10
+select = [
+    "C",  # Cyclomatic complexity checks
+    "E",  # Errors
+    "F",  # Pyflakes checks
+    "W",  # Warnings
+]
+
+[tool.mypy]
+files = "."
+disallow_untyped-calls = true
+disallow_untyped-defs = true
+strict = true
