@@ -23,10 +23,10 @@ from .utils import CommonCaptchaUtils
 
 
 class BaseCaptcha2(CommonCaptchaUtils):
-    """base config class fpr holding default configurations
+    """
+    base config class fpr holding default configurations
     Base Google Captcha v2 class, contain default settings and properties
     """
-
     PUBLIC_KEY: str = ""
     PRIVATE_KEY: str = ""
     CAPTCHA_LOG: bool = True
