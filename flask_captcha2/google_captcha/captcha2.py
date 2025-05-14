@@ -19,8 +19,8 @@ from markupsafe import Markup
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.logger import get_logger
-from .utils import CommonCaptchaUtils
-
+from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
+from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
 
 class BaseCaptcha2(CommonCaptchaUtils):
     """
@@ -38,12 +38,8 @@ class BaseCaptcha2(CommonCaptchaUtils):
     SIZE: str = "normal"  # compact، normal، invisible
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
-    Logger = get_logger(
-        log_level=logging.DEBUG, logger_name="Google-Captcha-v2"
-    )
 
-
-class FlaskCaptcha2(BaseCaptcha2):
+class FlaskCaptcha2(GoogleCaptchaInterface, BaseCaptcha2):
     """Main Google Captcha version 2 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -64,8 +60,8 @@ class FlaskCaptcha2(BaseCaptcha2):
     def __init__(
         self,
         app: Flask = None,
-        CAPTCHA_PUBLIC_KEY: str = None,
-        CAPTCHA_PRIVATE_KEY: str = None,
+        captcha_public_key: str = None,
+        captcha_private_key: str = None,
         **kwargs,
     ) -> None:
         """
@@ -77,10 +73,10 @@ class FlaskCaptcha2(BaseCaptcha2):
             self.init_app(app)
 
         elif (
-            CAPTCHA_PUBLIC_KEY and CAPTCHA_PRIVATE_KEY
+            captcha_public_key and captcha_private_key
         ):  # app is not passed read config from args passed to this method
-            kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
-            kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
+            kwargs["CAPTCHA_PRIVATE_KEY"] = captcha_private_key
+            kwargs["CAPTCHA_PUBLIC_KEY"] = captcha_public_key
             self.set_config(kwargs)
 
     def init_app(self, app: Flask = None):
@@ -109,27 +105,27 @@ class FlaskCaptcha2(BaseCaptcha2):
             CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG),
         )
 
-    def set_config(self, conf_list: dict) -> None:
+    def set_config(self, conf: dict) -> None:
         """setting config base on config list passed in arg
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
         """
-        if not conf_list.get("CAPTCHA_PUBLIC_KEY", False) or not conf_list.get(
+        if not conf.get("CAPTCHA_PUBLIC_KEY", False) or not conf.get(
             "CAPTCHA_PRIVATE_KEY", False
         ):
             raise ValueError(
                 "private_key and public_key are required for FlaskCaptcha2"
             )
 
-        self.PUBLIC_KEY = conf_list.get("CAPTCHA_PUBLIC_KEY")
-        self.PRIVATE_KEY = conf_list.get("CAPTCHA_PRIVATE_KEY")
-        self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
-        self.THEME = conf_list.get("CAPTCHA_THEME", self.THEME)
-        self.TYPE = conf_list.get("CAPTCHA_TYPE", self.TYPE)
-        self.SIZE = conf_list.get("CAPTCHA_SIZE", self.SIZE)
-        self.LANGUAGE = conf_list.get("CAPTCHA_LANGUAGE", self.LANGUAGE)
-        self.TABINDEX = conf_list.get("CAPTCHA_TABINDEX", self.TABINDEX)
-        self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+        self.PUBLIC_KEY = conf.get("CAPTCHA_PUBLIC_KEY")
+        self.PRIVATE_KEY = conf.get("CAPTCHA_PRIVATE_KEY")
+        self.ENABLED = conf.get("CAPTCHA_ENABLED", self.ENABLED)
+        self.THEME = conf.get("CAPTCHA_THEME", self.THEME)
+        self.TYPE = conf.get("CAPTCHA_TYPE", self.TYPE)
+        self.SIZE = conf.get("CAPTCHA_SIZE", self.SIZE)
+        self.LANGUAGE = conf.get("CAPTCHA_LANGUAGE", self.LANGUAGE)
+        self.TABINDEX = conf.get("CAPTCHA_TABINDEX", self.TABINDEX)
+        self.CAPTCHA_LOG = conf.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
 
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
@@ -165,20 +161,20 @@ class FlaskCaptcha2(BaseCaptcha2):
                 "response": request.form.get("g-recaptcha-response", None),
             }
 
-            responseGoogle = requests.get(self.GOOGLE_VERIFY_URL, params=data)
+            response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
 
             if self.CAPTCHA_LOG:
                 self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
                 self.debug_log(
-                    f"GOOGLE RESPONSE:\n {json.dumps(responseGoogle.json(), indent=4)}"
+                    f"GOOGLE RESPONSE:\n {json.dumps(response_google.json(), indent=4)}"
                 )
 
-            if responseGoogle.status_code == 200:
-                return responseGoogle.json()["success"]
+            if response_google.status_code == 200:
+                return response_google.json()["success"]
             else:
                 return False
 
-    def renderWidget(self, *args, **kwargs) -> Markup:
+    def render_widget(self, *args, **kwargs) -> Markup:
         """render captcha widget
 
         :param id: html id of captcha widget
@@ -214,7 +210,7 @@ class FlaskCaptcha2(BaseCaptcha2):
         # js event
         arg += f"{kwargs.get('js_event', '')}"
 
-        CaptchaField = (
+        captcha_field = (
             f"""
         <script src='https://www.google.com/recaptcha/api.js'></script>
             <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
@@ -224,6 +220,6 @@ class FlaskCaptcha2(BaseCaptcha2):
         """
         ).strip()
         if self.ENABLED:
-            return Markup(CaptchaField)
+            return Markup(captcha_field)
         else:
             return Markup(" ")
