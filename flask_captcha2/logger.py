@@ -6,8 +6,8 @@
  * Copyright (c) 2023 - ali sharifi
  * https://github.com/alisharify7/flask_captcha2
 """
-import logging
 import sys
+import logging
 from typing import Optional
 
 
@@ -32,7 +32,6 @@ def get_logger(
         >>> logger = get_logger(logging.INFO)
         >>> logger.info("Test message")
     """
-    # Set defaults
     log_level = logging.DEBUG if log_level is None else log_level
 
     # Create default format if none provided
@@ -44,12 +43,9 @@ def get_logger(
 
     formatter = logging.Formatter(log_format)
 
-    # Get or create logger
     logger = logging.getLogger(logger_name)
 
-    # Avoid adding handlers multiple times in case of repeated calls
     if not logger.handlers:
-        # Use provided handlers or create default stdout handler
         if handlers is None:
             handler = logging.StreamHandler(sys.stdout)
             handler.setLevel(log_level)
@@ -60,8 +56,5 @@ def get_logger(
             logger.addHandler(handler)
 
     logger.setLevel(log_level)
-
-    # Prevent propagation to root logger if desired
     logger.propagate = False
-
     return logger
