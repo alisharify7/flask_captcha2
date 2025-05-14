@@ -1,12 +1,13 @@
 """
  * flask_captcha2 OSS
- * custom Exption class
+ * custom exception class
  * author: github.com/alisharify7
  * email: alisharifyofficial@gmail.com
  * license: see LICENSE for more details.
  * Copyright (c) 2023 - ali sharifi
  * https://github.com/alisharify7/flask_captcha2
 """
+
 
 
 class BaseFlaskCaptchaException(Exception):
