@@ -17,13 +17,14 @@ from markupsafe import Markup
 
 # flask-captcha2
 from . import excep as exceptions
-from .google_captcha.captcha2 import FlaskCaptcha2
-from .google_captcha.captcha3 import FlaskCaptcha3
-from .local_captcha.Image import FlaskSessionImageCaptcha
+from .google_captcha.captcha2 import FlaskCaptcha2 as GoogleCaptcha2
+from .google_captcha.captcha3 import FlaskCaptcha3 as GoogleCaptcha3
+from .local_captcha.image import FlaskSessionImageCaptcha
 from .logger import get_logger
+from .mixins.logger_mixins import LoggerMixin
 
 
-class FlaskCaptcha:
+class FlaskCaptcha(LoggerMixin):
     """Master FlaskCaptcha Class
     this is master class, you should use object of this class for getting other captcha objects.
 
@@ -46,7 +47,7 @@ class FlaskCaptcha:
 
     """
 
-    CAPTCHA_TYPES = ["google-captcha-v2", "google-captcha-v3", "local-captcha-image"]
+    CAPTCHA_TYPES = ["google-captcha-v2", "google-captcha-v3", "local-session-captcha-image"]
 
     def __init__(self, app: Flask) -> None:
         """Constructor function
@@ -66,27 +67,40 @@ class FlaskCaptcha:
             ctx = {"captcha": self}
             return ctx
 
-        app.config["captcha_object_mapper"] = (
-            {}
-        )  # keep all captcha object : key:value -> name:object
-        self.__debug = app.debug
-        self.__app = app
-        self.__logger = get_logger(
-            log_level=logging.INFO, logger_name="Flask-Captcha2-Master"
+        self.CAPTCHA_OBJECT_MAPPER_KEY_NAME = "captcha_object_mapper"
+        app.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME] = dict()
+        self.DEBUG = app.debug
+        self.FLASK_APP = app
+        self.create_logger_object(
+            log_level=logging.INFO, name="FlaskCaptcha2-Manager"
         )
 
-    def __print_log(self, message: str):
-        """print a log message"""
-        self.__logger.info(message)
 
-    def get_google_captcha_v2(
-        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
-    ) -> FlaskCaptcha2:
-        """this method return `FlaskCaptcha2` object
+    @classmethod
+    def create(cls, captcha_type: str, *args, **kwargs):
+        # Factory method for creating captcha object manager
+        if type not in cls.CAPTCHA_TYPES:
+            raise RuntimeError("invalid type, type must be one of ")
+
+        match captcha_type:
+            case "google-captcha-v2":
+                return cls.generate_google_captcha_v2(*args, **kwargs)
+            case "google-captcha-v3":
+                return cls.generate_google_captcha_v3(*args, **kwargs)
+            case "local-captcha-image":
+                return cls.generate_session_image_captcha(*args, **kwargs)
+            case _:
+                raise RuntimeError("invalid captcha type: {}".format(captcha_type))
+
+
+    def generate_google_captcha_v2(
+        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
+    ):
+        """this method return `GoogleCaptcha2` object
 
         instead of direct using, use this method for generating a captcha version2 object
-        :parama name: a unique name for captcha object. it is better to be a combination of captcha type and version
-        :type name: str
+        :param namespace: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type namespace: str
         :param conf: a dictionary with config for captcha object
         :type conf: dict
 
@@ -105,43 +119,31 @@ class FlaskCaptcha:
 
         """
 
-        if not name:
+        if not namespace:
             raise ValueError("captcha should have a name!")
-        if not self.__check_duplicate_captcha_name(name):
-            raise ValueError("duplicated captcha name!")
+        if not self.__is_namespace_exists(namespace=namespace):
+            raise ValueError("duplicated captcha namespace!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
-            captcha = FlaskCaptcha2(**conf)
+            captcha = GoogleCaptcha2(**conf)
         else:
-            captcha = FlaskCaptcha2(app=self.__app)
+            captcha = GoogleCaptcha2(app=self.FLASK_APP)
 
-        self.__set_captcha_mapper(name=name, captcha_object=captcha)
-        self.__print_log(
-            f"Google-Captcha-version-2 created successfully,\n\tcaptcha-name:{name}"
+        self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
+        self.log(
+            f"Google-Captcha-version-2 created successfully,\n\tcaptcha namespace:{namespace}"
         )
-        return self.__get_captcha_from_mapper(name=name)
+        return self.__get_captcha_object(namespace=namespace)
 
-    @classmethod
-    def create(cls, type: str, *args, **kwargs):
-        # Factory method for creating captcha object manafer
-        if type not in cls.CAPTCHA_TYPES:
-            raise RuntimeError("invalid type, type must be one of ")
 
-        if type == "google-captcha-v2":
-            return cls.get_google_captcha_v2(*args, **kwargs)
-        elif type == "google-captcha-v3":
-            return cls.get_google_captcha_v3(*args, **kwargs)
-        else: # "local-captcha-image":
-            return cls.get_session_image_captcha(*args, **kwargs)
-
-    def get_google_captcha_v3(
-        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
-    ) -> FlaskCaptcha3:
+    def generate_google_captcha_v3(
+        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
+    ):
         """this method return `FlaskCaptcha3` object.
 
 
-        :param name: a unique name for captcha object. it is better to be a combination of captcha type and version
-        :type name: str
+        :param namespace: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type namespace: str
         :param conf: a dictionary with config for captcha object
         :type conf: dict
 
@@ -159,30 +161,30 @@ class FlaskCaptcha:
         :return: an FlaskCaptcha3 object
         :rtype: FlaskCaptcha3
         """
-        if not name:
+        if not namespace:
             raise ValueError("captcha should have a name!")
-        if not self.__check_duplicate_captcha_name(name):
+        if not self.__is_namespace_exists(namespace=namespace):
             raise ValueError("duplicated captcha name!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
-            captcha = FlaskCaptcha3(**conf)
+            captcha = GoogleCaptcha3(**conf)
         else:
-            captcha = FlaskCaptcha3(app=self.__app)
+            captcha = GoogleCaptcha3(app=self.FLASK_APP)
 
-        self.__set_captcha_mapper(name=name, captcha_object=captcha)
-        self.__print_log(
-            f"Google-Captcha-version-3 created successfully,\n\tcaptcha-name:{name}"
+        self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
+        self.log(
+            f"Google-Captcha-version-3 created successfully,\n\tcaptcha namespace:{namespace}"
         )
-        return self.__get_captcha_from_mapper(name=name)
+        return self.__get_captcha_object(namespace=namespace)
 
-    def get_session_image_captcha(
-        self, name: str, conf: typing.Dict[str, str] = None, *args, **kwargs
+    def generate_session_image_captcha(
+        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
     ) -> FlaskSessionImageCaptcha:
         """this method return `FlaskSessionImageCaptcha` object.
 
 
-        :param name: a unique name for captcha object. it is better to be a combination of captcha type and version
-        :type name: str
+        :param namespace: a unique name for captcha object. it is better to be a combination of captcha type and version
+        :type namespace: str
         :param conf: a dictionary with config for captcha object
         :type conf: dict
 
@@ -220,21 +222,21 @@ class FlaskCaptcha:
         :return: an FlaskCaptcha3 object
         :rtype: FlaskCaptcha3
         """
-        if not name:
+        if not namespace:
             raise ValueError("captcha should have a name!")
-        if not self.__check_duplicate_captcha_name(name):
+        if not self.__is_namespace_exists(namespace=namespace):
             raise ValueError("duplicated captcha name!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
             captcha = FlaskSessionImageCaptcha(**conf)
         else:
-            captcha = FlaskSessionImageCaptcha(app=self.__app)
+            captcha = FlaskSessionImageCaptcha(app=self.FLASK_APP)
 
-        self.__set_captcha_mapper(name=name, captcha_object=captcha)
-        self.__print_log(
-            f"Flask-Session-Image-Captcha created successfully,\n\tcaptcha-name:{name}"
+        self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
+        self.log(
+            f"Flask-Session-Image-Captcha created successfully,\n\tcaptcha namespace:{namespace}"
         )
-        return self.__get_captcha_from_mapper(name=name)
+        return self.__get_captcha_object(namespace=namespace)
 
     def render_captcha(self, *args, **kwargs) -> str:
         """`render` a captcha widget into html template.
@@ -258,11 +260,11 @@ class FlaskCaptcha:
         return self.__render_captcha_in_template(*args, **kwargs)
 
     def __render_captcha_in_template(
-        self, model_name: str, *args, **kwargs
+        self, namespace: str, *args, **kwargs
     ) -> Markup:
         """render a captcha (`Markup`) object.
 
-        `Don't` Use this method directlly inside template !
+        `Don't` Use this method directly inside template !
         instead use `render_captcha` method for safely
         rendering captcha widget inside html templates
 
@@ -276,15 +278,15 @@ class FlaskCaptcha:
         :rtype: Markup
 
         """
-        if captchaObject := self.__get_captcha_from_mapper(model_name):
-            return captchaObject.renderWidget(*args, **kwargs)
+        if captcha_object := self.__get_captcha_object(namespace=namespace):
+            return captcha_object.render_widget(*args, **kwargs)
         else:
             raise exceptions.CaptchaNameNotExists(
-                f"""model_name {model_name} was not set to any captcha object in app.\n
-                available captcha names: {self.__get_all_captcha_names()}"""
+                f"""namespace {namespace} was not set to any captcha object in app.\n
+                available captcha namespaces: {self.__get_all_captcha_namespaces()}"""
             )
 
-    def __check_duplicate_captcha_name(self, name: str) -> bool:
+    def __is_namespace_exists(self, namespace: str) -> bool:
         """check a captcha name (NameSpace) is not duplicated.
 
         :param name: name of captcha
@@ -293,11 +295,11 @@ class FlaskCaptcha:
         :return: `False` if captcha name is already exists, otherwise `True`
         :rtype: bool
         """
-        if name in self.__app.config["captcha_object_mapper"]:
+        if namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
             return False
         return True
 
-    def __set_captcha_mapper(self, name: str, captcha_object: object) -> bool:
+    def __set_captcha_object(self, namespace: str, captcha_object: object) -> bool:
         """Set a captcha object with the given name (Namespace) in captcha mapper repo.
 
         this method save (set) a captcha with the given name in
@@ -312,12 +314,12 @@ class FlaskCaptcha:
         :return: `True` if captcha set correctlly in mapper, otherwise `False`
         """
         try:
-            self.__app.config["captcha_object_mapper"][name] = captcha_object
+            self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][namespace] = captcha_object
         except Exception as e:
             return False
         return True
 
-    def __get_captcha_from_mapper(self, name: str) -> object:
+    def __get_captcha_object(self, namespace: str) -> object:
         """getting captcha object from mapper repo.
         this method returns captcha object with the given name
         (Namespace) that registered in app.
@@ -331,24 +333,24 @@ class FlaskCaptcha:
         :rtype: object
 
         """
-        if name in self.__app.config["captcha_object_mapper"]:
-            return self.__app.config["captcha_object_mapper"][name]
+        if namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
+            return self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][namespace]
         else:
             raise exceptions.CaptchaNameNotExists(
-                f"invalid model name. {name} was not set to any captcha object.\navailable captcha names:{self.__get_all_captcha_names()}"
+                f"invalid namespace. {namespace} was not set to any captcha object.\navailable namesspaces:{self.__get_all_captcha_namespaces()}"
             )
 
-    def __get_all_captcha_names(self) -> typing.List[str]:
+    def __get_all_captcha_namespaces(self) -> typing.List[str]:
         """return all registered NameSpaces.
         This method return all captcha names that `registered` in app.config.
 
         :return: list of namespaces of all captcha objects that registered in app
         :rtype: List
         """
-        return list(self.__app.config.get("captcha_object_mapper").keys())
+        return list(self.FLASK_APP.config.get(self.CAPTCHA_OBJECT_MAPPER_KEY_NAME, {}).keys())
 
     def __str__(self) -> str:
-        return f"<FlaskCaptcha MasterClass {self.app} >"
+        return f"<FlaskCaptcha MasterClass {self.FLASK_APP} >"
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(app={self.app})"
+        return f"{self.__class__.__name__}(app={self.FLASK_APP})"
