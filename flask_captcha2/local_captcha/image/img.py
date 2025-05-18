@@ -114,7 +114,7 @@ class BaseImageCaptcha:
             self.Logger.debug(message)
 
 
-class FlaskSessionImageCaptcha(BaseImageCaptcha):
+class SessionImageCaptcha(BaseImageCaptcha):
     def __init__(self, app: Flask, **kwargs):
         """
         constructor method.
