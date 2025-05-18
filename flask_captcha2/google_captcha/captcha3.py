@@ -19,10 +19,10 @@ from markupsafe import Markup
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.logger import get_logger
-from .utils import CommonCaptchaUtils
+from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
+from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
 
-
-class BaseCaptcha3(CommonCaptchaUtils):
+class BaseGoogleCaptcha3(CommonCaptchaUtils):
     """base config class fpr holding default configurations
     Base Google Captcha v3 class, contain default settings and properties
     """
@@ -44,7 +44,7 @@ class BaseCaptcha3(CommonCaptchaUtils):
     )
 
 
-class FlaskCaptcha3(BaseCaptcha3):
+class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
     """Main Google Captcha version 3 captcha Class,
 
     `Don't` use this model directly, instead use

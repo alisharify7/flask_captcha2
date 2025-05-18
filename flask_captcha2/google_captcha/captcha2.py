@@ -22,7 +22,7 @@ from flask_captcha2.logger import get_logger
 from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
 from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
 
-class BaseCaptcha2(CommonCaptchaUtils):
+class BaseGoogleCaptcha2(CommonCaptchaUtils):
     """
     base config class fpr holding default configurations
     Base Google Captcha v2 class, contain default settings and properties
@@ -39,7 +39,7 @@ class BaseCaptcha2(CommonCaptchaUtils):
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
 
-class FlaskCaptcha2(GoogleCaptchaInterface, BaseCaptcha2):
+class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha2):
     """Main Google Captcha version 2 captcha Class,
 
     `Don't` use this model directly, instead use
