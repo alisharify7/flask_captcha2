@@ -21,7 +21,6 @@ from random import SystemRandom
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
-from flask_captcha2.logger import get_logger
 
 
 class BaseImageCaptcha:
@@ -46,9 +45,6 @@ class BaseImageCaptcha:
 
     # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
     random = SystemRandom()  # https://docs.python.org/3/library/random.html
-    Logger = get_logger(
-        log_level=logging.DEBUG, logger_name="Flask-Captcha2-ImageCaptcha"
-    )
 
     @property
     def LETTERS(self):
@@ -107,11 +103,6 @@ class BaseImageCaptcha:
     def shuffle_list(self, list_captcha: list) -> None:
         """This Method take a list and shuffle the list randomly"""
         self.random.shuffle(list_captcha)
-
-    def debug_log(self, message: str):
-        """Print logs to stdout if CAPTCHA_IMAGE_LOG: bool  is set"""
-        if self.LOG:
-            self.Logger.debug(message)
 
 
 class SessionImageCaptcha(BaseImageCaptcha):
@@ -233,7 +224,7 @@ class SessionImageCaptcha(BaseImageCaptcha):
             ),
         )
 
-    def renderWidget(self, *args, **kwargs) -> Markup:
+    def render_widget(self, *args, **kwargs) -> Markup:
         """Render captcha widget image in template"""
         return self.__generate(*args, **kwargs)
 
@@ -296,10 +287,6 @@ class SessionImageCaptcha(BaseImageCaptcha):
 
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
 
-        self.debug_log(
-            f"Flask-Captcha2.ImageCaptcha.captcha generated:key: {captcha_raw_code}"
-        )
-
         self.set_answer(captcha_raw_code)
 
         # external args
@@ -333,7 +320,7 @@ class SessionImageCaptcha(BaseImageCaptcha):
 
     def revoke_answer(self) -> None:
         """revoke answer from user's session
-        this method will pop the asnwer from user's session
+        this method will pop the answer from user's session
         """
         if self.SESSION_KEY_NAME in session:
             session.pop(self.SESSION_KEY_NAME)
@@ -345,5 +332,4 @@ class SessionImageCaptcha(BaseImageCaptcha):
 
     def get_answer(self) -> str:
         """get the current captcha answer from user's session"""
-        if self.SESSION_KEY_NAME in session:
-            return session[self.SESSION_KEY_NAME]
+        return session.get(self.SESSION_KEY_NAME, None)
