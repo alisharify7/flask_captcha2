@@ -1,10 +1,10 @@
 """
- * flask_captcha2 OSS
- * author: github.com/alisharify7
- * email: alisharifyofficial@gmail.com
- * license: see LICENSE for more details.
- * Copyright (c) 2023 - ali sharifi
- * https://github.com/alisharify7/flask_captcha2
+* flask_captcha2 OSS
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2023 - ali sharifi
+* https://github.com/alisharify7/flask_captcha2
 """
 
 # build in
@@ -59,9 +59,7 @@ class BaseImageCaptcha:
     def LETTERS(self, value: str):
         """letters setter, make sure inpur is str value."""
         if not isinstance(value, str):
-            raise ValueError(
-                f"letters {value} must be a string not a {type(value)}"
-            )
+            raise ValueError(f"letters {value} must be a string not a {type(value)}")
         else:
             self._letters = value
 
@@ -73,9 +71,7 @@ class BaseImageCaptcha:
     def NUMBERS(self, value: str):
         """numbers settter, make sure the input is a str value"""
         if not isinstance(value, str):
-            raise ValueError(
-                f"numbers {value} must be a string not a {type(value)}"
-            )
+            raise ValueError(f"numbers {value} must be a string not a {type(value)}")
         else:
             self._numbers = value
 
@@ -86,9 +82,7 @@ class BaseImageCaptcha:
     @PUNCTUATIONS.setter
     def PUNCTUATIONS(self, value: str):
         if not isinstance(value, str):
-            raise ValueError(
-                f"punctuation must be a string not a {type(value)}"
-            )
+            raise ValueError(f"punctuation must be a string not a {type(value)}")
         else:
             self._punctuations = value
 
@@ -183,21 +177,15 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
 
             self.LETTERS = kwargs.get("CAPTCHA_IMAGE_LETTERS")  # setter call
             self.NUMBERS = kwargs.get("CAPTCHA_IMAGE_NUMBERS")  # setter call
-            self.PUNCTUATIONS = kwargs.get(
-                "CAPTCHA_IMAGE_PUNCTUATIONS"
-            )  # setter call
+            self.PUNCTUATIONS = kwargs.get("CAPTCHA_IMAGE_PUNCTUATIONS")  # setter call
 
             # session config
-            self.SESSION_KEY_NAME = kwargs.get(
-                "CAPTCHA_IMAGE_SESSION_KEY_NAME"
-            )
+            self.SESSION_KEY_NAME = kwargs.get("CAPTCHA_IMAGE_SESSION_KEY_NAME")
 
             # image configs
             self.INCLUDE_LETTERS = kwargs.get("CAPTCHA_IMAGE_INCLUDE_LETTERS")
             self.INCLUDE_NUMERIC = kwargs.get("CAPTCHA_IMAGE_INCLUDE_NUMERIC")
-            self.INCLUDE_PUNCTUATION = kwargs.get(
-                "CAPTCHA_IMAGE_INCLUDE_PUNCTUATION"
-            )
+            self.INCLUDE_PUNCTUATION = kwargs.get("CAPTCHA_IMAGE_INCLUDE_PUNCTUATION")
 
             self.WIDTH = kwargs.get("CAPTCHA_IMAGE_WIDTH")
             self.HEIGHT = kwargs.get("CAPTCHA_IMAGE_HEIGHT")
@@ -220,15 +208,9 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         self.__init__(
             app=None,
             CAPTCHA_IMAGE_LOG=app.config.get("CAPTCHA_IMAGE_LOG", self.LOG),
-            CAPTCHA_IMAGE_ENABLE=app.config.get(
-                "CAPTCHA_IMAGE_ENABLE", self.ENABLE
-            ),
-            CAPTCHA_IMAGE_LETTERS=app.config.get(
-                "CAPTCHA_IMAGE_LETTERS", self.LETTERS
-            ),
-            CAPTCHA_IMAGE_NUMBERS=app.config.get(
-                "CAPTCHA_IMAGE_NUMBERS", self.NUMBERS
-            ),
+            CAPTCHA_IMAGE_ENABLE=app.config.get("CAPTCHA_IMAGE_ENABLE", self.ENABLE),
+            CAPTCHA_IMAGE_LETTERS=app.config.get("CAPTCHA_IMAGE_LETTERS", self.LETTERS),
+            CAPTCHA_IMAGE_NUMBERS=app.config.get("CAPTCHA_IMAGE_NUMBERS", self.NUMBERS),
             CAPTCHA_IMAGE_PUNCTUATIONS=app.config.get(
                 "CAPTCHA_IMAGE_PUNCTUATIONS", self.PUNCTUATIONS
             ),
@@ -244,12 +226,8 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
             CAPTCHA_IMAGE_INCLUDE_PUNCTUATION=app.config.get(
                 "CAPTCHA_IMAGE_INCLUDE_PUNCTUATION", self.INCLUDE_PUNCTUATION
             ),
-            CAPTCHA_IMAGE_WIDTH=app.config.get(
-                "CAPTCHA_IMAGE_WIDTH", self.WIDTH
-            ),
-            CAPTCHA_IMAGE_HEIGHT=app.config.get(
-                "CAPTCHA_IMAGE_HEIGHT", self.HEIGHT
-            ),
+            CAPTCHA_IMAGE_WIDTH=app.config.get("CAPTCHA_IMAGE_WIDTH", self.WIDTH),
+            CAPTCHA_IMAGE_HEIGHT=app.config.get("CAPTCHA_IMAGE_HEIGHT", self.HEIGHT),
             CAPTCHA_IMAGE_CAPTCHA_LENGTH=app.config.get(
                 "CAPTCHA_IMAGE_CAPTCHA_LENGTH", self.LENGTH
             ),
@@ -281,9 +259,7 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
 
         numeric = kwargs.get("include_numbers", self.INCLUDE_NUMERIC)
         letters = kwargs.get("include_letters", self.INCLUDE_LETTERS)
-        punctuation = kwargs.get(
-            "include_punctuations", self.INCLUDE_PUNCTUATION
-        )
+        punctuation = kwargs.get("include_punctuations", self.INCLUDE_PUNCTUATION)
 
         # single mode captcha options
         captcha_raw_code = []
@@ -316,9 +292,7 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         captcha_raw_code = "".join(captcha_raw_code)
         image_data = self._imgGeneratorEngine.generate(captcha_raw_code)
 
-        base64_captcha = base64.b64encode(image_data.getvalue()).decode(
-            "ascii"
-        )
+        base64_captcha = base64.b64encode(image_data.getvalue()).decode("ascii")
 
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
 
@@ -333,12 +307,8 @@ class FlaskSessionImageCaptcha(BaseImageCaptcha):
         args += (
             f"class=\"{kwargs.get('class')}\"\t" if kwargs.get("class") else ""
         )  # css class
-        args += (
-            f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""
-        )  # id
-        args += (
-            kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""
-        )  # dataset
+        args += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""  # id
+        args += kwargs.get("dataset") + "\t" if kwargs.get("dataset") else ""  # dataset
         args += (
             f"style=\"{kwargs.get('style')}\"\t" if kwargs.get("style") else ""
         )  # style

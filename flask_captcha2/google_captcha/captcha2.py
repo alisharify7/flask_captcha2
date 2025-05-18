@@ -1,10 +1,10 @@
 """
- * flask_captcha2 OSS
- * author: github.com/alisharify7
- * email: alisharifyofficial@gmail.com
- * license: see LICENSE for more details.
- * Copyright (c) 2023 - ali sharifi
- * https://github.com/alisharify7/flask_captcha2
+* flask_captcha2 OSS
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2023 - ali sharifi
+* https://github.com/alisharify7/flask_captcha2
 """
 
 # build in
@@ -20,13 +20,18 @@ from markupsafe import Markup
 from flask_captcha2 import excep as ex
 from flask_captcha2.logger import get_logger
 from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
-from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
+from flask_captcha2.google_captcha.abstract_captcha import (
+    GoogleCaptchaInterface,
+    BaseGoogleCaptcha,
+)
+
 
 class BaseGoogleCaptcha2(CommonCaptchaUtils):
     """
     base config class fpr holding default configurations
     Base Google Captcha v2 class, contain default settings and properties
     """
+
     PUBLIC_KEY: str = ""
     PRIVATE_KEY: str = ""
     CAPTCHA_LOG: bool = True
@@ -39,7 +44,7 @@ class BaseGoogleCaptcha2(CommonCaptchaUtils):
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
 
-class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha2):
+class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha2):
     """Main Google Captcha version 2 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -67,9 +72,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha2):
         """
         if `app` object directly passed, then `init_app` method will be called.
         """
-        if app and isinstance(
-            app, Flask
-        ):  # app is passed read configs from app.config
+        if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
         elif (
@@ -86,9 +89,9 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha2):
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get(
-            "CAPTCHA_PUBLIC_KEY", None
-        ) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
+        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get(
+            "CAPTCHA_PRIVATE_KEY", None
+        ):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
             )

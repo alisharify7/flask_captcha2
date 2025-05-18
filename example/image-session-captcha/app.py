@@ -21,7 +21,7 @@ app.config.update(
         # length of captcha string
         "CAPTCHA_IMAGE_CAPTCHA_LENGTH": 5,
         "CAPTCHA_IMAGE_HEIGHT": 120,
-        "CAPTCHA_IMAGE_WIDTH":340,
+        "CAPTCHA_IMAGE_WIDTH": 340,
     }
 )
 

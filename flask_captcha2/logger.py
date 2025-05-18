@@ -1,21 +1,22 @@
 """
- * flask_captcha2 OSS
- * author: github.com/alisharify7
- * email: alisharifyofficial@gmail.com
- * license: see LICENSE for more details.
- * Copyright (c) 2023 - ali sharifi
- * https://github.com/alisharify7/flask_captcha2
+* flask_captcha2 OSS
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2023 - ali sharifi
+* https://github.com/alisharify7/flask_captcha2
 """
+
 import sys
 import logging
 from typing import Optional
 
 
 def get_logger(
-        log_level: Optional[int] = None,
-        logger_name: str = "Flask-Captcha",
-        log_format: Optional[str] = None,
-        handlers: Optional[list[logging.Handler]] = None
+    log_level: Optional[int] = None,
+    logger_name: str = "Flask-Captcha",
+    log_format: Optional[str] = None,
+    handlers: Optional[list[logging.Handler]] = None,
 ) -> logging.Logger:
     """Create and configure a custom Logger with given level, name, and formatting.
 

@@ -27,12 +27,8 @@ def googlecaptcha2(app):
     """flask-captcha2 Google Captcha v2 object"""
     app.config.from_mapping(
         {
-            "CAPTCHA_PRIVATE_KEY": os.environ.get(
-                "PRIVATE_KEY_V2", "sample key"
-            ),
-            "CAPTCHA_PUBLIC_KEY": os.environ.get(
-                "PUBLIC_KEY_V2", "sample key"
-            ),
+            "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", "sample key"),
+            "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", "sample key"),
             "CAPTCHA_ENABLED": True,
             "CAPTCHA_LOG": False,
             "CAPTCHA_LANGUAGE": "en",

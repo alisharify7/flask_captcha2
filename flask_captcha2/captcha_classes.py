@@ -1,10 +1,10 @@
 """
- * flask_captcha2 OSS
- * author: github.com/alisharify7
- * email: alisharifyofficial@gmail.com
- * license: see LICENSE for more details.
- * Copyright (c) 2023 - ali sharifi
- * https://github.com/alisharify7/flask_captcha2
+* flask_captcha2 OSS
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2023 - ali sharifi
+* https://github.com/alisharify7/flask_captcha2
 """
 
 # build in
@@ -46,7 +46,11 @@ class FlaskCaptcha(LoggerMixin):
 
     """
 
-    CAPTCHA_TYPES = ["google-captcha-v2", "google-captcha-v3", "local-session-captcha-image"]
+    CAPTCHA_TYPES = [
+        "google-captcha-v2",
+        "google-captcha-v3",
+        "local-session-captcha-image",
+    ]
 
     def __init__(self, app: Flask) -> None:
         """Constructor function
@@ -70,10 +74,7 @@ class FlaskCaptcha(LoggerMixin):
         app.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME] = dict()
         self.DEBUG = app.debug
         self.FLASK_APP = app
-        self.create_logger_object(
-            log_level=logging.INFO, name="FlaskCaptcha2-Manager"
-        )
-
+        self.create_logger_object(log_level=logging.INFO, name="FlaskCaptcha2-Manager")
 
     @classmethod
     def create(cls, captcha_type: str, *args, **kwargs):
@@ -91,9 +92,12 @@ class FlaskCaptcha(LoggerMixin):
             case _:
                 raise RuntimeError("invalid captcha type: {}".format(captcha_type))
 
-
     def generate_google_captcha_v2(
-        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
+        self,
+        namespace: str,
+        conf: typing.Union[typing.Dict[str, str], None] = None,
+        *args,
+        **kwargs,
     ):
         """this method return `GoogleCaptcha2` object
 
@@ -134,9 +138,12 @@ class FlaskCaptcha(LoggerMixin):
         )
         return self.__get_captcha_object(namespace=namespace)
 
-
     def generate_google_captcha_v3(
-        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
+        self,
+        namespace: str,
+        conf: typing.Union[typing.Dict[str, str], None] = None,
+        *args,
+        **kwargs,
     ):
         """this method return `FlaskCaptcha3` object.
 
@@ -177,7 +184,11 @@ class FlaskCaptcha(LoggerMixin):
         return self.__get_captcha_object(namespace=namespace)
 
     def generate_session_image_captcha(
-        self, namespace: str, conf: typing.Union[typing.Dict[str, str], None] = None, *args, **kwargs
+        self,
+        namespace: str,
+        conf: typing.Union[typing.Dict[str, str], None] = None,
+        *args,
+        **kwargs,
     ) -> FlaskSessionImageCaptcha:
         """this method return `FlaskSessionImageCaptcha` object.
 
@@ -258,9 +269,7 @@ class FlaskCaptcha(LoggerMixin):
         """
         return self.__render_captcha_in_template(*args, **kwargs)
 
-    def __render_captcha_in_template(
-        self, namespace: str, *args, **kwargs
-    ) -> Markup:
+    def __render_captcha_in_template(self, namespace: str, *args, **kwargs) -> Markup:
         """render a captcha (`Markup`) object.
 
         `Don't` Use this method directly inside template !
@@ -313,7 +322,9 @@ class FlaskCaptcha(LoggerMixin):
         :return: `True` if captcha set correctlly in mapper, otherwise `False`
         """
         try:
-            self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][namespace] = captcha_object
+            self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][
+                namespace
+            ] = captcha_object
         except Exception as e:
             return False
         return True
@@ -346,7 +357,9 @@ class FlaskCaptcha(LoggerMixin):
         :return: list of namespaces of all captcha objects that registered in app
         :rtype: List
         """
-        return list(self.FLASK_APP.config.get(self.CAPTCHA_OBJECT_MAPPER_KEY_NAME, {}).keys())
+        return list(
+            self.FLASK_APP.config.get(self.CAPTCHA_OBJECT_MAPPER_KEY_NAME, {}).keys()
+        )
 
     def __str__(self) -> str:
         return f"<FlaskCaptcha MasterClass {self.FLASK_APP} >"

@@ -1,10 +1,10 @@
 """
- * flask_captcha2 OSS
- * author: github.com/alisharify7
- * email: alisharifyofficial@gmail.com
- * license: see LICENSE for more details.
- * Copyright (c) 2023 - ali sharifi
- * https://github.com/alisharify7/flask_captcha2
+* flask_captcha2 OSS
+* author: github.com/alisharify7
+* email: alisharifyofficial@gmail.com
+* license: see LICENSE for more details.
+* Copyright (c) 2023 - ali sharifi
+* https://github.com/alisharify7/flask_captcha2
 """
 
 # build in
@@ -22,6 +22,7 @@ from flask_captcha2.logger import get_logger
 from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
 from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
 
+
 class BaseGoogleCaptcha3(CommonCaptchaUtils):
     """base config class fpr holding default configurations
     Base Google Captcha v3 class, contain default settings and properties
@@ -35,16 +36,12 @@ class BaseGoogleCaptcha3(CommonCaptchaUtils):
     CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
-    Logger = get_logger(
-        log_level=logging.DEBUG, logger_name="Google-Captcha-v3"
-    )
+    Logger = get_logger(log_level=logging.DEBUG, logger_name="Google-Captcha-v3")
 
-    HIDE_CAPTCHA_WIDGET_CSS = (
-        "<style>.grecaptcha-badge {visibility: hidden;}</style>"
-    )
+    HIDE_CAPTCHA_WIDGET_CSS = "<style>.grecaptcha-badge {visibility: hidden;}</style>"
 
 
-class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
+class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha3):
     """Main Google Captcha version 3 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -69,9 +66,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
         CAPTCHA_PRIVATE_KEY: str = None,
         **kwargs,
     ) -> None:
-        if app and isinstance(
-            app, Flask
-        ):  # app is passed read configs from app.config
+        if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
         elif (
@@ -85,9 +80,9 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get(
-            "CAPTCHA_PUBLIC_KEY", None
-        ) or not app.config.get("CAPTCHA_PRIVATE_KEY", None):
+        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get(
+            "CAPTCHA_PRIVATE_KEY", None
+        ):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha3: Private and Public Keys are Required"
             )
@@ -119,8 +114,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
         try:
             self.SCORE = (
                 self.MINIMUM_SCORE
-                if int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
-                < self.MINIMUM_SCORE
+                if int(conf_list.get("CAPTCHA_SCORE", self.SCORE)) < self.MINIMUM_SCORE
                 else int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
             )
         except ValueError:
@@ -166,8 +160,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha3):
                 jsonResponse = responseGoogle.json()
                 return (
                     True
-                    if jsonResponse["success"]
-                    and jsonResponse["score"] >= self.SCORE
+                    if jsonResponse["success"] and jsonResponse["score"] >= self.SCORE
                     else False
                 )
             else:
