@@ -21,13 +21,13 @@ app.config.update(
         # length of captcha string
         "CAPTCHA_IMAGE_CAPTCHA_LENGTH": 5,
         "CAPTCHA_IMAGE_HEIGHT": 120,
-        "CAPTCHA_IMAGE_WIDTH": 340,
+        "CAPTCHA_IMAGE_WIDTH": 120,
     }
 )
 
 MainCaptcha = FlaskCaptcha(app=app)  # app is required
-captcha = MainCaptcha.get_session_image_captcha(
-    name="imageCaptcha"
+captcha = MainCaptcha.generate_session_image_captcha(
+    namespace="imageCaptcha"
 )  # created a local Image captcha object, name is required
 
 

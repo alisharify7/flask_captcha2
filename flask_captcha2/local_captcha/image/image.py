@@ -170,13 +170,10 @@ class SessionImageCaptcha(BaseImageCaptcha):
             self.INCLUDE_LETTERS = kwargs.get("CAPTCHA_IMAGE_INCLUDE_LETTERS")
             self.INCLUDE_NUMERIC = kwargs.get("CAPTCHA_IMAGE_INCLUDE_NUMERIC")
             self.INCLUDE_PUNCTUATION = kwargs.get("CAPTCHA_IMAGE_INCLUDE_PUNCTUATION")
-
+            self.NAMESPACE = kwargs.get("NAMESPACE", "default")
             self.WIDTH = kwargs.get("CAPTCHA_IMAGE_WIDTH")
             self.HEIGHT = kwargs.get("CAPTCHA_IMAGE_HEIGHT")
-            self.LENGTH = kwargs.get(
-                "CAPTCHA_IMAGE_CAPTCHA_LENGTH"
-            )  # length of CAPTCHA code in image
-
+            self.LENGTH = kwargs.get("CAPTCHA_IMAGE_CAPTCHA_LENGTH")
             self._captcha_image_generator = ImageCaptcha(
                 height=self.HEIGHT, width=self.WIDTH
             )
@@ -215,6 +212,7 @@ class SessionImageCaptcha(BaseImageCaptcha):
             CAPTCHA_IMAGE_CAPTCHA_LENGTH=app.config.get(
                 "CAPTCHA_IMAGE_CAPTCHA_LENGTH", self.LENGTH
             ),
+            NAMESPACE=app.config.get("NAMESPACE", "default"),
         )
 
     def render_widget(self, *args, **kwargs) -> Markup:
@@ -323,3 +321,10 @@ class SessionImageCaptcha(BaseImageCaptcha):
     def get_answer(self) -> str:
         """get the current captcha answer from user's session"""
         return session.get(self.SESSION_KEY_NAME, None)
+
+    def __str__(self):
+        return f"<Flask-Captcha2.ImageSessionCaptcha namespace={self.NAMESPACE}>"
+
+    def __repr__(self):
+        # TODO: for now
+        return self.__str__()

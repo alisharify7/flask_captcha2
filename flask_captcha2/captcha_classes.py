@@ -17,9 +17,9 @@ from markupsafe import Markup
 
 # flask-captcha2
 from . import excep as exceptions
-from .google_captcha.captcha2 import FlaskCaptcha2 as GoogleCaptcha2
-from .google_captcha.captcha3 import FlaskCaptcha3 as GoogleCaptcha3
-from .local_captcha.image import FlaskSessionImageCaptcha
+from .google_captcha.captcha2 import GoogleCaptcha2
+from .google_captcha.captcha3 import GoogleCaptcha3
+from .local_captcha.image import SessionImageCaptcha
 from .mixins.logger_mixins import LoggerMixin
 
 
@@ -131,11 +131,7 @@ class FlaskCaptcha(LoggerMixin):
             captcha = GoogleCaptcha2(**conf)
         else:
             captcha = GoogleCaptcha2(app=self.FLASK_APP)
-
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
-        self.log(
-            f"Google-Captcha-version-2 created successfully,\n\tcaptcha namespace:{namespace}"
-        )
         return self.__get_captcha_object(namespace=namespace)
 
     def generate_google_captcha_v3(
@@ -178,9 +174,7 @@ class FlaskCaptcha(LoggerMixin):
             captcha = GoogleCaptcha3(app=self.FLASK_APP)
 
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
-        self.log(
-            f"Google-Captcha-version-3 created successfully,\n\tcaptcha namespace:{namespace}"
-        )
+
         return self.__get_captcha_object(namespace=namespace)
 
     def generate_session_image_captcha(
@@ -189,8 +183,8 @@ class FlaskCaptcha(LoggerMixin):
         conf: typing.Union[typing.Dict[str, str], None] = None,
         *args,
         **kwargs,
-    ) -> FlaskSessionImageCaptcha:
-        """this method return `FlaskSessionImageCaptcha` object.
+    ):
+        """this method return `SessionImageCaptcha` object.
 
 
         :param namespace: a unique name for captcha object. it is better to be a combination of captcha type and version
@@ -238,14 +232,11 @@ class FlaskCaptcha(LoggerMixin):
             raise ValueError("duplicated captcha name!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
-            captcha = FlaskSessionImageCaptcha(**conf)
+            captcha = SessionImageCaptcha(**conf, NAMESPACE=namespace)
         else:
-            captcha = FlaskSessionImageCaptcha(app=self.FLASK_APP)
+            captcha = SessionImageCaptcha(app=self.FLASK_APP, NAMESPACE=namespace)
 
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
-        self.log(
-            f"Flask-Session-Image-Captcha created successfully,\n\tcaptcha namespace:{namespace}"
-        )
         return self.__get_captcha_object(namespace=namespace)
 
     def render_captcha(self, *args, **kwargs) -> str:

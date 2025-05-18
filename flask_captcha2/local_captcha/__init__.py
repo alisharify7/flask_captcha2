@@ -1,4 +1,3 @@
-from .Image import FlaskSessionImageCaptcha
+from .image import SessionImageCaptcha
 
-
-__all__ = ("FlaskSessionImageCaptcha",)
+__all__ = ("SessionImageCaptcha",)
