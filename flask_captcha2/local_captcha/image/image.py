@@ -41,7 +41,6 @@ class BaseImageCaptcha:
     _letters: str = string.ascii_lowercase
     _punctuations: str = string.punctuation
     _numbers: str = string.digits
-    _imgGeneratorEngine: ImageCaptcha = None
 
     # https://stackoverflow.com/questions/54672594/why-is-random-random-not-secure-in-python
     random = SystemRandom()  # https://docs.python.org/3/library/random.html
@@ -53,7 +52,7 @@ class BaseImageCaptcha:
 
     @LETTERS.setter
     def LETTERS(self, value: str):
-        """letters setter, make sure inpur is str value."""
+        """letters setter, make sure imput is str value."""
         if not isinstance(value, str):
             raise ValueError(f"letters {value} must be a string not a {type(value)}")
         else:
@@ -84,21 +83,15 @@ class BaseImageCaptcha:
 
     def random_number(self, length: int) -> list:
         """return a list contains only numbers randomly with fixed length of input args"""
-        return [
-            secrets.choice(self.NUMBERS) for i in range(length)
-        ]  # replace random with secrets
+        return [secrets.choice(self.NUMBERS) for i in range(length)]
 
     def random_punctuation(self, length: int) -> list:
         """return a list contains only punctuation randomly with fixed length of input args"""
-        return [
-            secrets.choice(self.PUNCTUATIONS) for i in range(length)
-        ]  # replace random with secrets
+        return [secrets.choice(self.PUNCTUATIONS) for i in range(length)]
 
     def random_letters(self, length: int) -> list:
         """return a list contains only alphabet randomly with fixed length of input args"""
-        return [
-            secrets.choice(self.LETTERS) for i in range(length)
-        ]  # replace random with secrets
+        return [secrets.choice(self.LETTERS) for i in range(length)]
 
     def shuffle_list(self, list_captcha: list) -> None:
         """This Method take a list and shuffle the list randomly"""
@@ -184,7 +177,7 @@ class SessionImageCaptcha(BaseImageCaptcha):
                 "CAPTCHA_IMAGE_CAPTCHA_LENGTH"
             )  # length of CAPTCHA code in image
 
-            self._imgGeneratorEngine = ImageCaptcha(
+            self._captcha_image_generator = ImageCaptcha(
                 height=self.HEIGHT, width=self.WIDTH
             )
 
@@ -281,12 +274,9 @@ class SessionImageCaptcha(BaseImageCaptcha):
             self.shuffle_list(captcha_raw_code)  # final shuffle
 
         captcha_raw_code = "".join(captcha_raw_code)
-        image_data = self._imgGeneratorEngine.generate(captcha_raw_code)
-
+        image_data = self._captcha_image_generator.generate(captcha_raw_code)
         base64_captcha = base64.b64encode(image_data.getvalue()).decode("ascii")
-
         base64_captcha = f"data:image/png;base64, {base64_captcha}"
-
         self.set_answer(captcha_raw_code)
 
         # external args
