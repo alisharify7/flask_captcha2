@@ -20,7 +20,10 @@ from markupsafe import Markup
 from flask_captcha2 import excep as ex
 from flask_captcha2.logger import get_logger
 from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
-from flask_captcha2.google_captcha.abstract_captcha import GoogleCaptchaInterface
+from flask_captcha2.google_captcha.abstract_captcha import (
+    GoogleCaptchaInterface,
+    BaseGoogleCaptcha,
+)
 
 
 class BaseGoogleCaptcha3(CommonCaptchaUtils):
