@@ -20,7 +20,6 @@ from . import excep as exceptions
 from .google_captcha.captcha2 import FlaskCaptcha2 as GoogleCaptcha2
 from .google_captcha.captcha3 import FlaskCaptcha3 as GoogleCaptcha3
 from .local_captcha.image import FlaskSessionImageCaptcha
-from .logger import get_logger
 from .mixins.logger_mixins import LoggerMixin
 
 
