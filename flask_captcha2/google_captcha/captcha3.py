@@ -149,7 +149,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
                 and google_response.json()["score"] >= self.SCORE
             )
 
-    def renderWidget(self, *args, **kwargs) -> Markup:
+    def render_widget(self, *args, **kwargs) -> Markup:
         """render captcha widget
 
         :param id: id of captcha widget
