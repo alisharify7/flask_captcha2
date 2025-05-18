@@ -8,8 +8,8 @@
  * https://github.com/alisharify7/flask_captcha2
 """
 
-from .captcha2 import FlaskCaptcha2
-from .captcha3 import FlaskCaptcha3
+from .captcha2 import GoogleCaptcha2
+from .captcha3 import GoogleCaptcha3
 
 
-__all__ = ("FlaskCaptcha2", "FlaskCaptcha3", )
+__all__ = ("GoogleCaptcha2", "GoogleCaptcha3", )
