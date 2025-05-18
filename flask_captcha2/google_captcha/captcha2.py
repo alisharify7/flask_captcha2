@@ -7,10 +7,6 @@
 * https://github.com/alisharify7/flask_captcha2
 """
 
-# build in
-import json
-import logging
-
 # lib
 import requests
 from flask import request, Flask
@@ -18,15 +14,13 @@ from markupsafe import Markup
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
-from flask_captcha2.logger import get_logger
-from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
 from flask_captcha2.google_captcha.abstract_captcha import (
     GoogleCaptchaInterface,
     BaseGoogleCaptcha,
 )
 
 
-class BaseGoogleCaptcha2(CommonCaptchaUtils):
+class BaseGoogleCaptcha2:
     """
     base config class fpr holding default configurations
     Base Google Captcha v2 class, contain default settings and properties
@@ -165,17 +159,9 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             }
 
             response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
-
-            if self.CAPTCHA_LOG:
-                self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                self.debug_log(
-                    f"GOOGLE RESPONSE:\n {json.dumps(response_google.json(), indent=4)}"
-                )
-
-            if response_google.status_code == 200:
-                return response_google.json()["success"]
-            else:
-                return False
+            return (
+                response_google.status_code == 200 and response_google.json()["success"]
+            )
 
     def render_widget(self, *args, **kwargs) -> Markup:
         """render captcha widget

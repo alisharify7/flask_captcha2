@@ -7,10 +7,6 @@
 * https://github.com/alisharify7/flask_captcha2
 """
 
-# build in
-import json
-import logging
-
 # lib
 import requests
 from flask import request, Flask
@@ -18,15 +14,13 @@ from markupsafe import Markup
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
-from flask_captcha2.logger import get_logger
-from flask_captcha2.google_captcha.utils import CommonCaptchaUtils
 from flask_captcha2.google_captcha.abstract_captcha import (
     GoogleCaptchaInterface,
     BaseGoogleCaptcha,
 )
 
 
-class BaseGoogleCaptcha3(CommonCaptchaUtils):
+class BaseGoogleCaptcha3:
     """base config class fpr holding default configurations
     Base Google Captcha v3 class, contain default settings and properties
     """
@@ -38,8 +32,6 @@ class BaseGoogleCaptcha3(CommonCaptchaUtils):
     MINIMUM_SCORE: float = 0.5  # default minimum score
     CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
-
-    Logger = get_logger(log_level=logging.DEBUG, logger_name="Google-Captcha-v3")
 
     HIDE_CAPTCHA_WIDGET_CSS = "<style>.grecaptcha-badge {visibility: hidden;}</style>"
 
@@ -149,25 +141,13 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         else:
             response = request.form.get("g-recaptcha-response", None)
 
-            responseGoogle = requests.post(
+            google_response = requests.post(
                 f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
             )
-
-            if self.CAPTCHA_LOG:
-                self.debug_log(f"SEND REQUEST TO {self.GOOGLE_VERIFY_URL}")
-                self.debug_log(
-                    f"GOOGLE RESPONSE :\n{json.dumps(responseGoogle.json(), indent=4)}"
-                )
-
-            if responseGoogle.status_code == 200:
-                jsonResponse = responseGoogle.json()
-                return (
-                    True
-                    if jsonResponse["success"] and jsonResponse["score"] >= self.SCORE
-                    else False
-                )
-            else:
-                return False
+            return google_response.status_code == 200 and (
+                google_response.json()["success"]
+                and google_response.json()["score"] >= self.SCORE
+            )
 
     def renderWidget(self, *args, **kwargs) -> Markup:
         """render captcha widget
@@ -213,7 +193,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         arg += f"value=\"{kwargs.get('button_text', 'Submit')}\"\t"
         arg += f"{kwargs.get('js_event', ' ')}"
 
-        captchaField = (
+        captcha_field = (
             f"""
             { self.HIDE_CAPTCHA_WIDGET_CSS if kwargs.get("hide_badge", "") == True else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -223,8 +203,8 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             """
         ).strip()
         if self.ENABLED:
-            return Markup(captchaField)
+            return Markup(captcha_field)
         else:
             # if captcha is disabled render just a simple submit input
-            captchaField = f"""<input type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
-            return Markup(captchaField)
+            captcha_field = f"""<input type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
+            return Markup(captcha_field)
