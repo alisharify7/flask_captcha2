@@ -20,24 +20,24 @@ load_dotenv()
 
 app.config.update(
     {
-        "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", ""),
-        "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", ""),
-        "CAPTCHA_ENABLED": True,  # captcha status <True, False> True: Production , False: development
-        "CAPTCHA_LOG": True,  # show captcha logs in console
-        "CAPTCHA_LANGUAGE": "en",  # captcha language
+        "captcha_private_key": os.environ.get("captcha_private_key", ""),
+        "captcha_public_key": os.environ.get("captcha_public_key", ""),
+        "captcha_enabled": True,  # captcha status <True, False> True: Production , False: development
+        "captcha_log": True,  # show captcha logs in console
+        "captcha_language": "en",  # captcha language
     }
 )
 
-Master_captcha = FlaskCaptcha(app=app)  # app is required
-captcha = Master_captcha.get_google_captcha_v2(
-    name="captcha2"
+captcha_manager = FlaskCaptcha(app=app)  # app is required
+google_captcha_version3 = captcha_manager.generate_google_captcha_v2(
+    namespace="captcha2"
 )  # created a google captcha object
 
 
 @app.post("/")
 def index_post():
     """index view: post method"""
-    if captcha.is_verify():
+    if google_captcha_version3.is_verify():
         return "captcha is ok"
     else:
         return "invalid captcha"
@@ -50,4 +50,4 @@ def index_get():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5555)

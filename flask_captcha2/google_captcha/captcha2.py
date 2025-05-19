@@ -72,8 +72,8 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         elif (
             captcha_public_key and captcha_private_key
         ):  # app is not passed read config from args passed to this method
-            kwargs["CAPTCHA_PRIVATE_KEY"] = captcha_private_key
-            kwargs["CAPTCHA_PUBLIC_KEY"] = captcha_public_key
+            kwargs["captcha_private_key"] = captcha_private_key
+            kwargs["captcha_public_key"] = captcha_public_key
             self.set_config(kwargs)
 
     def init_app(self, app: Flask = None):
@@ -83,23 +83,23 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get(
-            "CAPTCHA_PRIVATE_KEY", None
+        if not app.config.get("captcha_public_key", None) or not app.config.get(
+            "captcha_public_key", None
         ):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
             )
 
         self.__init__(
-            CAPTCHA_PUBLIC_KEY=app.config.get("CAPTCHA_PUBLIC_KEY", None),
-            CAPTCHA_PRIVATE_KEY=app.config.get("CAPTCHA_PRIVATE_KEY", None),
-            CAPTCHA_ENABLED=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
-            CAPTCHA_THEME=app.config.get("CAPTCHA_THEME", self.THEME),
-            CAPTCHA_TYPE=app.config.get("CAPTCHA_TYPE", self.TYPE),
-            CAPTCHA_SIZE=app.config.get("CAPTCHA_SIZE", self.SIZE),
-            CAPTCHA_LANGUAGE=app.config.get("CAPTCHA_LANGUAGE", self.LANGUAGE),
-            CAPTCHA_TABINDEX=app.config.get("CAPTCHA_TABINDEX", self.TABINDEX),
-            CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG),
+            captcha_public_key=app.config.get("captcha_public_key", None),
+            captcha_private_key=app.config.get("captcha_private_key", None),
+            captcha_enabled=app.config.get("captcha_enabled", self.ENABLED),
+            captcha_theme=app.config.get("captcha_theme", self.THEME),
+            CAPTCHA_TYPE=app.config.get("captcha_type", self.TYPE),
+            captcha_size=app.config.get("captcha_size", self.SIZE),
+            captcha_language=app.config.get("captcha_language", self.LANGUAGE),
+            captcha_tabindex=app.config.get("captcha_tabindex", self.TABINDEX),
+            captcha_log=app.config.get("captcha_log", self.CAPTCHA_LOG),
         )
 
     def set_config(self, conf: dict) -> None:
@@ -107,22 +107,22 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
         """
-        if not conf.get("CAPTCHA_PUBLIC_KEY", False) or not conf.get(
-            "CAPTCHA_PRIVATE_KEY", False
+        if not conf.get("captcha_public_key", False) or not conf.get(
+            "captcha_private_key", False
         ):
             raise ValueError(
                 "private_key and public_key are required for FlaskCaptcha2"
             )
 
-        self.PUBLIC_KEY = conf.get("CAPTCHA_PUBLIC_KEY")
-        self.PRIVATE_KEY = conf.get("CAPTCHA_PRIVATE_KEY")
-        self.ENABLED = conf.get("CAPTCHA_ENABLED", self.ENABLED)
-        self.THEME = conf.get("CAPTCHA_THEME", self.THEME)
-        self.TYPE = conf.get("CAPTCHA_TYPE", self.TYPE)
-        self.SIZE = conf.get("CAPTCHA_SIZE", self.SIZE)
-        self.LANGUAGE = conf.get("CAPTCHA_LANGUAGE", self.LANGUAGE)
-        self.TABINDEX = conf.get("CAPTCHA_TABINDEX", self.TABINDEX)
-        self.CAPTCHA_LOG = conf.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+        self.PUBLIC_KEY = conf.get("captcha_public_key")
+        self.PRIVATE_KEY = conf.get("captcha_private_key")
+        self.ENABLED = conf.get("captcha_enabled", self.ENABLED)
+        self.THEME = conf.get("captcha_theme", self.THEME)
+        self.TYPE = conf.get("captcha_type", self.TYPE)
+        self.SIZE = conf.get("captcha_size", self.SIZE)
+        self.LANGUAGE = conf.get("captcha_language", self.LANGUAGE)
+        self.TABINDEX = conf.get("captcha_tabindex", self.TABINDEX)
+        self.CAPTCHA_LOG = conf.get("captcha_log", self.CAPTCHA_LOG)
 
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
