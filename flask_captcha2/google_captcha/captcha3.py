@@ -57,37 +57,37 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
     def __init__(
         self,
         app: Flask = None,
-        CAPTCHA_PUBLIC_KEY: str = None,
-        CAPTCHA_PRIVATE_KEY: str = None,
+        captcha_public_key: str = None,
+        captcha_private_key: str = None,
         **kwargs,
     ) -> None:
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
             self.init_app(app)
 
         elif (
-            CAPTCHA_PRIVATE_KEY and CAPTCHA_PUBLIC_KEY
+            captcha_private_key and captcha_public_key
         ):  # app is not passed read config from args passed to this method
-            kwargs["CAPTCHA_PRIVATE_KEY"] = CAPTCHA_PRIVATE_KEY
-            kwargs["CAPTCHA_PUBLIC_KEY"] = CAPTCHA_PUBLIC_KEY
+            kwargs["captcha_private_key"] = captcha_private_key
+            kwargs["captcha_public_key"] = captcha_public_key
             self.set_config(kwargs)
 
     def init_app(self, app: Flask = None) -> None:
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get("CAPTCHA_PUBLIC_KEY", None) or not app.config.get(
-            "CAPTCHA_PRIVATE_KEY", None
+        if not app.config.get("captcha_public_key", None) or not app.config.get(
+            "captcha_private_key", None
         ):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha3: Private and Public Keys are Required"
             )
 
         self.__init__(
-            CAPTCHA_PUBLIC_KEY=app.config.get("CAPTCHA_PUBLIC_KEY", None),
-            CAPTCHA_PRIVATE_KEY=app.config.get("CAPTCHA_PRIVATE_KEY", None),
-            CAPTCHA_ENABLED=app.config.get("CAPTCHA_ENABLED", self.ENABLED),
-            CAPTCHA_SCORE=app.config.get("CAPTCHA_SCORE", self.SCORE),
-            CAPTCHA_LOG=app.config.get("CAPTCHA_LOG", self.CAPTCHA_LOG),
+            captcha_public_key=app.config.get("captcha_public_key", None),
+            captcha_private_key=app.config.get("captcha_private_key", None),
+            captcha_enabled=app.config.get("captcha_enabled", self.ENABLED),
+            captcha_score=app.config.get("captcha_score", self.SCORE),
+            captcha_log=app.config.get("captcha_log", self.CAPTCHA_LOG),
         )
 
     def set_config(self, conf_list: dict) -> None:
@@ -95,22 +95,22 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
         use this method for setting/refreshing configs for captcha object without passing flask main app
         """
-        if not conf_list.get("CAPTCHA_PUBLIC_KEY", False) or not conf_list.get(
-            "CAPTCHA_PRIVATE_KEY", False
+        if not conf_list.get("captcha_public_key", False) or not conf_list.get(
+            "captcha_private_key", False
         ):
             raise ValueError(
                 "private_key and public_key are required for FlaskCaptcha3"
             )
 
-        self.PUBLIC_KEY = conf_list.get("CAPTCHA_PUBLIC_KEY")
-        self.PRIVATE_KEY = conf_list.get("CAPTCHA_PRIVATE_KEY")
-        self.ENABLED = conf_list.get("CAPTCHA_ENABLED", self.ENABLED)
-        self.CAPTCHA_LOG = conf_list.get("CAPTCHA_LOG", self.CAPTCHA_LOG)
+        self.PUBLIC_KEY = conf_list.get("captcha_public_key")
+        self.PRIVATE_KEY = conf_list.get("captcha_private_key")
+        self.ENABLED = conf_list.get("captcha_enabled", self.ENABLED)
+        self.CAPTCHA_LOG = conf_list.get("captcha_log", self.CAPTCHA_LOG)
         try:
             self.SCORE = (
                 self.MINIMUM_SCORE
-                if int(conf_list.get("CAPTCHA_SCORE", self.SCORE)) < self.MINIMUM_SCORE
-                else int(conf_list.get("CAPTCHA_SCORE", self.SCORE))
+                if int(conf_list.get("captcha_score", self.SCORE)) < self.MINIMUM_SCORE
+                else int(conf_list.get("captcha_score", self.SCORE))
             )
         except ValueError:
             self.SCORE = self.MINIMUM_SCORE
@@ -195,7 +195,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
         captcha_field = (
             f"""
-            { self.HIDE_CAPTCHA_WIDGET_CSS if kwargs.get("hide_badge", "") == True else ''}
+            { self.HIDE_CAPTCHA_WIDGET_CSS if kwargs.get("hide_badge", "") else ''}
             <script src='https://www.google.com/recaptcha/api.js'></script>
             <script>function onSubmit(token) {{document.getElementById('{kwargs.get('parent_form_id', '')}').submit();}}</script>
             <input type='submit' class="g-recaptcha {kwargs.get('css_class', '')}" {arg}
@@ -206,5 +206,5 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             return Markup(captcha_field)
         else:
             # if captcha is disabled render just a simple submit input
-            captcha_field = f"""<input type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
+            captcha_field = f"""<input  type='submit' class="{kwargs.get('class', '')}" {arg}></input>""".strip()
             return Markup(captcha_field)

@@ -153,11 +153,11 @@ class FlaskCaptcha(LoggerMixin):
             ..code-block::python
 
                  {
-                     "CAPTCHA_PRIVATE_KEY": "hish !",
-                     "CAPTCHA_PUBLIC_KEY": "hish !",
-                     'CAPTCHA_ENABLED': True,  # captcha status <True, False>
-                     "CAPTCHA_SCORE": 0.5,  #google captcha version3 works with scores
-                     "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
+                     "captcha_private_key": "hish !",
+                     "captcha_public_key": "hish !",
+                     'captcha_enabled': True,  # captcha status <True, False>
+                     "captcha_score": 0.5,  #google captcha version3 works with scores
+                     "captcha_log": True  # show captcha requests and logs in terminal > stdout
                  }
 
         :return: an FlaskCaptcha3 object

@@ -15,15 +15,15 @@
     <input placeholder="password" type="password" name="password" id="">
     <br>
     {{ captcha.render_captcha(
-                model_name='captcha3',
-                css_class='custom-class-name',
-                parent_form_id="ParentForm",
-                button_text="submit This Form",
-                id="SubmitBtnForm",
-                inline_css=" background-color:blue; color:white; font-size:2rem;",
-                dataset="data-ok='true' data-test='test data set check' ",
-                hide_badge=True
-            ) }}
+        namespace='captcha3',
+        css_class='custom-class-name',
+        parent_form_id="ParentForm",
+        button_text="submit This Form",
+        id="SubmitBtnForm",
+        inline_css=" background-color:blue; color:white; font-size:2rem; margin: 10px;",
+        dataset="data-ok='true' data-test='test data set check' ",
+        hide_badge=False
+        ) }}
 </form>
 
 </body>

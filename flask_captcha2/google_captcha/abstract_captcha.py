@@ -30,11 +30,6 @@ class GoogleCaptchaInterface(ABC):
         """Render the captcha widget in the UI."""
         pass
 
-    @abstractmethod
-    def refresh_conf(self, app: Flask) -> None:
-        """Refresh the captcha object setting using the flask-application configuration"""
-        pass
-
 
 class BaseGoogleCaptcha:
     def refresh_conf(self, app: Flask) -> None:
