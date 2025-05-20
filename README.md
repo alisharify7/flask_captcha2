@@ -254,8 +254,7 @@ def index():
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=alisharify7/flask_captcha2&type=Date)](https://star-history.com/#alisharify7/flask_captcha2&Date)
-
+[![Stargazers over time](https://starchart.cc/alisharify7/flask_captcha2.svg?variant=adaptive)](https://starchart.cc/alisharify7/flask_captcha2)
 
 ### Version History:
 
