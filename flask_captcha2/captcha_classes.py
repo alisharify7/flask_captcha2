@@ -291,17 +291,16 @@ class FlaskCaptcha(LoggerMixin):
         :param name: name of captcha
         :type name: str
 
-        :return: `False` if captcha name is already exists, otherwise `True`
+        :return: `False` if captcha name already exists, otherwise `True`
         :rtype: bool
         """
-        if namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
-            return False
-        return True
+        return namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
+
 
     def __set_captcha_object(self, namespace: str, captcha_object: object) -> bool:
         """Set a captcha object with the given name (Namespace) in captcha mapper repo.
 
-        this method save (set) a captcha with the given name in
+        This method saves (set) a captcha with the given name in
         captcha mapper repo.
 
         :param name: name of captcha object
@@ -310,7 +309,7 @@ class FlaskCaptcha(LoggerMixin):
         :param captcha_object: captcha object
         :type captcha_object: object
 
-        :return: `True` if captcha set correctlly in mapper, otherwise `False`
+        :return: `True` if captcha is set correctly in mapper, otherwise `False`
         """
         try:
             self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][
@@ -322,10 +321,10 @@ class FlaskCaptcha(LoggerMixin):
 
     def __get_captcha_object(self, namespace: str) -> object:
         """getting captcha object from mapper repo.
-        this method returns captcha object with the given name
-        (Namespace) that registered in app.
+        This method returns a CAPTCHA object with the given name
+        (Namespace) That is registered in app.
 
-        if the captcha name was not exists this method Raise an exception
+        if the captcha name does not exist this method raises an exception
 
         :param name: name of captcha object
         :type name: str
@@ -343,9 +342,9 @@ class FlaskCaptcha(LoggerMixin):
 
     def __get_all_captcha_namespaces(self) -> typing.List[str]:
         """return all registered NameSpaces.
-        This method return all captcha names that `registered` in app.config.
+        This method returns all CAPTCHA names that are registered in the app.config.
 
-        :return: list of namespaces of all captcha objects that registered in app
+        :return: list of namespaces of all captcha objects thatare  registered in the app
         :rtype: List
         """
         return list(
