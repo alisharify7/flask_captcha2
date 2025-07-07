@@ -3,13 +3,12 @@ from flask_captcha2.logger import get_logger
 
 
 class LoggerMixin(object):
-
+    """Logger Mixin"""
     def create_logger_object(
-        self, name: str, log_level: int = logging.DEBUG, **kwargs
+        self, logger_name: str, logger_level: int = logging.DEBUG, **kwargs
     ) -> logging.Logger:
-        self.logger = get_logger(log_level=log_level, logger_name=name, **kwargs)
+        return get_logger(log_level=logger_level, logger_name=logger_name, **kwargs)
 
-    def log(self, message: str) -> None:
-        if self.DEBUG:
-            return None
-        self.logger.debug(message)
+    def debug_log(self, message: str) -> None:
+        if self.CAPTCHA_LOG:
+            self.logger.debug(message)
