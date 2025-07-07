@@ -70,11 +70,14 @@ class FlaskCaptcha(LoggerMixin):
             ctx = {"captcha": self}
             return ctx
 
+
         self.CAPTCHA_OBJECT_MAPPER_KEY_NAME = "captcha_object_mapper"
-        app.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME] = dict()
         self.DEBUG = app.debug
         self.FLASK_APP = app
-        self.create_logger_object(log_level=logging.INFO, name="FlaskCaptcha2-Manager")
+        self.logger = self.create_logger_object(logger_level=logging.INFO, logger_name="FlaskCaptcha-Manager")
+        app.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME] = dict()
+
+
 
     @classmethod
     def create(cls, captcha_type: str, *args, **kwargs):
@@ -123,14 +126,14 @@ class FlaskCaptcha(LoggerMixin):
         """
 
         if not namespace:
-            raise ValueError("captcha should have a name!")
-        if not self.__is_namespace_exists(namespace=namespace):
-            raise ValueError("duplicated captcha namespace!")
+            raise ValueError("captcha should have a namespace!")
+        if self.__is_namespace_exists(namespace=namespace):
+            raise ValueError(f"duplicated captcha namespace! {self.__get_all_captcha_namespaces()}")
 
         if conf and isinstance(conf, dict):  # custom config is passed
-            captcha = GoogleCaptcha2(**conf)
+            captcha = GoogleCaptcha2(namespace=namespace, **conf)
         else:
-            captcha = GoogleCaptcha2(app=self.FLASK_APP)
+            captcha = GoogleCaptcha2(namespace=namespace, app=self.FLASK_APP)
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
         return self.__get_captcha_object(namespace=namespace)
 
@@ -294,7 +297,7 @@ class FlaskCaptcha(LoggerMixin):
         :return: `False` if captcha name already exists, otherwise `True`
         :rtype: bool
         """
-        return namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
+        return namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]
 
 
     def __set_captcha_object(self, namespace: str, captcha_object: object) -> bool:
