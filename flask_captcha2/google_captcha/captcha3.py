@@ -18,6 +18,7 @@ from flask_captcha2.google_captcha.abstract_captcha import (
     GoogleCaptchaInterface,
     BaseGoogleCaptcha,
 )
+from flask_captcha2.mixins.logger_mixins import LoggerMixin
 
 
 class BaseGoogleCaptcha3:
@@ -36,7 +37,7 @@ class BaseGoogleCaptcha3:
     HIDE_CAPTCHA_WIDGET_CSS = "<style>.grecaptcha-badge {visibility: hidden;}</style>"
 
 
-class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha3):
+class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha3, LoggerMixin):
     """Main Google Captcha version 3 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -56,12 +57,15 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
     def __init__(
         self,
+        namespace: str,
         app: Flask = None,
         captcha_public_key: str = None,
         captcha_private_key: str = None,
         **kwargs,
     ) -> None:
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
+            app.config["namespace"] = namespace
+            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
             self.init_app(app)
 
         elif (
@@ -69,6 +73,9 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         ):  # app is not passed read config from args passed to this method
             kwargs["captcha_private_key"] = captcha_private_key
             kwargs["captcha_public_key"] = captcha_public_key
+            kwargs["namespace"] = namespace
+            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+
             self.set_config(kwargs)
 
     def init_app(self, app: Flask = None) -> None:
@@ -88,6 +95,7 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             captcha_enabled=app.config.get("captcha_enabled", self.ENABLED),
             captcha_score=app.config.get("captcha_score", self.SCORE),
             captcha_log=app.config.get("captcha_log", self.CAPTCHA_LOG),
+            namespace=app.config.get("namespace", "google-captcha-v2"),
         )
 
     def set_config(self, conf_list: dict) -> None:
@@ -115,6 +123,8 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         except ValueError:
             self.SCORE = self.MINIMUM_SCORE
 
+        self.NAMESPACE = conf_list.get("namespace", "google-captcha-v3")
+
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
 
@@ -138,16 +148,16 @@ class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
         if not self.ENABLED:
             return True
-        else:
-            response = request.form.get("g-recaptcha-response", None)
+        response = request.form.get("g-recaptcha-response", None)
 
-            google_response = requests.post(
-                f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
-            )
-            return google_response.status_code == 200 and (
-                google_response.json()["success"]
-                and google_response.json()["score"] >= self.SCORE
-            )
+        google_response = requests.post(
+            f"{self.GOOGLE_VERIFY_URL}?secret={self.PRIVATE_KEY}&response={response}"
+        )
+        self.debug_log(f"google captcha response {google_response.json()}")
+        return google_response.status_code == 200 and (
+            google_response.json()["success"]
+            and google_response.json()["score"] >= self.SCORE
+        )
 
     def render_widget(self, *args, **kwargs) -> Markup:
         """render captcha widget

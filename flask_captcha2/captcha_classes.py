@@ -134,6 +134,7 @@ class FlaskCaptcha(LoggerMixin):
             captcha = GoogleCaptcha2(namespace=namespace, **conf)
         else:
             captcha = GoogleCaptcha2(namespace=namespace, app=self.FLASK_APP)
+        self.logger.warning(f"google captcha v2 with namespace={namespace} created.")
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
         return self.__get_captcha_object(namespace=namespace)
 
@@ -168,7 +169,7 @@ class FlaskCaptcha(LoggerMixin):
         """
         if not namespace:
             raise ValueError("captcha should have a name!")
-        if not self.__is_namespace_exists(namespace=namespace):
+        if self.__is_namespace_exists(namespace=namespace):
             raise ValueError("duplicated captcha name!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
@@ -176,8 +177,8 @@ class FlaskCaptcha(LoggerMixin):
         else:
             captcha = GoogleCaptcha3(namespace=namespace, app=self.FLASK_APP)
 
+        self.logger.warning(f"google captcha v3 with namespace={namespace} created.")
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
-
         return self.__get_captcha_object(namespace=namespace)
 
     def generate_session_image_captcha(

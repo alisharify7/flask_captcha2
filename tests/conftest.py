@@ -5,8 +5,6 @@ from flask import Flask
 
 from flask_captcha2 import FlaskCaptcha
 
-"""By default captcha log is False"""
-
 
 @pytest.fixture()
 def app():
@@ -15,10 +13,8 @@ def app():
     app.config.update(
         {
             "TESTING": True,
-            # 'DEBUG': True
         }
     )
-
     yield app
 
 

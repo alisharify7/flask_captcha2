@@ -69,10 +69,11 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         """
         if `app` object directly passed, then `init_app` method will be called.
         """
-        self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
             app.config["namespace"] = namespace
             self.init_app(app)
+            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+
 
         elif (
             captcha_public_key and captcha_private_key
@@ -80,6 +81,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             kwargs["captcha_private_key"] = captcha_private_key
             kwargs["captcha_public_key"] = captcha_public_key
             kwargs["namespace"] = namespace
+            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
             self.set_config(kwargs)
 
 
@@ -96,7 +98,6 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
             )
-        self.warn_log("captcha object for google captcha version 2 created.")
         self.__init__(
             captcha_public_key=app.config.get("captcha_public_key", None),
             captcha_private_key=app.config.get("captcha_private_key", None),
@@ -131,6 +132,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         self.LANGUAGE = conf.get("captcha_language", self.LANGUAGE)
         self.TABINDEX = conf.get("captcha_tabindex", self.TABINDEX)
         self.CAPTCHA_LOG = conf.get("captcha_log", self.CAPTCHA_LOG)
+        self.NAMESPACE = conf.get("namespace", "google-captcha-v2")
 
     def is_verify(self) -> bool:
         """This Method Verify a Captcha v2 request
