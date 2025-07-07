@@ -31,7 +31,7 @@ app.config.update(
 captcha_manager = FlaskCaptcha(app=app)  # app is required
 google_captcha_version3 = captcha_manager.generate_google_captcha_v2(
     namespace="captcha2"
-)  # created a google captcha object
+)  # created a Google captcha v2 object
 
 
 @app.post("/")
@@ -50,4 +50,4 @@ def index_get():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5555)
+    app.run(debug=True, host="0.0.0.0", port=5555, threaded=False)

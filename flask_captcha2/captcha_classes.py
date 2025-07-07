@@ -172,9 +172,9 @@ class FlaskCaptcha(LoggerMixin):
             raise ValueError("duplicated captcha name!")
 
         if conf and isinstance(conf, dict):  # custom config is passed
-            captcha = GoogleCaptcha3(**conf)
+            captcha = GoogleCaptcha3(namespace=namespace, **conf)
         else:
-            captcha = GoogleCaptcha3(app=self.FLASK_APP)
+            captcha = GoogleCaptcha3(namespace=namespace, app=self.FLASK_APP)
 
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
 
