@@ -6,6 +6,7 @@
 * Copyright (c) 2023 - ali sharifi
 * https://github.com/alisharify7/flask_captcha2
 """
+import logging
 
 # lib
 import requests
@@ -18,6 +19,7 @@ from flask_captcha2.google_captcha.abstract_captcha import (
     GoogleCaptchaInterface,
     BaseGoogleCaptcha,
 )
+from flask_captcha2.mixins.logger_mixins import LoggerMixin
 
 
 class BaseGoogleCaptcha2:
@@ -38,7 +40,7 @@ class BaseGoogleCaptcha2:
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
 
-class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha2):
+class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha2, LoggerMixin):
     """Main Google Captcha version 2 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -58,6 +60,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
 
     def __init__(
         self,
+        namespace: str,
         app: Flask = None,
         captcha_public_key: str = None,
         captcha_private_key: str = None,
@@ -66,7 +69,9 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         """
         if `app` object directly passed, then `init_app` method will be called.
         """
+        self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
         if app and isinstance(app, Flask):  # app is passed read configs from app.config
+            app.config["namespace"] = namespace
             self.init_app(app)
 
         elif (
@@ -74,7 +79,9 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         ):  # app is not passed read config from args passed to this method
             kwargs["captcha_private_key"] = captcha_private_key
             kwargs["captcha_public_key"] = captcha_public_key
+            kwargs["namespace"] = namespace
             self.set_config(kwargs)
+
 
     def init_app(self, app: Flask = None):
         """
@@ -89,7 +96,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
             )
-
+        self.warn_log("captcha object for google captcha version 2 created.")
         self.__init__(
             captcha_public_key=app.config.get("captcha_public_key", None),
             captcha_private_key=app.config.get("captcha_private_key", None),
@@ -100,6 +107,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             captcha_language=app.config.get("captcha_language", self.LANGUAGE),
             captcha_tabindex=app.config.get("captcha_tabindex", self.TABINDEX),
             captcha_log=app.config.get("captcha_log", self.CAPTCHA_LOG),
+            namespace=app.config.get("namespace", "google-captcha-v2"),
         )
 
     def set_config(self, conf: dict) -> None:
@@ -152,16 +160,15 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         """
         if not self.ENABLED:
             return True
-        else:
-            data = {
-                "secret": self.PRIVATE_KEY,
-                "response": request.form.get("g-recaptcha-response", None),
-            }
 
-            response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
-            return (
-                response_google.status_code == 200 and response_google.json()["success"]
-            )
+        data = {
+            "secret": self.PRIVATE_KEY,
+            "response": request.form.get("g-recaptcha-response", None),
+        }
+        response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
+        result = response_google.status_code == 200 and response_google.json()["success"]
+        self.debug_log(f"google response: {response_google.json()}")
+        return result
 
     def render_widget(self, *args, **kwargs) -> Markup:
         """render captcha widget
