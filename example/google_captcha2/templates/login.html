@@ -5,27 +5,57 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 </head>
 <body>
 
-<form method="POST" action="" id="parent">
+<div class="container mt-5">
+
+<h2 class="text-center m-2">Simple "Im not robot" google captcha version 2</h2>
+<form class="m-2 p-2 border" method="POST" action="/simple" id="simple_parent">
     {# you can also use Flask-wtf forms #}
-    <input placeholder="username" type="text" name="username" id="">
+    <input  class="form-control" placeholder="username" type="text" name="username" id="">
     <br>
-    <input placeholder="password" type="password" name="password" id="">
+    <input class="form-control" placeholder="password" type="password" name="password" id="">
+    <input type="submit" class="form-control my-2 bg-success text-white fs-4" value="submit">
     <br>
-    <input value="submit" type="submit">
     {{ 
         captcha.render_captcha(
-                namespace='captcha2',
+                namespace='simple',
                 inline_css='margin: 10px;',
                 css_class="custom_css_class",
                 id='captcha-v2',
-                dataset="data-ok='true'"
+                dataset="data-ok='true'",
             )
     }}
-
 </form>
+</div>
+
+<hr>
+
+<div class="container mt-5">
+
+<h2 class="text-center m-2">hidden badge google captcha version 2</h2>
+<form class="m-2 p-2 border" method="POST" action="/hidden" id="hidden_parent">
+    {# you can also use Flask-wtf forms #}
+    <input  class="form-control" placeholder="username" type="text" name="username" id="">
+    <br>
+    <input class="form-control" placeholder="password" type="password" name="password" id="">
+    <br>
+    {{ 
+        captcha.render_captcha(
+                namespace='hidden',
+                inline_css='margin: 10px;',
+                css_class="form-control my-2 bg-success text-white fs-4",
+                id='captcha-v2',
+                dataset="data-ok='true'",
+                parent_form_id='hidden_parent',
+                button_text="Submit"
+            )
+    }}
+</form>
+</div>
+
 
 </body>
 </html>
