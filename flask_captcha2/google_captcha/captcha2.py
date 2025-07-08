@@ -103,7 +103,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             captcha_private_key=app.config.get("captcha_private_key", None),
             captcha_enabled=app.config.get("captcha_enabled", self.ENABLED),
             captcha_theme=app.config.get("captcha_theme", self.THEME),
-            CAPTCHA_TYPE=app.config.get("captcha_type", self.TYPE),
+            captcha_type=app.config.get("captcha_type", self.TYPE),
             captcha_size=app.config.get("captcha_size", self.SIZE),
             captcha_language=app.config.get("captcha_language", self.LANGUAGE),
             captcha_tabindex=app.config.get("captcha_tabindex", self.TABINDEX),
@@ -193,7 +193,6 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         :return: captcha widget
         :rtype: Markup
         """
-
         arg = ""
         # id
         arg += f"id=\"{kwargs.get('id')}\"\t" if kwargs.get("id") else ""
@@ -208,16 +207,28 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         # js event
         arg += f"{kwargs.get('js_event', '')}"
 
-        captcha_field = (
-            f"""
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-            <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
-                data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}" data-size="{self.SIZE}"
-                data-tabindex="{self.TABINDEX}" {arg}>
-            </div>
-        """
-        ).strip()
+        captcha_field = "<script src='https://www.google.com/recaptcha/api.js'></script>"
+
+        if self.TYPE == "invisible" and self.SIZE == "invisible": # v2- hidden badge
+            captcha_field += f"""<script>function onSubmit(token) {{document.getElementById("{kwargs.get('parent_form_id', '')}").submit();}}</script>"""
+            captcha_field += f"""
+                <button class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
+                    data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" data-type="{self.TYPE}"
+                    data-callback="onSubmit" data-size="{self.SIZE}" data-tabindex="{self.TABINDEX}"
+                    type="submit" {arg}>
+                    {kwargs.get("button_text", "Submit Form")}
+                </button>
+            """
+
+        else: # simple i'm not robot widget
+            captcha_field += f"""
+                <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
+                    data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" 
+                    data-type="{self.TYPE}" data-size="{self.SIZE}"
+                    data-tabindex="{self.TABINDEX}" {arg}>
+                </div>
+            """
         if self.ENABLED:
-            return Markup(captcha_field)
+            return Markup(captcha_field.strip())
         else:
             return Markup(" ")
