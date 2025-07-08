@@ -6,6 +6,7 @@
 * Copyright (c) 2023 - ali sharifi
 * https://github.com/alisharify7/flask_captcha2
 """
+
 import logging
 
 # lib
@@ -40,7 +41,9 @@ class BaseGoogleCaptcha2:
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
 
-class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha2, LoggerMixin):
+class GoogleCaptcha2(
+    GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha2, LoggerMixin
+):
     """Main Google Captcha version 2 captcha Class,
 
     `Don't` use this model directly, instead use
@@ -74,7 +77,6 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             self.init_app(app)
             self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
 
-
         elif (
             captcha_public_key and captcha_private_key
         ):  # app is not passed read config from args passed to this method
@@ -83,7 +85,6 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             kwargs["namespace"] = namespace
             self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
             self.set_config(kwargs)
-
 
     def init_app(self, app: Flask = None):
         """
@@ -168,7 +169,9 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
             "response": request.form.get("g-recaptcha-response", None),
         }
         response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
-        result = response_google.status_code == 200 and response_google.json()["success"]
+        result = (
+            response_google.status_code == 200 and response_google.json()["success"]
+        )
         self.debug_log(f"google response: {response_google.json()}")
         return result
 
@@ -207,9 +210,11 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
         # js event
         arg += f"{kwargs.get('js_event', '')}"
 
-        captcha_field = "<script src='https://www.google.com/recaptcha/api.js'></script>"
+        captcha_field = (
+            "<script src='https://www.google.com/recaptcha/api.js'></script>"
+        )
 
-        if self.TYPE == "invisible" and self.SIZE == "invisible": # v2- hidden badge
+        if self.TYPE == "invisible" and self.SIZE == "invisible":  # v2- hidden badge
             captcha_field += f"""<script>function onSubmit(token) {{document.getElementById("{kwargs.get('parent_form_id', '')}").submit();}}</script>"""
             captcha_field += f"""
                 <button class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
@@ -220,7 +225,7 @@ class GoogleCaptcha2(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptch
                 </button>
             """
 
-        else: # simple i'm not robot widget
+        else:  # simple i'm not robot widget
             captcha_field += f"""
                 <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
                     data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" 

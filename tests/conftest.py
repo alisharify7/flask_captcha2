@@ -19,7 +19,28 @@ def app():
 
 
 @pytest.fixture()
-def googlecaptcha2(app):
+def googlecaptcha2_simple(app):
+    """flask-captcha2 Google Captcha v2 object"""
+    app.config.from_mapping(
+        {
+            "CAPTCHA_PRIVATE_KEY": os.environ.get("PRIVATE_KEY_V2", "sample key"),
+            "CAPTCHA_PUBLIC_KEY": os.environ.get("PUBLIC_KEY_V2", "sample key"),
+            "CAPTCHA_ENABLED": True,
+            "CAPTCHA_LOG": False,
+            "CAPTCHA_LANGUAGE": "en",
+            "CAPTCHA_THEME": "light",
+            "CAPTCHA_SIZE": "normal",
+            "CAPTCHA_TABINDEX": 0,
+            "CAPTCHA_TYPE": "image",
+        }
+    )
+    MainCaptcha = FlaskCaptcha(app=app)
+    captcha = MainCaptcha.get_google_captcha_v2("flask-captcha-v2")
+    yield captcha
+
+
+@pytest.fixture()
+def googlecaptcha2_hidden_badge(app):
     """flask-captcha2 Google Captcha v2 object"""
     app.config.from_mapping(
         {

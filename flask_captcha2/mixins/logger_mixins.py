@@ -4,6 +4,7 @@ from flask_captcha2.logger import get_logger
 
 class LoggerMixin(object):
     """Logger Mixin"""
+
     def create_logger_object(
         self, logger_name: str, logger_level: int = logging.DEBUG, **kwargs
     ) -> logging.Logger:

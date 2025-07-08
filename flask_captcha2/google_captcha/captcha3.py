@@ -37,7 +37,9 @@ class BaseGoogleCaptcha3:
     HIDE_CAPTCHA_WIDGET_CSS = "<style>.grecaptcha-badge {visibility: hidden;}</style>"
 
 
-class GoogleCaptcha3(GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha3, LoggerMixin):
+class GoogleCaptcha3(
+    GoogleCaptchaInterface, BaseGoogleCaptcha, BaseGoogleCaptcha3, LoggerMixin
+):
     """Main Google Captcha version 3 captcha Class,
 
     `Don't` use this model directly, instead use

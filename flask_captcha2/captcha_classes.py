@@ -70,14 +70,13 @@ class FlaskCaptcha(LoggerMixin):
             ctx = {"captcha": self}
             return ctx
 
-
         self.CAPTCHA_OBJECT_MAPPER_KEY_NAME = "captcha_object_mapper"
         self.DEBUG = app.debug
         self.FLASK_APP = app
-        self.logger = self.create_logger_object(logger_level=logging.INFO, logger_name="FlaskCaptcha-Manager")
+        self.logger = self.create_logger_object(
+            logger_level=logging.INFO, logger_name="FlaskCaptcha-Manager"
+        )
         app.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME] = dict()
-
-
 
     @classmethod
     def create(cls, captcha_type: str, *args, **kwargs):
@@ -128,7 +127,9 @@ class FlaskCaptcha(LoggerMixin):
         if not namespace:
             raise ValueError("captcha should have a namespace!")
         if self.__is_namespace_exists(namespace=namespace):
-            raise ValueError(f"duplicated captcha namespace! {self.__get_all_captcha_namespaces()}")
+            raise ValueError(
+                f"duplicated captcha namespace! {self.__get_all_captcha_namespaces()}"
+            )
 
         if conf and isinstance(conf, dict):  # custom config is passed
             captcha = GoogleCaptcha2(namespace=namespace, **conf)
@@ -299,7 +300,6 @@ class FlaskCaptcha(LoggerMixin):
         :rtype: bool
         """
         return namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]
-
 
     def __set_captcha_object(self, namespace: str, captcha_object: object) -> bool:
         """Set a captcha object with the given name (Namespace) in captcha mapper repo.
