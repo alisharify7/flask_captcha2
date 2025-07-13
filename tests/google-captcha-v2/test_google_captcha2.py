@@ -1,21 +1,46 @@
 import pytest
 from markupsafe import Markup
 
-
-def test_captcha_config_is_correct(googlecaptcha2, app):
+@pytest.mark.config_g2_simple
+def test_captcha_config_is_correct(googlecaptcha2_simple, app):
     """This test ensure that Flask-Captcha can read and apply all config correctly
     from app.config object to google-captcha-v2 object"""
-    assert googlecaptcha2.PRIVATE_KEY == app.config.get("CAPTCHA_PRIVATE_KEY")
-    assert googlecaptcha2.PUBLIC_KEY == app.config.get("CAPTCHA_PUBLIC_KEY")
-    assert googlecaptcha2.ENABLED == app.config.get("CAPTCHA_ENABLED")
-    assert googlecaptcha2.CAPTCHA_LOG == app.config.get("CAPTCHA_LOG")
-    assert googlecaptcha2.LANGUAGE == app.config.get("CAPTCHA_LANGUAGE")
-    assert googlecaptcha2.TABINDEX == app.config.get("CAPTCHA_TABINDEX")
-    assert googlecaptcha2.SIZE == app.config.get("CAPTCHA_SIZE")
-    assert googlecaptcha2.TYPE == app.config.get("CAPTCHA_TYPE")
-    assert googlecaptcha2.THEME == app.config.get("CAPTCHA_THEME")
+    assert googlecaptcha2_simple.PRIVATE_KEY == app.config.get("captcha_private_key")
+    assert googlecaptcha2_simple.PUBLIC_KEY == app.config.get("captcha_public_key")
+    assert googlecaptcha2_simple.ENABLED == app.config.get("captcha_enabled")
+    assert googlecaptcha2_simple.CAPTCHA_LOG == app.config.get("captcha_log")
+    assert googlecaptcha2_simple.LANGUAGE == app.config.get("captcha_language")
+    assert googlecaptcha2_simple.TABINDEX == app.config.get("captcha_tabindex")
+    assert googlecaptcha2_simple.SIZE == app.config.get("captcha_size")
+    assert googlecaptcha2_simple.TYPE == app.config.get("captcha_type")
+    assert googlecaptcha2_simple.THEME == app.config.get("captcha_theme")
 
 
+
+@pytest.mark.config_g2_hidden
+def test_captcha_hidden_config_is_correct(googlecaptcha2_hidden, app):
+    """Ensure that Flask-Captcha configures Google Captcha v2 with 'invisible' mode correctly"""
+    assert googlecaptcha2_hidden.PRIVATE_KEY == app.config.get("captcha_private_key")
+    assert googlecaptcha2_hidden.PUBLIC_KEY == app.config.get("captcha_public_key")
+    assert googlecaptcha2_hidden.ENABLED == app.config.get("captcha_enabled")
+    assert googlecaptcha2_hidden.CAPTCHA_LOG == app.config.get("captcha_log")
+    assert googlecaptcha2_hidden.LANGUAGE == app.config.get("captcha_language")
+    assert googlecaptcha2_hidden.TABINDEX == app.config.get("captcha_tabindex")
+    assert googlecaptcha2_hidden.SIZE == app.config.get("captcha_size")
+    assert googlecaptcha2_hidden.TYPE == app.config.get("captcha_type")
+    assert googlecaptcha2_hidden.THEME == app.config.get("captcha_theme")
+
+
+@pytest.mark.config_g3
+def test_captcha_v3_config_is_correct(googlecaptcha3, app):
+    """Ensure that Flask-Captcha correctly reads and applies config for Google Captcha v3"""
+    assert googlecaptcha3.PRIVATE_KEY == app.config.get("captcha_private_key")
+    assert googlecaptcha3.PUBLIC_KEY == app.config.get("captcha_public_key")
+    assert googlecaptcha3.ENABLED == app.config.get("captcha_enabled")
+    assert googlecaptcha3.SCORE == app.config.get("captcha_score")
+    assert googlecaptcha3.CAPTCHA_LOG == app.config.get("captcha_log")
+
+    
 def test_refresh_captcha_config(googlecaptcha2, app):
     """Test refresh method work properly"""
     # change the app config while the app running <captcha config in app.config>
