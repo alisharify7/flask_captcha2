@@ -100,7 +100,7 @@ class FlaskCaptcha(LoggerMixin):
         conf: typing.Union[typing.Dict[str, str], None] = None,
         *args,
         **kwargs,
-    ):
+    ) -> GoogleCaptcha2:
         """this method return `GoogleCaptcha2` object
 
         instead of direct using, use this method for generating a captcha version2 object
@@ -145,7 +145,7 @@ class FlaskCaptcha(LoggerMixin):
         conf: typing.Union[typing.Dict[str, str], None] = None,
         *args,
         **kwargs,
-    ):
+    ) -> GoogleCaptcha3:
         """this method return `FlaskCaptcha3` object.
 
 
