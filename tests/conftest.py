@@ -15,13 +15,14 @@ def app():
             "TESTING": True,
         }
     )
+    print("called")
     yield app
 
 
 @pytest.fixture()
 def googlecaptcha2_simple(app):
     """flask-captcha2 Google Captcha v2 object"""
-    app.config.from_mapping(
+    app.config.update(
         {
             "captcha_private_key": os.environ.get(
                 "PRIVATE_KEY_V2", "sample key"
@@ -38,6 +39,7 @@ def googlecaptcha2_simple(app):
             "captcha_type": "image",
         }
     )
+
     captcha_manager = FlaskCaptcha(app=app)
     captcha2 = captcha_manager.generate_google_captcha_v2(
         namespace="flask-captcha-v2"
@@ -48,7 +50,7 @@ def googlecaptcha2_simple(app):
 @pytest.fixture()
 def googlecaptcha2_hidden(app):
     """flask-captcha2 Google Captcha v2 object"""
-    app.config.from_mapping(
+    app.config.update(
         {
             "captcha_private_key": os.environ.get(
                 "PRIVATE_KEY_V2", "sample key"
@@ -75,7 +77,7 @@ def googlecaptcha2_hidden(app):
 @pytest.fixture()
 def googlecaptcha3(app):
     """flask-captcha2 Google Captcha v3 object"""
-    app.config.from_mapping(
+    app.config.update(
         {
             "captcha_private_key": os.environ.get("PRIVATE_KEY_V3", "test"),
             "captcha_public_key": os.environ.get("PRIVATE_KEY_V3", "test"),
@@ -85,7 +87,7 @@ def googlecaptcha3(app):
         }
     )
     MainCaptcha = FlaskCaptcha(app=app)
-    captcha = MainCaptcha.get_google_captcha_v3("flask-captcha-v3")
+    captcha = MainCaptcha.generate_google_captcha_v3("flask-captcha-v3")
     yield captcha
 
 
