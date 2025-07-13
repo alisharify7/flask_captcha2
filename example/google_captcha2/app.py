@@ -11,7 +11,9 @@ except ImportError:
     )
 
 import os
+
 from flask import Flask, render_template
+
 from flask_captcha2 import FlaskCaptcha
 
 app = Flask(__name__)

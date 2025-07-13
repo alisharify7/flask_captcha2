@@ -8,5 +8,5 @@
 ### run app:
 
     flask run
-    or 
+    or
     python app.py

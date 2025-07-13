@@ -7,18 +7,16 @@
 * https://github.com/alisharify7/flask_captcha2
 """
 
-import logging
-
 # lib
 import requests
-from flask import request, Flask
+from flask import Flask, request
 from markupsafe import Markup
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.google_captcha.abstract_captcha import (
-    GoogleCaptchaInterface,
     BaseGoogleCaptcha,
+    GoogleCaptchaInterface,
 )
 from flask_captcha2.mixins.logger_mixins import LoggerMixin
 
@@ -72,10 +70,14 @@ class GoogleCaptcha2(
         """
         if `app` object directly passed, then `init_app` method will be called.
         """
-        if app and isinstance(app, Flask):  # app is passed read configs from app.config
+        if app and isinstance(
+            app, Flask
+        ):  # app is passed read configs from app.config
             app.config["namespace"] = namespace
             self.init_app(app)
-            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+            self.logger = self.create_logger_object(
+                logger_name=f"Logger-{namespace}"
+            )
 
         elif (
             captcha_public_key and captcha_private_key
@@ -83,7 +85,9 @@ class GoogleCaptcha2(
             kwargs["captcha_private_key"] = captcha_private_key
             kwargs["captcha_public_key"] = captcha_public_key
             kwargs["namespace"] = namespace
-            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+            self.logger = self.create_logger_object(
+                logger_name=f"Logger-{namespace}"
+            )
             self.set_config(kwargs)
 
     def init_app(self, app: Flask = None):
@@ -93,9 +97,9 @@ class GoogleCaptcha2(
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get("captcha_public_key", None) or not app.config.get(
+        if not app.config.get(
             "captcha_public_key", None
-        ):
+        ) or not app.config.get("captcha_public_key", None):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
             )
@@ -170,7 +174,8 @@ class GoogleCaptcha2(
         }
         response_google = requests.get(self.GOOGLE_VERIFY_URL, params=data)
         result = (
-            response_google.status_code == 200 and response_google.json()["success"]
+            response_google.status_code == 200
+            and response_google.json()["success"]
         )
         self.debug_log(f"google response: {response_google.json()}")
         return result
@@ -214,7 +219,9 @@ class GoogleCaptcha2(
             "<script src='https://www.google.com/recaptcha/api.js'></script>"
         )
 
-        if self.TYPE == "invisible" and self.SIZE == "invisible":  # v2- hidden badge
+        if (
+            self.TYPE == "invisible" and self.SIZE == "invisible"
+        ):  # v2- hidden badge
             captcha_field += f"""<script>function onSubmit(token) {{document.getElementById("{kwargs.get('parent_form_id', '')}").submit();}}</script>"""
             captcha_field += f"""
                 <button class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
@@ -228,7 +235,7 @@ class GoogleCaptcha2(
         else:  # simple i'm not robot widget
             captcha_field += f"""
                 <div class="g-recaptcha {kwargs.get('css_class', '')}" data-sitekey="{self.PUBLIC_KEY}"
-                    data-theme="{self.THEME}" data-lang="{self.LANGUAGE}" 
+                    data-theme="{self.THEME}" data-lang="{self.LANGUAGE}"
                     data-type="{self.TYPE}" data-size="{self.SIZE}"
                     data-tabindex="{self.TABINDEX}" {arg}>
                 </div>

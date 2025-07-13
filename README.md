@@ -11,9 +11,9 @@ captcha (image, voice) with Flask applications
 <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/alisharify7/flask_captcha2"> <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/alisharify7/flask_captcha2"> <img alt="GitHub repo Licence" src="https://img.shields.io/pypi/l/flask_captcha2">
 
 [![Latest version](https://img.shields.io/pypi/v/Flask-captcha2)](https://pypi.python.org/pypi/Flask-captcha2)[![Supported python versions](https://img.shields.io/pypi/pyversions/Flask-captcha2)](https://pypi.python.org/pypi/flask_captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2)](https://pepy.tech/project/flask-captcha2) [![Downloads](https://static.pepy.tech/badge/flask-captcha2/month)](https://pepy.tech/project/flask-captcha2)
-  
 
-🚀 demo 
+
+🚀 demo
 ------------------
 
 <img src="./docs/session-image-captcha-2.png">
@@ -24,7 +24,7 @@ captcha (image, voice) with Flask applications
 -------------------
 
 ``` {.}
-pip install -U flask_captcha2 
+pip install -U flask_captcha2
 ```
 
 🔧 0.1 how to use:
@@ -40,7 +40,7 @@ app = Flask(__name__)
  google_captcha2_config_list = {
      "CAPTCHA_PRIVATE_KEY": "hish !",
      "CAPTCHA_PUBLIC_KEY": "hish !",
-     'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
+     'CAPTCHA_ENABLED': True,  # captcha status <True, False>
      "CAPTCHA_LOG": True, # show captcha logs in console
      "CAPTCHA_LANGUAGE": "en" # captcha language
  }
@@ -48,7 +48,7 @@ app = Flask(__name__)
  google_captcha3_config_list = {
      "CAPTCHA_PRIVATE_KEY": "hish !",
      "CAPTCHA_PUBLIC_KEY": "hish !",
-     'CAPTCHA_ENABLED': True,  # captcha status <True, False> 
+     'CAPTCHA_ENABLED': True,  # captcha status <True, False>
      "CAPTCHA_SCORE": 0.5,  #google captcha version3 works with scores
      "CAPTCHA_LOG": True  # show captcha requests and logs in terminal > stdout
  }
@@ -107,7 +107,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
      <br>
      <input value="submit" type="submit">
 
-     {# 
+     {#
         all available parameter for google captcha version 2:
             model_name: required,
             id: optional,
@@ -116,27 +116,27 @@ for rendering a captcha width you should pass name to < model_name > in < captch
             js_event: optional,
             dataset: optional,
      #}
-    
-     
+
+
      {{
      captcha.render_captcha (
             # [Required] namespace
-             model_name='g-captcha2', 
-                
+             model_name='g-captcha2',
+
             # [Optional] add id to captcha widget
              id='g-captcha-v2',
-                 
+
             # [Optional] add css class to captcha widget
             css_class='p-2 btn btn-primary',
-            
+
             # [Optional] add inline css to captcha widget
-            inline_css='font-size:10px;', 
-            
+            inline_css='font-size:10px;',
+
             # [Optional] add dataset to captcha widget
             dataset="data-checked='true';"
-            
+
             # [Optional] add js event to captcha widget
-            js_event="onclick(alert('clicked!'))", 
+            js_event="onclick(alert('clicked!'))",
         )
      }}
 
@@ -147,7 +147,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 
 ## Google captcha version 2 `render` parameters
 
-| parameter  | description                      | type | status     | 
+| parameter  | description                      | type | status     |
 |------------|----------------------------------|------|------------|
 | model_name | namespace                        | str  | `Required` |
 | id         | id of captcha widget in html     | str  | `Optional` |
@@ -169,7 +169,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 </head>
 <body>
 
- <form method="POST" action="/v3" id="ParentForm"> # <---- parent_form_id 
+ <form method="POST" action="/v3" id="ParentForm"> # <---- parent_form_id
 
 {# you can also use Flask-wtf forms #}
  <input placeholder="username" type="text" name="username" id="">
@@ -215,7 +215,7 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 
 ## Google captcha version 3 `render` parameters
 
-| parameter      | description                                                                                                                                                       | type | status     | 
+| parameter      | description                                                                                                                                                       | type | status     |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|------------|
 | model_name     | namespace                                                                                                                                                         | str  | `Required` |
 | id             | id of captcha widget in html                                                                                                                                      | str  | `Optional` |
@@ -231,12 +231,12 @@ for rendering a captcha width you should pass name to < model_name > in < captch
 -----------------------
 
 Use the is_verify method on captcha objects for validating a request that
-contains a captcha 
+contains a captcha
 
 ```python
 @app.route("/g-v2-verify/", methods=["POST"])
 def index():
-    # with is_verify method verify the captcha 
+    # with is_verify method verify the captcha
     if google_captcha2.is_verify():
         return "Captcha is ok."
     else:
@@ -288,13 +288,13 @@ def index():
     > -   adding the ability to create multiple captchas with different versions
     > -   adding Pytest base test
 
-  
+
 - version 3.0.5 Released: July 21, 2024
 -   Changes:
 
     > -   reformat/Refactor code
     > -   rename render_captcha parameters
-  
+
 - version 3.1.0 Released: September 28, 2024
 -   Changes:
 

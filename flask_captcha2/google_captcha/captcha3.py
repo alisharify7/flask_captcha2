@@ -9,14 +9,14 @@
 
 # lib
 import requests
-from flask import request, Flask
+from flask import Flask, request
 from markupsafe import Markup
 
 # flask-captcha2
 from flask_captcha2 import excep as ex
 from flask_captcha2.google_captcha.abstract_captcha import (
-    GoogleCaptchaInterface,
     BaseGoogleCaptcha,
+    GoogleCaptchaInterface,
 )
 from flask_captcha2.mixins.logger_mixins import LoggerMixin
 
@@ -34,7 +34,9 @@ class BaseGoogleCaptcha3:
     CAPTCHA_LOG: bool = True
     GOOGLE_VERIFY_URL: str = "https://www.google.com/recaptcha/api/siteverify"
 
-    HIDE_CAPTCHA_WIDGET_CSS = "<style>.grecaptcha-badge {visibility: hidden;}</style>"
+    HIDE_CAPTCHA_WIDGET_CSS = (
+        "<style>.grecaptcha-badge {visibility: hidden;}</style>"
+    )
 
 
 class GoogleCaptcha3(
@@ -65,9 +67,13 @@ class GoogleCaptcha3(
         captcha_private_key: str = None,
         **kwargs,
     ) -> None:
-        if app and isinstance(app, Flask):  # app is passed read configs from app.config
+        if app and isinstance(
+            app, Flask
+        ):  # app is passed read configs from app.config
             app.config["namespace"] = namespace
-            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+            self.logger = self.create_logger_object(
+                logger_name=f"Logger-{namespace}"
+            )
             self.init_app(app)
 
         elif (
@@ -76,7 +82,9 @@ class GoogleCaptcha3(
             kwargs["captcha_private_key"] = captcha_private_key
             kwargs["captcha_public_key"] = captcha_public_key
             kwargs["namespace"] = namespace
-            self.logger = self.create_logger_object(logger_name=f"Logger-{namespace}")
+            self.logger = self.create_logger_object(
+                logger_name=f"Logger-{namespace}"
+            )
 
             self.set_config(kwargs)
 
@@ -84,9 +92,9 @@ class GoogleCaptcha3(
         if not isinstance(app, Flask):
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
-        if not app.config.get("captcha_public_key", None) or not app.config.get(
-            "captcha_private_key", None
-        ):
+        if not app.config.get(
+            "captcha_public_key", None
+        ) or not app.config.get("captcha_private_key", None):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha3: Private and Public Keys are Required"
             )
@@ -119,7 +127,8 @@ class GoogleCaptcha3(
         try:
             self.SCORE = (
                 self.MINIMUM_SCORE
-                if int(conf_list.get("captcha_score", self.SCORE)) < self.MINIMUM_SCORE
+                if int(conf_list.get("captcha_score", self.SCORE))
+                < self.MINIMUM_SCORE
                 else int(conf_list.get("captcha_score", self.SCORE))
             )
         except ValueError:

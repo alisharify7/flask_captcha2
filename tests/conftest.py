@@ -23,8 +23,12 @@ def googlecaptcha2_simple(app):
     """flask-captcha2 Google Captcha v2 object"""
     app.config.from_mapping(
         {
-            "captcha_private_key": os.environ.get("PRIVATE_KEY_V2", "sample key"),
-            "captcha_public_key": os.environ.get("PUBLIC_KEY_V2", "sample key"),
+            "captcha_private_key": os.environ.get(
+                "PRIVATE_KEY_V2", "sample key"
+            ),
+            "captcha_public_key": os.environ.get(
+                "PUBLIC_KEY_V2", "sample key"
+            ),
             "captcha_enabled": True,
             "captcha_log": False,
             "captcha_language": "en",
@@ -35,7 +39,9 @@ def googlecaptcha2_simple(app):
         }
     )
     captcha_manager = FlaskCaptcha(app=app)
-    captcha2 = captcha_manager.generate_google_captcha_v2(namespace="flask-captcha-v2")
+    captcha2 = captcha_manager.generate_google_captcha_v2(
+        namespace="flask-captcha-v2"
+    )
     yield captcha2
 
 
@@ -44,8 +50,12 @@ def googlecaptcha2_hidden(app):
     """flask-captcha2 Google Captcha v2 object"""
     app.config.from_mapping(
         {
-            "captcha_private_key": os.environ.get("PRIVATE_KEY_V2", "sample key"),
-            "captcha_public_key": os.environ.get("PUBLIC_KEY_V2", "sample key"),
+            "captcha_private_key": os.environ.get(
+                "PRIVATE_KEY_V2", "sample key"
+            ),
+            "captcha_public_key": os.environ.get(
+                "PUBLIC_KEY_V2", "sample key"
+            ),
             "captcha_enabled": True,
             "captcha_log": False,
             "captcha_language": "en",
@@ -56,7 +66,9 @@ def googlecaptcha2_hidden(app):
         }
     )
     captcha_manager = FlaskCaptcha(app=app)
-    captcha2 = captcha_manager.generate_google_captcha_v2(namespace="flask-captcha-v2")
+    captcha2 = captcha_manager.generate_google_captcha_v2(
+        namespace="flask-captcha-v2"
+    )
     yield captcha2
 
 

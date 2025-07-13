@@ -11,7 +11,6 @@
 from .captcha2 import GoogleCaptcha2
 from .captcha3 import GoogleCaptcha3
 
-
 __all__ = (
     "GoogleCaptcha2",
     "GoogleCaptcha3",

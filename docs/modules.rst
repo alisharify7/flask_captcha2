@@ -6,4 +6,3 @@ flask_captcha2
 
    flask_captcha2
    flask_captcha2
-

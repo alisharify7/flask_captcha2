@@ -4,7 +4,9 @@ example :
 """
 
 import os
+
 from flask import Flask, render_template, request
+
 from flask_captcha2 import FlaskCaptcha
 
 app = Flask(__name__)

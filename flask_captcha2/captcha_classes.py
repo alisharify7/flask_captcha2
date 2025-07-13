@@ -92,7 +92,9 @@ class FlaskCaptcha(LoggerMixin):
             case "local-captcha-image":
                 return cls.generate_session_image_captcha(*args, **kwargs)
             case _:
-                raise RuntimeError("invalid captcha type: {}".format(captcha_type))
+                raise RuntimeError(
+                    "invalid captcha type: {}".format(captcha_type)
+                )
 
     def generate_google_captcha_v2(
         self,
@@ -135,7 +137,9 @@ class FlaskCaptcha(LoggerMixin):
             captcha = GoogleCaptcha2(namespace=namespace, **conf)
         else:
             captcha = GoogleCaptcha2(namespace=namespace, app=self.FLASK_APP)
-        self.logger.warning(f"google captcha v2 with namespace={namespace} created.")
+        self.logger.warning(
+            f"google captcha v2 with namespace={namespace} created."
+        )
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
         return self.__get_captcha_object(namespace=namespace)
 
@@ -178,7 +182,9 @@ class FlaskCaptcha(LoggerMixin):
         else:
             captcha = GoogleCaptcha3(namespace=namespace, app=self.FLASK_APP)
 
-        self.logger.warning(f"google captcha v3 with namespace={namespace} created.")
+        self.logger.warning(
+            f"google captcha v3 with namespace={namespace} created."
+        )
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
         return self.__get_captcha_object(namespace=namespace)
 
@@ -239,7 +245,9 @@ class FlaskCaptcha(LoggerMixin):
         if conf and isinstance(conf, dict):  # custom config is passed
             captcha = SessionImageCaptcha(**conf, NAMESPACE=namespace)
         else:
-            captcha = SessionImageCaptcha(app=self.FLASK_APP, NAMESPACE=namespace)
+            captcha = SessionImageCaptcha(
+                app=self.FLASK_APP, NAMESPACE=namespace
+            )
 
         self.__set_captcha_object(namespace=namespace, captcha_object=captcha)
         return self.__get_captcha_object(namespace=namespace)
@@ -265,7 +273,9 @@ class FlaskCaptcha(LoggerMixin):
         """
         return self.__render_captcha_in_template(*args, **kwargs)
 
-    def __render_captcha_in_template(self, namespace: str, *args, **kwargs) -> Markup:
+    def __render_captcha_in_template(
+        self, namespace: str, *args, **kwargs
+    ) -> Markup:
         """render a captcha (`Markup`) object.
 
         `Don't` Use this method directly inside template !
@@ -299,9 +309,14 @@ class FlaskCaptcha(LoggerMixin):
         :return: `False` if captcha name already exists, otherwise `True`
         :rtype: bool
         """
-        return namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]
+        return (
+            namespace
+            in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]
+        )
 
-    def __set_captcha_object(self, namespace: str, captcha_object: object) -> bool:
+    def __set_captcha_object(
+        self, namespace: str, captcha_object: object
+    ) -> bool:
         """Set a captcha object with the given name (Namespace) in captcha mapper repo.
 
         This method saves (set) a captcha with the given name in
@@ -319,7 +334,7 @@ class FlaskCaptcha(LoggerMixin):
             self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][
                 namespace
             ] = captcha_object
-        except Exception as e:
+        except Exception:
             return False
         return True
 
@@ -337,8 +352,13 @@ class FlaskCaptcha(LoggerMixin):
         :rtype: object
 
         """
-        if namespace in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]:
-            return self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][namespace]
+        if (
+            namespace
+            in self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME]
+        ):
+            return self.FLASK_APP.config[self.CAPTCHA_OBJECT_MAPPER_KEY_NAME][
+                namespace
+            ]
         else:
             raise exceptions.CaptchaNameNotExists(
                 f"invalid namespace. {namespace} was not set to any captcha object.\navailable namesspaces:{self.__get_all_captcha_namespaces()}"
@@ -352,7 +372,9 @@ class FlaskCaptcha(LoggerMixin):
         :rtype: List
         """
         return list(
-            self.FLASK_APP.config.get(self.CAPTCHA_OBJECT_MAPPER_KEY_NAME, {}).keys()
+            self.FLASK_APP.config.get(
+                self.CAPTCHA_OBJECT_MAPPER_KEY_NAME, {}
+            ).keys()
         )
 
     def __str__(self) -> str:

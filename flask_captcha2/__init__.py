@@ -10,5 +10,4 @@
 
 from .captcha_classes import FlaskCaptcha
 
-
 __all__ = ("FlaskCaptcha",)

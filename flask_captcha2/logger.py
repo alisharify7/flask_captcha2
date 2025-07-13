@@ -7,8 +7,8 @@
 * https://github.com/alisharify7/flask_captcha2
 """
 
-import sys
 import logging
+import sys
 from typing import Optional
 
 
@@ -37,7 +37,9 @@ def get_logger(
 
     # Create default format if none provided
     if log_format is None:
-        log_format = f"[{logger_name} - %(levelname)s] " "[%(asctime)s] - %(message)s"
+        log_format = (
+            f"[{logger_name} - %(levelname)s] " "[%(asctime)s] - %(message)s"
+        )
 
     formatter = logging.Formatter(log_format)
 
