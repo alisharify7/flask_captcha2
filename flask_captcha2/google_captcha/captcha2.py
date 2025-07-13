@@ -98,7 +98,7 @@ class GoogleCaptcha2(
             raise ex.NotFlaskApp(f"{app} object is not a flask instance!")
 
         if not app.config.get(
-            "captcha_public_key", None
+            "captcha_private_key", None
         ) or not app.config.get("captcha_public_key", None):
             raise ValueError(
                 "Flask-Captcha2.google_captcha.captcha2: Private and Public Keys are Required"
