@@ -114,3 +114,10 @@ files = "."
 disallow_untyped-calls = true
 disallow_untyped-defs = true
 strict = true
+
+[tool.pytest.ini_options]
+markers = [
+    "config_g2_simple: tag for captcha config tests (G2 simple)",
+    "config_g2_hidden: tag for captcha config tests (G2 hidden/invisible)",
+    "config_g3: tag for captcha config tests (G3 score-based)"
+]
