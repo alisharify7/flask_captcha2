@@ -30,4 +30,4 @@ class GoogleCaptchaInterface(ABC):
 class BaseGoogleCaptcha:
     def refresh_conf(self, app: Flask) -> None:
         """Refresh the captcha object setting using the flask-application configuration"""
-        self.__init__(app)
+        self.set_config(app.config)
