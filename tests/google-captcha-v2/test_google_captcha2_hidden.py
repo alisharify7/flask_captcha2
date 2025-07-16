@@ -2,25 +2,6 @@ import pytest
 from markupsafe import Markup
 
 
-@pytest.mark.config_g2_simple
-def test_captcha_config_is_correct(googlecaptcha2_simple, app):
-    """This test ensure that Flask-Captcha can read and apply all config correctly
-    from app.config object to google-captcha-v2 object"""
-    assert googlecaptcha2_simple.PRIVATE_KEY == app.config.get(
-        "captcha_private_key"
-    )
-    assert googlecaptcha2_simple.PUBLIC_KEY == app.config.get(
-        "captcha_public_key"
-    )
-    assert googlecaptcha2_simple.ENABLED == app.config.get("captcha_enabled")
-    assert googlecaptcha2_simple.CAPTCHA_LOG == app.config.get("captcha_log")
-    assert googlecaptcha2_simple.LANGUAGE == app.config.get("captcha_language")
-    assert googlecaptcha2_simple.TABINDEX == app.config.get("captcha_tabindex")
-    assert googlecaptcha2_simple.SIZE == app.config.get("captcha_size")
-    assert googlecaptcha2_simple.TYPE == app.config.get("captcha_type")
-    assert googlecaptcha2_simple.THEME == app.config.get("captcha_theme")
-
-
 @pytest.mark.config_g2_hidden
 def test_captcha_hidden_config_is_correct(googlecaptcha2_hidden, app):
     """Ensure that Flask-Captcha configures Google Captcha v2 with 'invisible' mode correctly"""
@@ -49,14 +30,18 @@ def test_captcha_v3_config_is_correct(googlecaptcha3, app):
     assert googlecaptcha3.CAPTCHA_LOG == app.config.get("captcha_log")
 
 
-def test_refresh_captcha_config(googlecaptcha2, app):
+@pytest.mark.hidden_g2_refresh_config
+def test_refresh_captcha_config(googlecaptcha2_hidden, app):
     """Test refresh method work properly"""
     # change the app config while the app running <captcha config in app.config>
-    app.config["CAPTCHA_LOG"] = True
-    assert googlecaptcha2.CAPTCHA_LOG != app.config["CAPTCHA_LOG"]
+    app.config["captcha_log"] = True
+    assert googlecaptcha2_hidden.CAPTCHA_LOG != app.config["captcha_log"]
 
-    googlecaptcha2.refresh_conf(app)  # refresh new config from flask App
-    assert googlecaptcha2.CAPTCHA_LOG == app.config["CAPTCHA_LOG"]
+    googlecaptcha2_hidden.refresh_conf(
+        app
+    )  # refresh new config from flask App
+    print(googlecaptcha2_hidden.CAPTCHA_LOG)
+    assert googlecaptcha2_hidden.CAPTCHA_LOG == app.config["captcha_log"]
 
 
 def test_load_captcha_in_html(client, googlecaptcha2, app):

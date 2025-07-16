@@ -119,5 +119,6 @@ strict = true
 markers = [
     "config_g2_simple: tag for captcha config tests (G2 simple)",
     "config_g2_hidden: tag for captcha config tests (G2 hidden/invisible)",
-    "config_g3: tag for captcha config tests (G3 score-based)"
+    "config_g3: tag for captcha config tests (G3 score-based)",
+    "hidden_g2_refresh_config: test refresh config for hidden google captcha 2 object",
 ]
