@@ -60,9 +60,6 @@ app = Flask(__name__)
  # Namespaces are important. Do not use repeated names and choose names with meaning.
 ```
 
-google captcha docs
-https://developers.google.com/recaptcha/docs/v3 v3
-https://developers.google.com/recaptcha/docs/display v2
 ## example:
 
 ```python
